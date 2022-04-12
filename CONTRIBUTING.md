@@ -20,12 +20,12 @@ yarn start
 
 # Contributing
 
-Thank you for your interest in contributing to the Uniswap interface! 🦄
+Thank you for your interest in contributing to the Teleswap interface! 🦄
 
 ## Finding a first issue
 
 Start with issues with the label
-[`good first issue`](https://github.com/Uniswap/uniswap-interface/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
+[`good first issue`](https://github.com/Teleswap/uniswap-interface/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
 ## Pull requests
 
@@ -34,9 +34,9 @@ CI checks will run against all PRs.
 
 # Translations
 
-Help Uniswap reach a global audience! 
+Help Teleswap reach a global audience!
 
-Uniswap uses [Crowdin](https://crowdin.com/project/uniswap-interface) 
+Teleswap uses [Crowdin](https://crowdin.com/project/uniswap-interface)
 for managing translations. Whenever a new string is added to the project,
 it gets uploaded to Crowdin for translation by [this workflow](./.github/workflows/crowdin.yaml).
 

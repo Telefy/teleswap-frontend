@@ -1,6 +1,6 @@
 {
-  "name": "bharathswap",
-  "description": "BharathSwap Tool",
+  "name": "teleswap",
+  "description": "Teleswap is a decentralised swapping protocol using AMM",
   "homepage": ".",
   "private": true,
   "devDependencies": {
