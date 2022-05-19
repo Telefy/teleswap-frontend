@@ -1,4 +1,4 @@
-import { Currency } from '@uniswap/sdk-core'
+import { Currency } from '@telefy/teleswap-core-sdk'
 import { ExtendedEther, WETH9_EXTENDED } from '../constants/tokens'
 import { supportedChainId } from './supportedChainId'
 

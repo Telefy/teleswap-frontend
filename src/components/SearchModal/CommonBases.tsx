@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro'
 import React from 'react'
 import { Text } from 'rebass'
-import { Currency } from '@uniswap/sdk-core'
+import { Currency } from '@telefy/teleswap-core-sdk'
 import styled from 'styled-components/macro'
 
 import { COMMON_BASES } from '../../constants/routing'

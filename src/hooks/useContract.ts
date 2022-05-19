@@ -21,6 +21,16 @@ import UNISOCKS_ABI from 'abis/unisocks.json'
 import WETH_ABI from 'abis/weth.json'
 import EIP_2612 from 'abis/eip_2612.json'
 
+// sushi staking
+import BENTOBOX_ABI from 'abis/bentobox.json'
+import BORING_HELPER_ABI from 'abis/boring-helper.json'
+import MASTERCHEF_ABI from 'abis/masterchef.json'
+import MASTERCHEF_V2_ABI from 'abis/masterchef-v2.json'
+import MINICHEF_ABI from 'abis/minichef-v2.json'
+import SUSHI_ABI from 'abis/sushi.json'
+import CLONE_REWARDER_ABI from 'abis/clone-rewarder.json'
+import COMPLEX_REWARDER_ABI from 'abis/complex-rewarder.json'
+
 import {
   NONFUNGIBLE_POSITION_MANAGER_ADDRESSES,
   QUOTER_ADDRESSES,
@@ -34,6 +44,19 @@ import {
   ENS_REGISTRAR_ADDRESSES,
   SOCKS_CONTROLLER_ADDRESSES,
 } from 'constants/addresses'
+
+// sushi staking
+import {
+  BENTOBOX_ADDRESS,
+  BORING_HELPER_ADDRESS,
+  MASTERCHEF_ADDRESS,
+  MASTERCHEF_V2_ADDRESS,
+  MINICHEF_ADDRESS,
+  SUSHI_ADDRESS,
+} from '@telefy/teleswap-core-sdk'
+import { OLD_FARMS } from 'config/farms'
+// sushi staking
+
 import { abi as NFTPositionManagerABI } from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json'
 import { useMemo } from 'react'
 import { Quoter, UniswapV3Factory, UniswapV3Pool } from 'types/v3'
@@ -43,6 +66,7 @@ import { getContract } from 'utils'
 import { Erc20, ArgentWalletDetector, EnsPublicResolver, EnsRegistrar, Multicall2, Weth } from '../abis/types'
 import { UNI, WETH9_EXTENDED } from '../constants/tokens'
 import { useActiveWeb3React } from './web3'
+import { SupportedChainId as ChainId } from 'constants/chains'
 
 // returns null on errors
 export function useContract<T extends Contract = Contract>(
@@ -166,4 +190,63 @@ export function useV3Pool(address: string | undefined) {
 
 export function useV3Quoter() {
   return useContract<Quoter>(QUOTER_ADDRESSES, QuoterABI)
+}
+
+// Sushi Staking
+export function useBoringHelperContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  // TODO ramin update in sdk
+  return useContract(
+    chainId
+      ? chainId === ChainId.KOVAN
+        ? '0x5bd6e4eFA335192FDA5D6B42a344ccA3d45894B8'
+        : BORING_HELPER_ADDRESS[chainId]
+      : undefined,
+    BORING_HELPER_ABI,
+    false
+  )
+}
+export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? BENTOBOX_ADDRESS[chainId] : undefined, BENTOBOX_ABI, withSignerIfPossible)
+}
+export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? MASTERCHEF_ADDRESS[chainId] : undefined, MASTERCHEF_ABI, withSignerIfPossible)
+}
+export function useMasterChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? MASTERCHEF_V2_ADDRESS[chainId] : undefined, MASTERCHEF_V2_ABI, withSignerIfPossible)
+}
+export function useMiniChefContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? MINICHEF_ADDRESS[chainId] : undefined, MINICHEF_ABI, withSignerIfPossible)
+}
+export function useOldFarmsContract(withSignerIfPossibe?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? OLD_FARMS[chainId] : undefined, MINICHEF_ABI, withSignerIfPossibe)
+}
+export function useSushiContract(withSignerIfPossible = true): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? SUSHI_ADDRESS[chainId] : undefined, SUSHI_ABI, withSignerIfPossible)
+}
+// @ts-ignore TYPE NEEDS FIXING
+export function useComplexRewarderContract(address, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(address, COMPLEX_REWARDER_ABI, withSignerIfPossible)
+}
+// @ts-ignore TYPE NEEDS FIXING
+export function useCloneRewarderContract(address, withSignerIfPossibe?: boolean): Contract | null {
+  return useContract(address, CLONE_REWARDER_ABI, withSignerIfPossibe)
+}
+const MULTICALL_ADDRESS = {
+  [ChainId.MAINNET]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.ROPSTEN]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.RINKEBY]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.GOERLI]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.KOVAN]: '0x1F98415757620B543A52E61c46B32eB19261F984',
+  [ChainId.CELO]: '0x3d0B3b816DC1e0825808F27510eF7Aa5E3136D75',
+  [ChainId.FUSE]: '0x393B6DC9B00E18314888678721eC0e923FC5f49D',
+}
+export function useInterfaceMulticall(): Contract | null | undefined {
+  return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, false)
 }

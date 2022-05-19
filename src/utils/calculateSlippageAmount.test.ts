@@ -1,5 +1,5 @@
 import { AddressZero } from '@ethersproject/constants'
-import { CurrencyAmount, Percent, Token } from '@uniswap/sdk-core'
+import { CurrencyAmount, Percent, Token } from '@telefy/teleswap-core-sdk'
 import { calculateSlippageAmount } from './calculateSlippageAmount'
 
 describe('#calculateSlippageAmount', () => {

@@ -1,4 +1,4 @@
-import { Percent, Token } from '@uniswap/sdk-core'
+import { Percent, Token } from '@telefy/teleswap-core-sdk'
 import { computePairAddress, Pair } from '@mazelon/teleswap-sdk'
 import JSBI from 'jsbi'
 import flatMap from 'lodash.flatmap'
@@ -27,6 +27,8 @@ import {
 } from './actions'
 import { SupportedLocale } from 'constants/locales'
 import { useAppDispatch, useAppSelector } from 'state/hooks'
+import { createAction } from '@reduxjs/toolkit'
+import { useSelector } from 'react-redux'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -339,4 +341,26 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 
     return Object.keys(keyed).map((key) => keyed[key])
   }, [combinedList])
+}
+
+const updateUserUseSushiGuard = createAction<{
+  userUseSushiGuard: boolean
+}>('user/updateUserUseSushiGuard')
+/**
+ * Returns a boolean indicating if the user has enabled SushiGuard protection.
+ */
+export function useUserSushiGuard(): [boolean, (newUseSushiGuard: boolean) => void] {
+  const dispatch = useAppDispatch()
+
+  // @ts-ignore TYPE NEEDS FIXING
+  const useSushiGuard = useSelector<AppState, AppState['user']['useSushiGuard']>(
+    (state) => state.user.userUseSushiGuard
+  )
+
+  const setUseSushiGuard = useCallback(
+    (newUseSushiGuard: boolean) => dispatch(updateUserUseSushiGuard({ userUseSushiGuard: newUseSushiGuard })),
+    [dispatch]
+  )
+
+  return [useSushiGuard, setUseSushiGuard]
 }

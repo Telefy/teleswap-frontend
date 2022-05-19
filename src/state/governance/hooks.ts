@@ -1,6 +1,6 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { abi as GOV_ABI } from '@uniswap/governance/build/GovernorAlpha.json'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { CurrencyAmount, Token } from '@telefy/teleswap-core-sdk'
 import { GOVERNANCE_ADDRESSES } from 'constants/addresses'
 import { SupportedChainId } from 'constants/chains'
 import { UNISWAP_GRANTS_PROPOSAL_DESCRIPTION } from 'constants/proposals/uniswap_grants_proposal_description'

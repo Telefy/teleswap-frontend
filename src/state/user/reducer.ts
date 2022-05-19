@@ -17,6 +17,7 @@ import {
   updateUserSingleHopOnly,
   updateHideClosedPositions,
   updateUserLocale,
+  updateUserUseSushiGuard,
 } from './actions'
 import { SupportedLocale } from 'constants/locales'
 
@@ -32,6 +33,9 @@ export interface UserState {
   userLocale: SupportedLocale | null
 
   userExpertMode: boolean
+
+  // true if SushiGuard protection is enabled
+  userUseSushiGuard: boolean
 
   userSingleHopOnly: boolean // only allow swaps on direct pairs
 
@@ -80,6 +84,7 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
+  userUseSushiGuard: false,
 }
 
 export default createReducer(initialState, (builder) =>
@@ -184,5 +189,8 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(toggleURLWarning, (state) => {
       state.URLWarningVisible = !state.URLWarningVisible
+    })
+    .addCase(updateUserUseSushiGuard, (state, action) => {
+      state.userUseSushiGuard = action.payload.userUseSushiGuard
     })
 )

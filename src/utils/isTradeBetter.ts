@@ -1,7 +1,7 @@
 import { ZERO_PERCENT, ONE_HUNDRED_PERCENT } from '../constants/misc'
-import { Percent, Currency, TradeType } from '@uniswap/sdk-core'
+import { Percent, Currency, TradeType } from '@telefy/teleswap-core-sdk'
 import { Trade as V2Trade } from '@mazelon/teleswap-sdk'
-import { Trade as V3Trade } from '@uniswap/v3-sdk'
+import { Trade as V3Trade } from '@mazelon/teleswap-v3-sdk'
 
 // returns whether tradeB is better than tradeA by at least a threshold percentage amount
 export function isTradeBetter(

@@ -1,4 +1,4 @@
-import { Price, CurrencyAmount, Currency, Fraction } from '@uniswap/sdk-core'
+import { Price, CurrencyAmount, Currency, Fraction } from '@telefy/teleswap-core-sdk'
 import JSBI from 'jsbi'
 
 export function formatCurrencyAmount(amount: CurrencyAmount<Currency> | undefined, sigFigs: number) {

@@ -1,5 +1,5 @@
 import JSBI from 'jsbi'
-import { Percent, Token, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
+import { Percent, Token, CurrencyAmount, TradeType } from '@telefy/teleswap-core-sdk'
 import { Trade, Pair, Route } from '@mazelon/teleswap-sdk'
 import { computeRealizedLPFeeAmount, warningSeverity } from './prices'
 

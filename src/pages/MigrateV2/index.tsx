@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useMemo } from 'react'
 import { Pair } from '@mazelon/teleswap-sdk'
-import { Token } from '@uniswap/sdk-core'
+import { Token } from '@telefy/teleswap-core-sdk'
 import { ThemeContext } from 'styled-components'
 import { AutoColumn } from '../../components/Column'
 import { AutoRow } from '../../components/Row'

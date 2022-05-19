@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Token, CurrencyAmount, Currency } from '@uniswap/sdk-core'
+import { Token, CurrencyAmount, Currency } from '@telefy/teleswap-core-sdk'
 import { useTokenContract } from './useContract'
 import { useSingleCallResult } from '../state/multicall/hooks'
 

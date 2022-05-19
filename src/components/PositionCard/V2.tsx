@@ -1,6 +1,6 @@
 import JSBI from 'jsbi'
 import React, { useState } from 'react'
-import { Percent, CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { Percent, CurrencyAmount, Token } from '@telefy/teleswap-core-sdk'
 import { Pair } from '@mazelon/teleswap-sdk'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { Link } from 'react-router-dom'

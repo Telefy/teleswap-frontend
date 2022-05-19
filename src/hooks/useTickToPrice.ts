@@ -1,5 +1,5 @@
-import { Token, Price } from '@uniswap/sdk-core'
-import { tickToPrice } from '@uniswap/v3-sdk'
+import { Token, Price } from '@telefy/teleswap-core-sdk'
+import { tickToPrice } from '@mazelon/teleswap-v3-sdk'
 
 export function getTickToPrice(
   baseToken: Token | undefined,

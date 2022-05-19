@@ -1,5 +1,5 @@
-import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
-import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
+import { Currency, CurrencyAmount, TradeType } from '@telefy/teleswap-core-sdk'
+import { encodeRouteToPath, Route, Trade } from '@mazelon/teleswap-v3-sdk'
 import { BigNumber } from 'ethers'
 import { useMemo } from 'react'
 import { useSingleContractMultipleData } from '../state/multicall/hooks'

@@ -1,5 +1,5 @@
 import JSBI from 'jsbi'
-import { Percent, CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { Percent, CurrencyAmount, Token } from '@telefy/teleswap-core-sdk'
 import { Pair } from '@mazelon/teleswap-sdk'
 import { darken } from 'polished'
 import React, { useState } from 'react'

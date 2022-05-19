@@ -1,5 +1,5 @@
 import { t } from '@lingui/macro'
-import { Token, CurrencyAmount } from '@uniswap/sdk-core'
+import { Token, CurrencyAmount } from '@telefy/teleswap-core-sdk'
 import { Pair } from '@mazelon/teleswap-sdk'
 import JSBI from 'jsbi'
 import { useMemo } from 'react'
