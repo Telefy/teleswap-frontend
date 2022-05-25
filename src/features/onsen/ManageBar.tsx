@@ -26,6 +26,7 @@ import React, { useState } from 'react'
 import { Chef, PairType } from './enum'
 import { useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 const APPROVAL_ADDRESSES = {
   [Chef.MASTERCHEF]: { [ChainId.MAINNET]: MASTERCHEF_ADDRESS[ChainId.MAINNET] },
@@ -82,7 +83,7 @@ const ManageBar = ({ farm }) => {
     ? 'Insufficient balance'
     : undefined
   const isWithdrawValid = !withdrawError
-
+  const darkMode = useIsDarkMode()
   return (
     <>
       <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40">
@@ -110,7 +111,7 @@ const ManageBar = ({ farm }) => {
             <Button
               variant="outlined"
               size="xs"
-              color={toggle ? 'blue' : 'pink'}
+              color={toggle ? 'purple' : 'pink'}
               key={i}
               onClick={() => {
                 toggle

@@ -5,6 +5,7 @@ import { useWalletModalToggle } from 'state/application/hooks'
 import React from 'react'
 import { Activity } from 'react-feather'
 import { UnsupportedChainIdError, useWeb3React } from 'web3-react-core'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 import Button, { ButtonProps } from '../Button'
 
@@ -12,6 +13,7 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
   const { i18n } = useLingui()
   const toggleWalletModal = useWalletModalToggle()
   const { error } = useWeb3React()
+  const darkMode = useIsDarkMode()
   return error ? (
     <div
       className="flex items-center justify-center px-4 py-2 font-semibold text-white border rounded bg-opacity-80 border-red bg-red hover:bg-opacity-100"
@@ -28,7 +30,7 @@ export default function Web3Connect({ color = 'gray', size, className = '', ...r
       onClick={toggleWalletModal}
       variant="outlined"
       color={color}
-      className={classNames(className, '!border-none')}
+      className={`classNames(className, '!border-none') ${darkMode ? 'button-dark' : 'button-light'}`}
       size={size}
       {...rest}
     >
