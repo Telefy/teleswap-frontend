@@ -1,5 +1,5 @@
-import { Currency } from '@uniswap/sdk-core'
-import { Pool, Route } from '@uniswap/v3-sdk'
+import { Currency } from '@telefy/teleswap-core-sdk'
+import { Pool, Route } from '@mazelon/teleswap-v3-sdk'
 import { useMemo } from 'react'
 import { useUserSingleHopOnly } from '../state/user/hooks'
 import { useActiveWeb3React } from './web3'

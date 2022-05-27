@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html translate="no">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" type="image/png" href="%PUBLIC_URL%/favicon.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/images/192x192_App_Icon.png" />
@@ -15,6 +14,7 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/stylesheet.css" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -26,77 +26,78 @@
     -->
 
     <style>
+      * {
+        font-family: 'Inter', sans-serif;
+        box-sizing: border-box;
+      }
+
+      @supports (font-variation-settings: normal) {
         * {
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
+          font-family: 'Inter var', sans-serif;
         }
-        
-        @supports (font-variation-settings: normal) {
-            * {
-                font-family: 'Inter var', sans-serif;
-            }
-        }
-        
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        
-        button {
-            user-select: none;
-        }
-        
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      button {
+        user-select: none;
+      }
+
+      html {
+        font-size: 16px;
+        font-variant: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
+      }
+
+      #background-radial-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        pointer-events: none;
+        width: 200vw;
+        height: 200vh;
+        mix-blend-mode: color;
+        /* background: radial-gradient(50% 50% at 50% 50%, #fc077d10 0%, rgba(255, 255, 255, 0) 100%); */
+        transform: translate(-50vw, -100vh);
+        z-index: -1;
+        background: radial-gradient(#561c5e, #26012b);
+      }
+
+      html {
+        min-height: 100%;
+      }
+
+      @media (prefers-color-scheme: dark) {
         html {
-            font-size: 16px;
-            font-variant: none;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-            font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
+          background-color: #2b0101;
         }
-        
-        #background-radial-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            pointer-events: none;
-            width: 200vw;
-            height: 200vh;
-            mix-blend-mode: color;
-            background: radial-gradient(50% 50% at 50% 50%, #fc077d10 0%, rgba(255, 255, 255, 0) 100%);
-            transform: translate(-50vw, -100vh);
-            z-index: -1;
-        }
-        
+      }
+
+      @media (prefers-color-scheme: light) {
         html {
-            min-height: 100%;
+          background-color: #f7f8fa;
         }
-        
-        @media (prefers-color-scheme: dark) {
-            html {
-                background-color: #2b0101;
-            }
-        }
-        
-        @media (prefers-color-scheme: light) {
-            html {
-                background-color: #f7f8fa;
-            }
-        }
+      }
     </style>
 
-    <title>Telefy</title>
-</head>
+    <title>Telefy - App</title>
+  </head>
 
-<body>
+  <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
     <!-- The root is the container of the app -->
     <div id="root">
-        <!-- Triggers the font to load immediately and then is replaced by the app -->
-        <div style="visibility: hidden">X</div>
+      <!-- Triggers the font to load immediately and then is replaced by the app -->
+      <div style="visibility: hidden">X</div>
     </div>
 
     <div id="background-radial-gradient"></div>
@@ -111,6 +112,5 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-</body>
-
+  </body>
 </html>

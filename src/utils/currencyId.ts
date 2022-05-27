@@ -1,4 +1,4 @@
-import { Currency } from '@uniswap/sdk-core'
+import { Currency } from '@telefy/teleswap-core-sdk'
 
 export function currencyId(currency: Currency): string {
   if (currency.isNative) return 'ETH'

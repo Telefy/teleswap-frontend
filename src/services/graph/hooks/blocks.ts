@@ -1,0 +1,108 @@
+import { ChainId } from '@telefy/teleswap-core-sdk'
+import { getAverageBlockTime, getBlock, getMassBlocks } from 'services/graph/fetchers'
+import { addSeconds, getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subWeeks } from 'date-fns'
+import stringify from 'fast-json-stable-stringify'
+import useSWR from 'swr'
+
+import { GraphProps } from '../interfaces'
+
+export function useOneDayBlock({ chainId = ChainId.MAINNET, shouldFetch = true, swrConfig = undefined }) {
+  const date = startOfSecond(startOfMinute(startOfHour(subDays(Date.now(), 1))))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+  return useBlock({
+    chainId,
+    variables: {
+      where: {
+        timestamp_gt: start,
+        timestamp_lt: end,
+      },
+    },
+    shouldFetch,
+    swrConfig,
+  })
+}
+
+export function useTwoDayBlock({ chainId = ChainId.MAINNET, shouldFetch = true, swrConfig = undefined }) {
+  const date = startOfSecond(startOfMinute(startOfHour(subDays(Date.now(), 2))))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+  return useBlock({
+    chainId,
+    variables: {
+      where: {
+        timestamp_gt: start,
+        timestamp_lt: end,
+      },
+    },
+    shouldFetch,
+    swrConfig,
+  })
+}
+
+export function useOneWeekBlock({ chainId = ChainId.MAINNET, shouldFetch = true, swrConfig = undefined }) {
+  const date = startOfSecond(startOfMinute(startOfHour(subWeeks(Date.now(), 1))))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+  return useBlock({
+    chainId,
+    variables: {
+      where: {
+        timestamp_gt: start,
+        timestamp_lt: end,
+      },
+    },
+    shouldFetch,
+    swrConfig,
+  })
+}
+
+export function useTwoWeekBlock({ chainId = ChainId.MAINNET, shouldFetch = true, swrConfig = undefined }) {
+  const date = startOfSecond(startOfMinute(startOfHour(subWeeks(Date.now(), 2))))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+  return useBlock({
+    chainId,
+    variables: {
+      where: {
+        timestamp_gt: start,
+        timestamp_lt: end,
+      },
+    },
+    shouldFetch,
+    swrConfig,
+  })
+}
+
+export function useBlock({
+  chainId = ChainId.MAINNET,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) {
+  return useSWR(
+    shouldFetch ? ['block', chainId, stringify(variables)] : null,
+    (_, chainId) => getBlock(chainId, variables),
+    swrConfig
+  )
+}
+
+export function useMassBlocks({
+  chainId,
+  timestamps,
+  swrConfig = undefined,
+}: GraphProps & { timestamps: number[] | string[] }) {
+  return useSWR(
+    chainId ? ['massBlocks', chainId, stringify(timestamps)] : null,
+    (_, chainId) => getMassBlocks(chainId, timestamps),
+    swrConfig
+  )
+}
+
+export function useAverageBlockTime({
+  chainId = ChainId.MAINNET,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) {
+  return useSWR(chainId ? ['averageBlockTime', chainId] : null, (_, chainId) => getAverageBlockTime(chainId), swrConfig)
+}

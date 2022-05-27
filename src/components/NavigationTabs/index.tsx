@@ -3,7 +3,7 @@ import styled from 'styled-components/macro'
 import { darken } from 'polished'
 import { Trans } from '@lingui/macro'
 import { NavLink, Link as HistoryLink, useLocation } from 'react-router-dom'
-import { Percent } from '@uniswap/sdk-core'
+import { Percent } from '@telefy/teleswap-core-sdk'
 
 import { ArrowLeft } from 'react-feather'
 import { RowBetween } from '../Row'
@@ -104,9 +104,10 @@ export function AddRemoveTabs({
   const location = useLocation()
 
   // detect if back should redirect to v3 or v2 pool page
-  const poolLink = location.pathname.includes('add/v2')
-    ? '/pool/v2'
-    : '/pool' + (!!positionID ? `/${positionID.toString()}` : '')
+  const poolLink =
+    location.pathname.includes('add/v2') || location.pathname.includes('remove/v2')
+      ? '/pool/v2'
+      : '/pool' + (!!positionID ? `/${positionID.toString()}` : '')
 
   return (
     <Tabs>

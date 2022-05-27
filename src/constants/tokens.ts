@@ -1,4 +1,4 @@
-import { WETH9, Token, Ether } from '@uniswap/sdk-core'
+import { WETH9, Token, Ether } from '@telefy/teleswap-core-sdk'
 import { UNI_ADDRESS } from './addresses'
 import { SupportedChainId } from './chains'
 

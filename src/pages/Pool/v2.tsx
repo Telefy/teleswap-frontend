@@ -31,7 +31,7 @@ const PageWrapper = styled(AutoColumn)`
 `
 
 const VoteCard = styled(DataCard)`
-  background: radial-gradient(76.02% 75.41% at 1.84% 0%, #27ae60 0%, #000000 100%);
+  background: radial-gradient(76.02% 75.41% at 1.84% 0%, #550a65 0%, #000000 100%);
   overflow: hidden;
 `
 
@@ -209,7 +209,7 @@ export default function Pool() {
                 <ButtonSecondary>
                   <RowBetween>
                     <Trans>
-                      <ExternalLink href={'https://telefy.finance' + account}>
+                      <ExternalLink href={'https://info.telefy.finance/account/' + account}>
                         Account analytics and accrued fees
                       </ExternalLink>
                       <span> ↗ </span>
@@ -229,7 +229,7 @@ export default function Pool() {
                       />
                     )
                 )}
-                <RowFixed justify="center" style={{ width: '100%' }}>
+                {/* <RowFixed justify="center" style={{ width: '100%' }}>
                   <ButtonOutlined
                     as={Link}
                     to="/migrate/v2"
@@ -245,7 +245,7 @@ export default function Pool() {
                     <ChevronsRight size={16} style={{ marginRight: '8px' }} />
                     <Trans>Migrate Liquidity to Telefy</Trans>
                   </ButtonOutlined>
-                </RowFixed>
+                </RowFixed> */}
               </>
             ) : (
               <EmptyProposals>

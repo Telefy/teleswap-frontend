@@ -6,7 +6,7 @@ import styled, { keyframes } from 'styled-components'
 import { TYPE } from 'theme'
 import { AutoColumn } from 'components/Column'
 import { ButtonPrimary } from 'components/Button'
-import { FeeAmount } from '@uniswap/v3-sdk'
+import { FeeAmount } from '@mazelon/teleswap-v3-sdk'
 import { formattedFeeAmount } from 'utils'
 import { Trans } from '@lingui/macro'
 

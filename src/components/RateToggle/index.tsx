@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro'
 import React from 'react'
-import { Currency } from '@uniswap/sdk-core'
+import { Currency } from '@telefy/teleswap-core-sdk'
 import { ToggleElement, ToggleWrapper } from 'components/Toggle/MultiToggle'
 
 // the order of displayed base currencies from left to right is always in sort order

@@ -1,5 +1,5 @@
 import { Pair } from '@mazelon/teleswap-sdk'
-import { Currency, CurrencyAmount, Percent, Token } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Percent, Token } from '@telefy/teleswap-core-sdk'
 import React, { useState, useCallback, ReactNode } from 'react'
 import styled from 'styled-components/macro'
 import { darken } from 'polished'

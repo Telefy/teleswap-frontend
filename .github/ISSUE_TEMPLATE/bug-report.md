@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Describe an issue in the Uniswap Interface
+about: Describe an issue in the Teleswap Frontend
 title: ''
 labels: bug
 assignees: ''

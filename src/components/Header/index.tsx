@@ -11,7 +11,7 @@ import { useUserHasSubmittedClaim } from 'state/transactions/hooks'
 import { useDarkModeManager } from 'state/user/hooks'
 import { useETHBalances } from 'state/wallet/hooks'
 import styled from 'styled-components/macro'
-import Logo from '../../assets/svg/telefy.svg'
+import Logo from '../../assets/svg/telefy-light.svg'
 import LogoDark from '../../assets/svg/telefy-dark1.svg'
 import { NETWORK_LABELS, SupportedChainId } from '../../constants/chains'
 import { useActiveWeb3React } from '../../hooks/web3'
@@ -345,6 +345,9 @@ export default function Header() {
           }
         >
           <Trans>Pool</Trans>
+        </StyledNavLink>
+        <StyledNavLink id={`swap-nav-link`} to={'/farm?chainId=1'}>
+          <Trans>Farm</Trans>
         </StyledNavLink>
         {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
           <Trans>Vote</Trans>

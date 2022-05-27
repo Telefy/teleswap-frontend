@@ -25,3 +25,4 @@ export const setOpenModal = createAction<ApplicationModal | null>('application/s
 export const addPopup =
   createAction<{ key?: string; removeAfterMs?: number | null; content: PopupContent }>('application/addPopup')
 export const removePopup = createAction<{ key: string }>('application/removePopup')
+export const setKashiApprovalPending = createAction<string>('application/setKashiApprovalPending')

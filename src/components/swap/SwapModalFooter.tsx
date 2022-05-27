@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro'
-import { Currency, TradeType } from '@uniswap/sdk-core'
+import { Currency, TradeType } from '@telefy/teleswap-core-sdk'
 import { Trade as V2Trade } from '@mazelon/teleswap-sdk'
-import { Trade as V3Trade } from '@uniswap/v3-sdk'
+import { Trade as V3Trade } from '@mazelon/teleswap-v3-sdk'
 
 import React, { ReactNode } from 'react'
 import { Text } from 'rebass'

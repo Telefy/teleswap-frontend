@@ -5,8 +5,8 @@ import {
   TICK_SPACINGS,
   encodeSqrtRatioX96,
   TickMath,
-} from '@uniswap/v3-sdk/dist/'
-import { Price, Token } from '@uniswap/sdk-core'
+} from '@mazelon/teleswap-v3-sdk/dist/'
+import { Price, Token } from '@telefy/teleswap-core-sdk'
 import { tryParseAmount } from 'state/swap/hooks'
 import JSBI from 'jsbi'
 

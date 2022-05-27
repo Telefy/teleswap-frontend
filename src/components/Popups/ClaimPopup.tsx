@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { CurrencyAmount, Token } from '@telefy/teleswap-core-sdk'
 import React, { useCallback, useEffect } from 'react'
 import ReactGA from 'react-ga'
 import { Heart, X } from 'react-feather'

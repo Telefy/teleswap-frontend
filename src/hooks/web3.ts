@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { injected } from '../connectors'
 import { NetworkContextName } from '../constants/misc'
+import { SupportedChainId as ChainId } from 'constants/chains'
+import stringify from 'fast-json-stable-stringify'
+import useSWR from 'swr'
 
 export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> {
   const context = useWeb3ReactCore<Web3Provider>()
@@ -83,4 +86,25 @@ export function useInactiveListener(suppress = false) {
     }
     return undefined
   }, [active, error, suppress, activate])
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+async function queryFilter(contract: Contract, event, fromBlockOrBlockHash, toBlock) {
+  return contract.queryFilter(event, fromBlockOrBlockHash, toBlock)
+}
+
+export function useQueryFilter({
+  chainId = ChainId.MAINNET,
+  shouldFetch = true,
+  // @ts-ignore TYPE NEEDS FIXING
+  contract,
+  // @ts-ignore TYPE NEEDS FIXING
+  event,
+  fromBlockOrBlockHash = undefined,
+  toBlock = undefined,
+}) {
+  return useSWR(
+    shouldFetch ? () => ['queryFilter', chainId, stringify(event), fromBlockOrBlockHash, toBlock] : null,
+    () => queryFilter(contract, event, fromBlockOrBlockHash, toBlock)
+  )
 }

@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro'
 import React from 'react'
-import { Currency, Price, Token } from '@uniswap/sdk-core'
+import { Currency, Price, Token } from '@telefy/teleswap-core-sdk'
 import StepCounter from 'components/InputStepCounter/InputStepCounter'
 import { RowBetween } from 'components/Row'
 

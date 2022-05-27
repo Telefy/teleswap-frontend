@@ -1,16 +1,10 @@
-import { Currency, CurrencyAmount, Price, Token } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Price, Token, USD } from '@telefy/teleswap-core-sdk'
 import { useMemo } from 'react'
-import { SupportedChainId } from '../constants/chains'
+import { SupportedChainId as ChainId } from '../constants/chains'
 import { USDC } from '../constants/tokens'
 import { useV2TradeExactOut } from './useV2Trade'
 import { useBestV3TradeExactOut } from './useBestV3Trade'
 import { useActiveWeb3React } from './web3'
-
-// Stablecoin amounts used when calculating spot price for a given currency.
-// The amount is large enough to filter low liquidity pairs.
-const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
-  [SupportedChainId.MAINNET]: CurrencyAmount.fromRawAmount(USDC, 100_000e6),
-}
 
 /**
  * Returns the price in USDC of the input currency
@@ -61,4 +55,15 @@ export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefine
       return null
     }
   }, [currencyAmount, price])
+}
+
+// StableCoin amounts used when calculating spot price for a given currency.
+// The amount is large enough to filter low liquidity pairs.
+export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
+  [ChainId.MAINNET]: CurrencyAmount.fromRawAmount(USD[ChainId.MAINNET], 100_000e6),
+  [ChainId.ROPSTEN]: CurrencyAmount.fromRawAmount(USD[ChainId.ROPSTEN], 100_000e6),
+  [ChainId.KOVAN]: CurrencyAmount.fromRawAmount(USD[ChainId.KOVAN], 100_000e1),
+  [ChainId.ARBITRUM_ONE]: CurrencyAmount.fromRawAmount(USD[ChainId.ARBITRUM_ONE], 100_000e6),
+  [ChainId.CELO]: CurrencyAmount.fromRawAmount(USD[ChainId.CELO], 100_000e18),
+  [ChainId.FUSE]: CurrencyAmount.fromRawAmount(USD[ChainId.FUSE], 100_000e6),
 }

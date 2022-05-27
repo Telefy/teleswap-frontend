@@ -1,18 +1,47 @@
+/* eslint-disable prettier/prettier */
 import { createReducer, nanoid } from '@reduxjs/toolkit'
-import { addPopup, PopupContent, removePopup, updateBlockNumber, ApplicationModal, setOpenModal } from './actions'
+import {
+  addPopup,
+  PopupContent,
+  removePopup,
+  updateBlockNumber,
+  ApplicationModal,
+  setOpenModal,
+  setKashiApprovalPending,
+} from './actions'
+import { TokenList } from '@uniswap/token-lists'
 
 type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>
+
+export type PopupContentFarm =
+  | {
+    txn: {
+      hash: string
+      success?: boolean
+      summary?: string
+    }
+  }
+  | {
+    listUpdate: {
+      listUrl: string
+      oldList: TokenList
+      newList: TokenList
+      auto: boolean
+    }
+  }
 
 export interface ApplicationState {
   readonly blockNumber: { readonly [chainId: number]: number }
   readonly popupList: PopupList
   readonly openModal: ApplicationModal | null
+  readonly kashiApprovalPending: string
 }
 
 const initialState: ApplicationState = {
   blockNumber: {},
   popupList: [],
   openModal: null,
+  kashiApprovalPending: '',
 }
 
 export default createReducer(initialState, (builder) =>
@@ -44,5 +73,8 @@ export default createReducer(initialState, (builder) =>
           p.show = false
         }
       })
+    })
+    .addCase(setKashiApprovalPending, (state, action) => {
+      state.kashiApprovalPending = action.payload
     })
 )

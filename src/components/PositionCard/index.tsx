@@ -1,5 +1,5 @@
 import JSBI from 'jsbi'
-import { Percent, CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { Percent, CurrencyAmount, Token } from '@telefy/teleswap-core-sdk'
 import { Pair } from '@mazelon/teleswap-sdk'
 import { darken } from 'polished'
 import React, { useState } from 'react'
@@ -42,7 +42,7 @@ export const HoverCard = styled(Card)`
 const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
   border: none;
   background: ${({ theme, bgColor }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, bgColor)} 0%, ${theme.bg3} 100%) `};
+    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, '#bf4ed0')} 0%, ${theme.bg2} 100%) `};
   position: relative;
   overflow: hidden;
 `
@@ -307,7 +307,10 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
             </FixedHeightRow>
 
             <ButtonSecondary padding="8px" borderRadius="8px">
-              <ExternalLink style={{ width: '100%', textAlign: 'center' }} href={`https://telefy.finance/${account}`}>
+              <ExternalLink
+                style={{ width: '100%', textAlign: 'center' }}
+                href={`https://info.telefy.finance/account/${account}`}
+              >
                 <Trans>
                   View accrued fees and analytics<span style={{ fontSize: '11px' }}>↗</span>
                 </Trans>
@@ -315,7 +318,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
             </ButtonSecondary>
             {userDefaultPoolBalance && JSBI.greaterThan(userDefaultPoolBalance.quotient, BIG_INT_ZERO) && (
               <RowBetween marginTop="10px">
-                <ButtonPrimary
+                {/* <ButtonPrimary
                   padding="8px"
                   borderRadius="8px"
                   as={Link}
@@ -323,7 +326,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                   width="32%"
                 >
                   <Trans>Migrate</Trans>
-                </ButtonPrimary>
+                </ButtonPrimary> */}
                 <ButtonPrimary
                   padding="8px"
                   borderRadius="8px"
@@ -349,7 +352,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                 padding="8px"
                 borderRadius="8px"
                 as={Link}
-                to={`/uni/${currencyId(currency0)}/${currencyId(currency1)}`}
+                to={`/tele/${currencyId(currency0)}/${currencyId(currency1)}`}
                 width="100%"
               >
                 <Trans>Manage Liquidity in Rewards Pool</Trans>

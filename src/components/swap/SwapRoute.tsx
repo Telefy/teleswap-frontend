@@ -1,6 +1,6 @@
-import { Currency, TradeType } from '@uniswap/sdk-core'
+import { Currency, TradeType } from '@telefy/teleswap-core-sdk'
 import { Trade as V2Trade } from '@mazelon/teleswap-sdk'
-import { Trade as V3Trade, FeeAmount } from '@uniswap/v3-sdk'
+import { Trade as V3Trade, FeeAmount } from '@mazelon/teleswap-v3-sdk'
 import React, { Fragment, memo, useContext } from 'react'
 import { ChevronRight } from 'react-feather'
 import { Flex } from 'rebass'

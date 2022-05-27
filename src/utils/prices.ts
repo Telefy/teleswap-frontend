@@ -1,7 +1,7 @@
 import JSBI from 'jsbi'
-import { Currency, CurrencyAmount, Fraction, Percent, TradeType } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Fraction, Percent, TradeType } from '@telefy/teleswap-core-sdk'
 import { Trade as V2Trade } from '@mazelon/teleswap-sdk'
-import { Trade as V3Trade } from '@uniswap/v3-sdk'
+import { Trade as V3Trade } from '@mazelon/teleswap-v3-sdk'
 import {
   ALLOWED_PRICE_IMPACT_HIGH,
   ALLOWED_PRICE_IMPACT_LOW,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FeeAmount } from '@uniswap/v3-sdk'
+import { FeeAmount } from '@mazelon/teleswap-v3-sdk'
 import { Trans } from '@lingui/macro'
 import { AutoColumn } from 'components/Column'
 import { DynamicSection } from 'pages/AddLiquidity/styled'

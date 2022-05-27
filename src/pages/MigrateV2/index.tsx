@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext, useMemo } from 'react'
 import { Pair } from '@mazelon/teleswap-sdk'
-import { Token } from '@uniswap/sdk-core'
+import { Token } from '@telefy/teleswap-core-sdk'
 import { ThemeContext } from 'styled-components'
 import { AutoColumn } from '../../components/Column'
 import { AutoRow } from '../../components/Row'
@@ -46,7 +46,7 @@ const computeSushiPairAddress = ({ tokenA, tokenB }: { tokenA: Token; tokenB: To
  * @param tokenB the other token
  */
 function toSushiLiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
-  return new Token(tokenA.chainId, computeSushiPairAddress({ tokenA, tokenB }), 18, 'SLP', 'SushiSwap LP Token')
+  return new Token(tokenA.chainId, computeSushiPairAddress({ tokenA, tokenB }), 18, 'TEL-LP', 'Teleswap LP Token')
 }
 
 export default function MigrateV2() {

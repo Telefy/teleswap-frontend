@@ -17,8 +17,8 @@
     }
   ],
   "orientation": "portrait",
-  "name": "Uniswap",
-  "short_name": "Uniswap",
+  "name": "Teleswap",
+  "short_name": "Teleswap",
   "start_url": ".",
   "theme_color": "#ff007a"
 }

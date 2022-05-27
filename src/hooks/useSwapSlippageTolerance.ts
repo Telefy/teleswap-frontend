@@ -1,5 +1,5 @@
-import { Currency, Percent, TradeType } from '@uniswap/sdk-core'
-import { Trade as V3Trade } from '@uniswap/v3-sdk'
+import { Currency, Percent, TradeType } from '@telefy/teleswap-core-sdk'
+import { Trade as V3Trade } from '@mazelon/teleswap-v3-sdk'
 import { Trade as V2Trade } from '@mazelon/teleswap-sdk'
 import { useMemo } from 'react'
 import { useUserSlippageToleranceWithDefault } from '../state/user/hooks'

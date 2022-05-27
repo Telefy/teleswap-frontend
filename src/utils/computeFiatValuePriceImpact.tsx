@@ -1,4 +1,4 @@
-import { Token, CurrencyAmount, Percent } from '@uniswap/sdk-core'
+import { Token, CurrencyAmount, Percent } from '@telefy/teleswap-core-sdk'
 import JSBI from 'jsbi'
 import { ONE_HUNDRED_PERCENT } from '../constants/misc'
 
