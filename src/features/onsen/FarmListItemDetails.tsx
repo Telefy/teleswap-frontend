@@ -15,6 +15,7 @@ import InvestmentDetails from './InvestmentDetails'
 import ManageBar from './ManageBar'
 import ManageKashiPair from './ManageKashiPair'
 import ManageSwapPair from './ManageSwapPair'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 const COLUMN_CONTAINER = 'flex flex-col flex-grow gap-4'
 
@@ -31,51 +32,56 @@ const FarmListItemDetails = ({ farm, onDismiss }) => {
   const { view } = useAppSelector(selectOnsen)
   const dispatch = useAppDispatch()
   const [content, setContent] = useState<ReactNode>()
-
+  const darkMode = useIsDarkMode()
   return (
-    <Context.Provider value={useMemo(() => ({ content, setContent }), [content, setContent])}>
-      <div className={classNames('')}>
-        <div className={classNames(COLUMN_CONTAINER, content ? '' : 'hidden')}>{content}</div>
-        <div className={classNames(COLUMN_CONTAINER, content ? 'hidden' : '')}>
-          <HeadlessUiModal.Header
-            header={
-              <div className="flex gap-0.5 items-center">
-                {view === OnsenModalView.Liquidity
-                  ? i18n._(t`Manage liquidity`)
-                  : view === OnsenModalView.Position
-                  ? i18n._(t`Your position and rewards`)
-                  : i18n._(t`Stake or unstake your liquidity`)}
-                <QuestionHelper className="!bg-dark-800 !shadow-xl p-2" text={<InformationDisclosure farm={farm} />} />
-              </div>
-            }
-            onClose={onDismiss}
-          />
-          <ToggleButtonGroup
-            size="sm"
-            value={view}
-            onChange={(view: OnsenModalView) => dispatch(setOnsenModalView(view))}
-            variant="filled"
-          >
-            <ToggleButtonGroup.Button value={OnsenModalView.Liquidity}>
-              {farm.pair.type === PairType.KASHI ? i18n._(t`Lending`) : i18n._(t`Liquidity`)}
-            </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={OnsenModalView.Staking}>{i18n._(t`Staking`)}</ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={OnsenModalView.Position}>{i18n._(t`Rewards`)}</ToggleButtonGroup.Button>
-          </ToggleButtonGroup>
+    <div className={darkMode ? 'modal-dark' : 'modal-light'}>
+      <Context.Provider value={useMemo(() => ({ content, setContent }), [content, setContent])}>
+        <div className={classNames('')}>
+          <div className={classNames(COLUMN_CONTAINER, content ? '' : 'hidden')}>{content}</div>
+          <div className={classNames(COLUMN_CONTAINER, content ? 'hidden' : '')}>
+            <HeadlessUiModal.Header
+              header={
+                <div className={`flex gap-0.5 items-center ${darkMode ? 'modal-title-dark' : 'modal-title-light'}`}>
+                  {view === OnsenModalView.Liquidity
+                    ? i18n._(t`Manage liquidity`)
+                    : view === OnsenModalView.Position
+                    ? i18n._(t`Your position and rewards`)
+                    : i18n._(t`Stake or unstake your liquidity`)}
+                  <QuestionHelper
+                    className="!bg-dark-800 !shadow-xl p-2"
+                    text={<InformationDisclosure farm={farm} />}
+                  />
+                </div>
+              }
+              onClose={onDismiss}
+            />
+            <ToggleButtonGroup
+              size="sm"
+              value={view}
+              onChange={(view: OnsenModalView) => dispatch(setOnsenModalView(view))}
+              variant="filled"
+            >
+              <ToggleButtonGroup.Button value={OnsenModalView.Liquidity}>
+                {farm.pair.type === PairType.KASHI ? i18n._(t`Lending`) : i18n._(t`Liquidity`)}
+              </ToggleButtonGroup.Button>
+              <ToggleButtonGroup.Button value={OnsenModalView.Staking}>{i18n._(t`Staking`)}</ToggleButtonGroup.Button>
+              <ToggleButtonGroup.Button value={OnsenModalView.Position}>{i18n._(t`Rewards`)}</ToggleButtonGroup.Button>
+            </ToggleButtonGroup>
 
-          {/*Dont unmount following components to make modal more react faster*/}
-          <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Position ? 'block' : 'hidden')}>
-            <InvestmentDetails farm={farm} />
-          </div>
-          <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Liquidity ? 'block' : 'hidden')}>
-            {farm.pair.type === PairType.KASHI ? <ManageKashiPair farm={farm} /> : <ManageSwapPair farm={farm} />}
-          </div>
-          <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Staking ? 'block' : 'hidden')}>
-            <ManageBar farm={farm} />
+            {/*Dont unmount following components to make modal more react faster*/}
+            <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Position ? 'block' : 'hidden')}>
+              <InvestmentDetails farm={farm} />
+            </div>
+            <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Liquidity ? 'block' : 'hidden')}>
+              {farm.pair.type === PairType.KASHI ? <ManageKashiPair farm={farm} /> : <ManageSwapPair farm={farm} />}
+            </div>
+            <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Staking ? 'block' : 'hidden')}>
+              <ManageBar farm={farm} />
+            </div>
           </div>
         </div>
-      </div>
-    </Context.Provider>
+      </Context.Provider>
+    </div>
   )
 }
 

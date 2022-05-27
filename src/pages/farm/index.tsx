@@ -14,6 +14,7 @@ import { TridentBody, TridentHeader } from 'layouts/Trident'
 import { useActiveWeb3React } from 'hooks/web3'
 import React, { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 export default function Farm(): JSX.Element {
   const { i18n } = useLingui()
@@ -24,12 +25,11 @@ export default function Farm(): JSX.Element {
   const router = new URLSearchParams(param)
 
   const type = !router.get('filter') ? 'all' : (router.get('filter') as string)
-
+  const darkMode = useIsDarkMode()
   const queryOrActiveAccount = useMemo(
     () => (router.get('account') ? (router.get('account') as string) : account),
     [account, router.get('account')]
   )
-
   console.log({ queryOrActiveAccount })
 
   const FILTER = {
@@ -72,7 +72,7 @@ export default function Farm(): JSX.Element {
       {/* <NextSeo title="Farm" description="Farm SUSHI" /> */}
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
         <div>
-          <Typography variant="h2" className="text-high-emphesis" weight={700}>
+          <Typography variant="h2" style={{ color: darkMode ? 'white' : '#6e087a' }} weight={700}>
             {i18n._(t`Onsen Menu`)}
           </Typography>
           <Typography variant="sm" weight={400}>
@@ -80,7 +80,7 @@ export default function Farm(): JSX.Element {
           </Typography>
         </div>
         <div className="flex gap-3">
-          <Button id="btn-create-new-pool" size="sm">
+          <Button id="btn-create-new-pool" size="sm" className={darkMode ? 'background-dark' : 'background-light'}>
             <a
               href="https://docs.google.com/document/d/1VcdrqAn1sR8Wa0BSSU-jAl68CfoECR62LCzIyzUpZ_U"
               target="_blank"
@@ -94,7 +94,9 @@ export default function Farm(): JSX.Element {
       <TridentBody>
         <div className="flex flex-col w-full gap-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <Search search={search} term={term} />
+            <div className={darkMode ? 'search-dark' : 'search-light'}>
+              <Search search={search} term={term} />
+            </div>
             <OnsenFilter account={account} chainId={chainId} />
           </div>
           <FarmList farms={result} term={term} />

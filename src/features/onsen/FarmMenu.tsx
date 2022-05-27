@@ -123,7 +123,7 @@ const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: 
         >
           <Menu.Items
             static
-            className="absolute z-10 w-full mt-2 border divide-y rounded shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-dark-900 bg-dark-1000 divide-dark-900"
+            className="absolute z-10 w-full mt-2 border divide-y rounded shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-dark-900 bg-theme divide-dark-900"
           >
             {Object.entries(items).map(([k, v], index) => (
               <div

@@ -180,7 +180,7 @@ const InvestmentDetails = ({ farm }) => {
       {farm.pair.type === PairType.KASHI && (
         <Button
           fullWidth
-          color="blue"
+          color="pink"
           variant="empty"
           size="sm"
           className="!italic"
