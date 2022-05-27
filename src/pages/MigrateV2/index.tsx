@@ -46,7 +46,7 @@ const computeSushiPairAddress = ({ tokenA, tokenB }: { tokenA: Token; tokenB: To
  * @param tokenB the other token
  */
 function toSushiLiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
-  return new Token(tokenA.chainId, computeSushiPairAddress({ tokenA, tokenB }), 18, 'SLP', 'SushiSwap LP Token')
+  return new Token(tokenA.chainId, computeSushiPairAddress({ tokenA, tokenB }), 18, 'TEL-LP', 'Teleswap LP Token')
 }
 
 export default function MigrateV2() {

@@ -35,7 +35,7 @@ const InformationDisclosure = ({ farm }) => {
               <NavLink href={`/migrate`}>
                 <a className="text-sm text-blue">migrate liquidity</a>
               </NavLink>
-              {i18n._(t`) to receive SLP tokens.`)}
+              {i18n._(t`) to receive TEL-LP tokens.`)}
             </Typography>
           </>
         )}
@@ -47,7 +47,7 @@ const InformationDisclosure = ({ farm }) => {
         <Typography variant="xs">
           {i18n._(t`Approve and then deposit your`)}
           {` `}
-          {farm.pair.type === PairType.KASHI ? `KMP` : `SLP`}
+          {farm.pair.type === PairType.KASHI ? `KMP` : `TEL-LP`}
           {` `}
           {i18n._(t`tokens into the farm to start earning rewards.`)}
         </Typography>
@@ -59,7 +59,7 @@ const InformationDisclosure = ({ farm }) => {
         {farm.pair.type === PairType.SWAP && (
           <Typography variant="xs">
             {i18n._(
-              t`Harvest rewards and unstake your SLP tokens at any time. You can then remove your liquidity to receive your base investment tokens back in your wallet.`
+              t`Harvest rewards and unstake your TEL-LP tokens at any time. You can then remove your liquidity to receive your base investment tokens back in your wallet.`
             )}
           </Typography>
         )}

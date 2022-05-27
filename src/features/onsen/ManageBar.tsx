@@ -161,7 +161,7 @@ const ManageBar = ({ farm }) => {
             color={!isDepositValid && !!parsedDepositValue ? 'red' : 'blue'}
             onClick={async () => {
               try {
-                // KMP decimals depend on asset, SLP is always 18
+                // KMP decimals depend on asset, TEL-LP is always 18
                 // @ts-ignore TYPE NEEDS FIXING
                 const tx = await deposit(farm.id, BigNumber.from(parsedDepositValue?.quotient.toString()))
                 if (tx?.hash) {
@@ -194,7 +194,7 @@ const ManageBar = ({ farm }) => {
           color={!isWithdrawValid && !!parsedWithdrawValue ? 'red' : 'blue'}
           onClick={async () => {
             try {
-              // KMP decimals depend on asset, SLP is always 18
+              // KMP decimals depend on asset, TEL-LP is always 18
               // @ts-ignore TYPE NEEDS FIXING
               const tx = await withdraw(farm.id, BigNumber.from(parsedWithdrawValue?.quotient.toString()))
               if (tx?.hash) {
