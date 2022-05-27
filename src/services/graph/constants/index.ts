@@ -21,6 +21,7 @@ export const GRAPH_HOST = {
   [ChainId.KOVAN]: THE_GRAPH,
   [ChainId.FUSE]: THE_GRAPH,
   [ChainId.MOONBEAM]: THE_GRAPH,
+  [ChainId.RINKEBY]: THE_GRAPH,
 }
 
 export const TRIDENT = {

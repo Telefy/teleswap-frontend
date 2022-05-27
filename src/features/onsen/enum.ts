@@ -1,6 +1,5 @@
 export enum Chef {
-  MASTERCHEF,
-  MASTERCHEF_V2,
+  DIALER_CONTRACT,
   MINICHEF,
   OLD_FARMS,
 }

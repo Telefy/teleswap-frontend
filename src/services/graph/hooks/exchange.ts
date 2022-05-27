@@ -28,7 +28,7 @@ import {
   getPicklePrice,
   getRulerPrice,
   getSpellPrice,
-  getSushiPrice,
+  getTelePrice,
   getTokenDayData,
   getTokenPairs,
   getTokens,
@@ -174,8 +174,8 @@ export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export function useSushiPrice(swrConfig: SWRConfiguration = undefined) {
-  return useSWR(['sushiPrice'], () => getSushiPrice(), swrConfig)
+export function useTelePrice(chainId: number, swrConfig: SWRConfiguration = undefined) {
+  return useSWR(['sushiPrice'], () => getTelePrice(chainId), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING

@@ -43,7 +43,7 @@ export default function Farm(): JSX.Element {
     kashi: (farm) => farm.pair.type === PairType.KASHI && farm.allocPoint !== '0',
     // @ts-ignore TYPE NEEDS FIXING
     '2x': (farm) =>
-      (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF) &&
+      (farm.chef === Chef.DIALER_CONTRACT || farm.chef === Chef.MINICHEF) &&
       farm.rewards.length > 1 &&
       farm.allocPoint !== '0',
     // @ts-ignore TYPE NEEDS FIXING

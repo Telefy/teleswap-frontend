@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable prefer-const */
 import { getAddress } from '@ethersproject/address'
-import { ChainId, Currency, NATIVE, SUSHI, Token } from '@telefy/teleswap-core-sdk'
+import { ChainId, Currency, NATIVE, TELE, Token } from '@telefy/teleswap-core-sdk'
 import { XDAI_TOKENS } from 'config/tokens'
 import { Feature } from 'enums'
 import { Chef, PairType } from 'features/onsen/enum'
@@ -28,13 +28,15 @@ import {
   useOnePrice,
   useSpellPrice,
   useSushiPairs,
-  useSushiPrice,
+  useTelePrice,
 } from 'services/graph'
 import { useCallback, useMemo } from 'react'
 
 export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
   const positions = usePositions(chainId)
   const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  console.log('FARM 1');
+
   const farms = useFarms({ chainId })
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair.toLowerCase()), [farms])
 
@@ -48,6 +50,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
     shouldFetch: !!farmAddresses,
   })
 
+  console.log(swapPairs, 'swapPairs');
   const { data: swapPairs1d } = useSushiPairs({
     chainId,
     variables: {
@@ -69,7 +72,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
   const { data: masterChefV1TotalAllocPoint } = useMasterChefV1TotalAllocPoint()
   const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
 
-  const { data: sushiPrice } = useSushiPrice()
+  const { data: telePrice } = useTelePrice(chainId)
   const { data: ethPrice } = useEthPrice()
   const { data: maticPrice } = useMaticPrice()
   const { data: gnoPrice } = useGnoPrice()
@@ -90,7 +93,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
     // @ts-ignore TYPE NEEDS FIXING
     (pool) => {
       // TODO: Deal with inconsistencies between properties on subgraph
-      pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
+      pool.owner = pool?.owner || pool?.dialerContract || pool?.miniChef
       pool.balance = pool?.balance || pool?.slpBalance
 
       // @ts-ignore TYPE NEEDS FIXING
@@ -107,20 +110,20 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
       const blocksPerHour = 3600 / averageBlockTime
 
       function getRewards() {
-        // TODO: Some subgraphs give sushiPerBlock & sushiPerSecond, and mcv2 gives nothing
-        const sushiPerBlock =
-          pool?.owner?.sushiPerBlock / 1e18 ||
-          (pool?.owner?.sushiPerSecond / 1e18) * averageBlockTime ||
+        // TODO: Some subgraphs give telePerBlock & sushiPerSecond, and DialerContract gives nothing
+        const telePerBlock =
+          pool?.owner?.telePerBlock / 1e18 ||
+          (pool?.owner?.telePerSecond / 1e18) * averageBlockTime ||
           masterChefV1SushiPerBlock
 
         // @ts-ignore TYPE NEEDS FIXING
-        const rewardPerBlock = (pool.allocPoint / pool.owner.totalAllocPoint) * sushiPerBlock
+        const rewardPerBlock = (pool.allocPoint / pool.owner.totalAllocPoint) * telePerBlock
 
         const defaultReward = {
-          currency: SUSHI[ChainId.MAINNET],
+          currency: TELE[chainId],
           rewardPerBlock,
           rewardPerDay: rewardPerBlock * blocksPerDay,
-          rewardPrice: sushiPrice,
+          rewardPrice: telePrice,
         }
 
         let rewards: { currency: Currency; rewardPerBlock: number; rewardPerDay: number; rewardPrice: number }[] = [
@@ -128,7 +131,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
           defaultReward,
         ]
 
-        if (pool.chef === Chef.MASTERCHEF_V2) {
+        if (pool.chef === Chef.DIALER_CONTRACT) {
           // override for mcv2...
           pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
 
@@ -167,7 +170,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
 
             const reward = {
               currency: new Token(
-                ChainId.MAINNET,
+                chainId,
                 getAddress(pool.rewardToken.id),
                 Number(pool.rewardToken.decimals),
                 pool.rewardToken.symbol,
@@ -180,10 +183,10 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
             rewards[1] = reward
           }
         } else if (pool.chef === Chef.MINICHEF && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM_ONE) {
-          const sushiPerSecond =
-            ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
-          const sushiPerBlock = sushiPerSecond * averageBlockTime
-          const sushiPerDay = sushiPerBlock * blocksPerDay
+          const telePerSecond =
+            ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.telePerSecond) / 1e18
+          const telePerBlock = telePerSecond * averageBlockTime
+          const telePerDay = telePerBlock * blocksPerDay
 
           const rewardPerSecond =
             ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
@@ -250,8 +253,8 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
             // @ts-ignore TYPE NEEDS FIXING
             rewards[0] = {
               ...defaultReward,
-              rewardPerBlock: sushiPerBlock,
-              rewardPerDay: sushiPerDay,
+              rewardPerBlock: telePerBlock,
+              rewardPerDay: telePerDay,
             }
             // @ts-ignore TYPE NEEDS FIXING
             if (chainId in reward) {
@@ -283,10 +286,10 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
             }
           }
         } else if (pool.chef === Chef.OLD_FARMS) {
-          const sushiPerSecond =
-            ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
-          const sushiPerBlock = sushiPerSecond * averageBlockTime
-          const sushiPerDay = sushiPerBlock * blocksPerDay
+          const telePerSecond =
+            ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.telePerSecond) / 1e18
+          const telePerBlock = telePerSecond * averageBlockTime
+          const telePerDay = telePerBlock * blocksPerDay
 
           const rewardPerSecond =
             ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
@@ -307,8 +310,8 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
           // @ts-ignore TYPE NEEDS FIXING
           rewards[0] = {
             ...defaultReward,
-            rewardPerBlock: sushiPerBlock,
-            rewardPerDay: sushiPerDay,
+            rewardPerBlock: telePerBlock,
+            rewardPerDay: telePerDay,
           }
 
           // @ts-ignore TYPE NEEDS FIXING
@@ -398,7 +401,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
       movrPrice,
       onePrice,
       positions,
-      sushiPrice,
+      telePrice,
       swapPairs,
       swapPairs1d,
     ]

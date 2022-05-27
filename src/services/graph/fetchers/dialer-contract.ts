@@ -5,7 +5,7 @@ import {
   masterChefV1PairAddressesQuery,
   masterChefV1SushiPerBlockQuery,
   masterChefV1TotalAllocPointQuery,
-  masterChefV2PairAddressesQuery,
+  DialerContractPairAddressesQuery,
   miniChefPairAddressesQuery,
   miniChefPoolsQuery,
   miniChefPoolsQueryV2,
@@ -40,14 +40,15 @@ export const oldMiniChef = async (query, chainId = ChainId.MAINNET) =>
   // @ts-ignore TYPE NEEDS FIXING
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${OLD_MINICHEF[chainId]}`, query)
 
-export const MASTERCHEF_V2 = {
-  [ChainId.MAINNET]: 'sushiswap/master-chefv2',
+export const DIALER_CONTRACT = {
+  [ChainId.MAINNET]: 'sathishkumarsb/mainnettele15',
+  [ChainId.RINKEBY]: 'sathishkumarsb/mainnettele15',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const masterChefV2 = async (query, chainId = ChainId.MAINNET, variables = undefined) =>
+export const DialerContract = async (query, chainId = ChainId.MAINNET, variables = undefined) =>
   // @ts-ignore TYPE NEEDS FIXING
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MASTERCHEF_V2[chainId]}`, query, variables)
+  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${DIALER_CONTRACT[chainId]}`, query, variables)
 
 export const MASTERCHEF_V1 = {
   [ChainId.MAINNET]: 'sushiswap/master-chef',
@@ -83,8 +84,11 @@ export const getMasterChefV1PairAddreses = async () => {
   return pools?.map((pool) => pool.pair)
 }
 
-export const getMasterChefV2Farms = async (variables = undefined) => {
-  const { pools } = await masterChefV2(poolsV2Query, undefined, variables)
+export const getDialerContractFarms = async (variables = undefined) => {
+  console.log(variables, 'farm 3')
+
+  const { pools } = await DialerContract(poolsV2Query, undefined, variables)
+  console.log(pools, 'graphfetch1')
 
   const tokens = await getTokenSubset(ChainId.MAINNET, {
     // @ts-ignore TYPE NEEDS FIXING
@@ -101,8 +105,8 @@ export const getMasterChefV2Farms = async (variables = undefined) => {
   }))
 }
 
-export const getMasterChefV2PairAddreses = async () => {
-  const { pools } = await masterChefV2(masterChefV2PairAddressesQuery)
+export const getDialerContractPairAddreses = async () => {
+  const { pools } = await DialerContract(DialerContractPairAddressesQuery)
   // @ts-ignore
   return pools?.map((pool) => pool.pair)
 }

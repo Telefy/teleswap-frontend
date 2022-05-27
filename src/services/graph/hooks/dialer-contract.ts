@@ -5,8 +5,8 @@ import {
   getMasterChefV1PairAddreses,
   getMasterChefV1SushiPerBlock,
   getMasterChefV1TotalAllocPoint,
-  getMasterChefV2Farms,
-  getMasterChefV2PairAddreses,
+  getDialerContractFarms,
+  getDialerContractPairAddreses,
   getMiniChefFarms,
   getMiniChefPairAddreses,
   getOldMiniChefFarms,
@@ -39,17 +39,21 @@ export function useMasterChefV1Farms({ chainId, swrConfig = undefined }: useFarm
   return useMemo(() => {
     if (!data) return []
     // @ts-ignore TYPE NEEDS FIXING
-    return data.map((data) => ({ ...data, chef: Chef.MASTERCHEF }))
+    return data.map((data) => ({ ...data, chef: Chef.DIALER_CONTRACT }))
   }, [data])
 }
 
-export function useMasterChefV2Farms({ chainId, swrConfig = undefined }: useFarmsProps) {
-  const shouldFetch = chainId && chainId === ChainId.MAINNET
-  const { data } = useSWR(shouldFetch ? 'masterChefV2Farms' : null, () => getMasterChefV2Farms(), swrConfig)
+export function useDialerContractFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
+  console.log('farm 2.1')
+
+  const shouldFetch = chainId && (chainId === ChainId.MAINNET || chainId === ChainId.RINKEBY)
+  const { data } = useSWR(shouldFetch ? 'DialerContractFarms' : null, () => getDialerContractFarms(), swrConfig)
+  console.log(data, 'farm 3.1')
+
   return useMemo(() => {
     if (!data) return []
     // @ts-ignore TYPE NEEDS FIXING
-    return data.map((data) => ({ ...data, chef: Chef.MASTERCHEF_V2 }))
+    return data.map((data) => ({ ...data, chef: Chef.DIALER_CONTRACT }))
   }, [data])
 }
 
@@ -97,14 +101,12 @@ export function useMiniChefFarms({ chainId, swrConfig = undefined }: useFarmsPro
 }
 
 export function useFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
-  const masterChefV1Farms = useMasterChefV1Farms({ chainId })
-  const masterChefV2Farms = useMasterChefV2Farms({ chainId })
+  const DialerContractFarms = useDialerContractFarms({ chainId })
   const miniChefFarms = useMiniChefFarms({ chainId })
   const oldMiniChefFarms = useOldMiniChefFarms()
   return useMemo(
-    () =>
-      concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms, oldMiniChefFarms).filter((pool) => pool && pool.pair),
-    [masterChefV1Farms, masterChefV2Farms, miniChefFarms, oldMiniChefFarms]
+    () => concat(DialerContractFarms, miniChefFarms, oldMiniChefFarms).filter((pool) => pool && pool.pair),
+    [DialerContractFarms, miniChefFarms, oldMiniChefFarms]
   )
 }
 
@@ -114,10 +116,10 @@ export function useMasterChefV1PairAddresses() {
   return useSWR(shouldFetch ? ['masterChefV1PairAddresses', chainId] : null, (_) => getMasterChefV1PairAddreses())
 }
 
-export function useMasterChefV2PairAddresses() {
+export function useDialerContractPairAddresses() {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.MAINNET
-  return useSWR(shouldFetch ? ['masterChefV2PairAddresses', chainId] : null, (_) => getMasterChefV2PairAddreses())
+  return useSWR(shouldFetch ? ['DialerContractPairAddresses', chainId] : null, (_) => getDialerContractPairAddreses())
 }
 
 export function useMiniChefPairAddresses() {
@@ -141,10 +143,10 @@ export function useMiniChefPairAddresses() {
 
 export function useFarmPairAddresses() {
   const { data: masterChefV1PairAddresses } = useMasterChefV1PairAddresses()
-  const { data: masterChefV2PairAddresses } = useMasterChefV2PairAddresses()
+  const { data: DialerContractPairAddresses } = useDialerContractPairAddresses()
   const { data: miniChefPairAddresses } = useMiniChefPairAddresses()
   return useMemo(
-    () => concat(masterChefV1PairAddresses ?? [], masterChefV2PairAddresses ?? [], miniChefPairAddresses ?? []),
-    [masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses]
+    () => concat(masterChefV1PairAddresses ?? [], DialerContractPairAddresses ?? [], miniChefPairAddresses ?? []),
+    [masterChefV1PairAddresses, DialerContractPairAddresses, miniChefPairAddresses]
   )
 }
