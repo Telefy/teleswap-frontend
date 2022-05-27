@@ -1,20 +1,9 @@
 import { Zero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
-import {
-  CurrencyAmount,
-  MASTERCHEF_ADDRESS,
-  MASTERCHEF_V2_ADDRESS,
-  MINICHEF_ADDRESS,
-  SUSHI,
-} from '@telefy/teleswap-core-sdk'
+import { CurrencyAmount, DIALER_CONTRACT_ADDRESS, MINICHEF_ADDRESS, TELE } from '@telefy/teleswap-core-sdk'
 import JSBI from 'jsbi'
 import { OLD_FARMS } from 'config/farms'
-import {
-  useMasterChefContract,
-  useMasterChefV2Contract,
-  useMiniChefContract,
-  useOldFarmsContract,
-} from 'hooks/useContract'
+import { useDialerContract, useMiniChefContract, useOldFarmsContract } from 'hooks/useContract'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'state/multicall/hooks'
 import { useActiveWeb3React } from 'hooks/web3'
 import concat from 'lodash/concat'
@@ -24,18 +13,16 @@ import { useCallback, useMemo } from 'react'
 import { Chef } from './enum'
 
 export function useChefContract(chef: Chef) {
-  const masterChefContract = useMasterChefContract()
-  const masterChefV2Contract = useMasterChefV2Contract()
+  const DialerContract = useDialerContract()
   const miniChefContract = useMiniChefContract()
   const oldFarmsContract = useOldFarmsContract()
   const contracts = useMemo(
     () => ({
-      [Chef.MASTERCHEF]: masterChefContract,
-      [Chef.MASTERCHEF_V2]: masterChefV2Contract,
+      [Chef.DIALER_CONTRACT]: DialerContract,
       [Chef.MINICHEF]: miniChefContract,
       [Chef.OLD_FARMS]: oldFarmsContract,
     }),
-    [masterChefContract, masterChefV2Contract, miniChefContract, oldFarmsContract]
+    [DialerContract, miniChefContract, oldFarmsContract]
   )
   return useMemo(() => {
     return contracts[chef]
@@ -43,18 +30,16 @@ export function useChefContract(chef: Chef) {
 }
 
 export function useChefContracts(chefs: Chef[]) {
-  const masterChefContract = useMasterChefContract()
-  const masterChefV2Contract = useMasterChefV2Contract()
+  const DialerContract = useDialerContract()
   const miniChefContract = useMiniChefContract()
   const oldFarmsContract = useOldFarmsContract()
   const contracts = useMemo(
     () => ({
-      [Chef.MASTERCHEF]: masterChefContract,
-      [Chef.MASTERCHEF_V2]: masterChefV2Contract,
+      [Chef.DIALER_CONTRACT]: DialerContract,
       [Chef.MINICHEF]: miniChefContract,
       [Chef.OLD_FARMS]: oldFarmsContract,
     }),
-    [masterChefContract, masterChefV2Contract, miniChefContract, oldFarmsContract]
+    [DialerContract, miniChefContract, oldFarmsContract]
   )
   return chefs.map((chef) => contracts[chef])
 }
@@ -82,7 +67,7 @@ export function useUserInfo(farm, token) {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export function usePendingSushi(farm) {
+export function usePendingTele(farm) {
   const { account, chainId } = useActiveWeb3React()
 
   const contract = useChefContract(farm.chef)
@@ -94,14 +79,14 @@ export function usePendingSushi(farm) {
     return [String(farm.id), String(account)]
   }, [farm, account])
 
-  const result = useSingleCallResult(args ? contract : null, 'pendingSushi', args)?.result
+  const result = useSingleCallResult(args ? contract : null, 'pendingTele', args)?.result
 
   const value = result?.[0]
 
   const amount = value ? JSBI.BigInt(value.toString()) : undefined
 
   // @ts-ignore TYPE NEEDS FIXING
-  return amount ? CurrencyAmount.fromRawAmount(SUSHI[chainId], amount) : undefined
+  return amount ? CurrencyAmount.fromRawAmount(TELE[chainId], amount) : undefined
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -139,7 +124,7 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
   }, [numberOfPools, account])
 
   // @ts-ignore TYPE NEEDS FIXING
-  const pendingSushi = useSingleContractMultipleData(args ? contract : null, 'pendingSushi', args)
+  const pendingTele = useSingleContractMultipleData(args ? contract : null, 'pendingTele', args)
 
   // @ts-ignore TYPE NEEDS FIXING
   const userInfo = useSingleContractMultipleData(args ? contract : null, 'userInfo', args)
@@ -152,11 +137,8 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
 
   const getChef = useCallback(() => {
     // @ts-ignore TYPE NEEDS FIXING
-    if (MASTERCHEF_ADDRESS[chainId] === contract.address) {
-      return Chef.MASTERCHEF
-      // @ts-ignore TYPE NEEDS FIXING
-    } else if (MASTERCHEF_V2_ADDRESS[chainId] === contract.address) {
-      return Chef.MASTERCHEF_V2
+    if (DIALER_CONTRACT_ADDRESS[chainId] === contract.address) {
+      return Chef.DIALER_CONTRACT
       // @ts-ignore TYPE NEEDS FIXING
     } else if (MINICHEF_ADDRESS[chainId] === contract.address) {
       return Chef.MINICHEF
@@ -169,39 +151,37 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
   }, [chainId, contract])
 
   return useMemo(() => {
-    if (!pendingSushi && !userInfo) {
+    if (!pendingTele && !userInfo) {
       return []
     }
-    return zip(pendingSushi, userInfo)
+    return zip(pendingTele, userInfo)
       .map((data, i) => ({
         // @ts-ignore TYPE NEEDS FIXING
         id: args[i][0],
         // @ts-ignore TYPE NEEDS FIXING
-        pendingSushi: data[0].result?.[0] || Zero,
+        pendingTele: data[0].result?.[0] || Zero,
         // @ts-ignore TYPE NEEDS FIXING
         amount: data[1].result?.[0] || Zero,
         chef: getChef(),
         // pendingTokens: data?.[2]?.result,
       }))
-      .filter(({ pendingSushi, amount }) => {
-        return (pendingSushi && !pendingSushi.isZero()) || (amount && !amount.isZero())
+      .filter(({ pendingTele, amount }) => {
+        return (pendingTele && !pendingTele.isZero()) || (amount && !amount.isZero())
       })
-  }, [args, getChef, pendingSushi, userInfo])
+  }, [args, getChef, pendingTele, userInfo])
 }
 
 const toRet: any[] = []
 
 export function usePositions(chainId?: number) {
-  const masterChefContract = useMasterChefContract()
-  const masterChefV2Contract = useMasterChefV2Contract()
+  const DialerContract = useDialerContract()
   const miniChefContract = useMiniChefContract()
-  const masterChefV1Positions = useChefPositions(masterChefContract, undefined, chainId)
-  const masterChefV2Positions = useChefPositions(masterChefV2Contract, undefined, chainId)
+  const DialerContractPositions = useChefPositions(DialerContract, undefined, chainId)
   const miniChefPositions = useChefPositions(miniChefContract, undefined, chainId)
 
   const data = useMemo(() => {
-    return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
-  }, [masterChefV1Positions, masterChefV2Positions, miniChefPositions])
+    return concat(DialerContractPositions, miniChefPositions)
+  }, [DialerContractPositions, miniChefPositions])
 
   return data.length > 0 ? data : toRet
 }

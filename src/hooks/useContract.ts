@@ -24,10 +24,9 @@ import EIP_2612 from 'abis/eip_2612.json'
 // sushi staking
 import BENTOBOX_ABI from 'abis/bentobox.json'
 import BORING_HELPER_ABI from 'abis/boring-helper.json'
-import MASTERCHEF_ABI from 'abis/masterchef.json'
-import MASTERCHEF_V2_ABI from 'abis/masterchef-v2.json'
+import DIALER_CONTRACT_ABI from 'abis/dialer-contract.json'
 import MINICHEF_ABI from 'abis/minichef-v2.json'
-import SUSHI_ABI from 'abis/sushi.json'
+import TELE_ABI from 'abis/tele.json'
 import CLONE_REWARDER_ABI from 'abis/clone-rewarder.json'
 import COMPLEX_REWARDER_ABI from 'abis/complex-rewarder.json'
 
@@ -49,10 +48,9 @@ import {
 import {
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
-  MASTERCHEF_ADDRESS,
-  MASTERCHEF_V2_ADDRESS,
+  DIALER_CONTRACT_ADDRESS,
   MINICHEF_ADDRESS,
-  SUSHI_ADDRESS,
+  TELE_ADDRESS,
 } from '@telefy/teleswap-core-sdk'
 import { OLD_FARMS } from 'config/farms'
 // sushi staking
@@ -210,13 +208,9 @@ export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | 
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? BENTOBOX_ADDRESS[chainId] : undefined, BENTOBOX_ABI, withSignerIfPossible)
 }
-export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
+export function useDialerContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? MASTERCHEF_ADDRESS[chainId] : undefined, MASTERCHEF_ABI, withSignerIfPossible)
-}
-export function useMasterChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? MASTERCHEF_V2_ADDRESS[chainId] : undefined, MASTERCHEF_V2_ABI, withSignerIfPossible)
+  return useContract(chainId ? DIALER_CONTRACT_ADDRESS[chainId] : undefined, DIALER_CONTRACT_ABI, withSignerIfPossible)
 }
 export function useMiniChefContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
@@ -226,9 +220,9 @@ export function useOldFarmsContract(withSignerIfPossibe?: boolean): Contract | n
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? OLD_FARMS[chainId] : undefined, MINICHEF_ABI, withSignerIfPossibe)
 }
-export function useSushiContract(withSignerIfPossible = true): Contract | null {
+export function useTeleContract(withSignerIfPossible = true): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? SUSHI_ADDRESS[chainId] : undefined, SUSHI_ABI, withSignerIfPossible)
+  return useContract(chainId ? TELE_ADDRESS[chainId] : undefined, TELE_ABI, withSignerIfPossible)
 }
 // @ts-ignore TYPE NEEDS FIXING
 export function useComplexRewarderContract(address, withSignerIfPossible?: boolean): Contract | null {

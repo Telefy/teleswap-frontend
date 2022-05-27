@@ -1,16 +1,15 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Zero } from '@ethersproject/constants'
-import { useSushiContract } from 'hooks/useContract'
+import { useTeleContract } from 'hooks/useContract'
 import { useActiveWeb3React } from 'hooks/web3'
 import { useCallback } from 'react'
 
 import { Chef } from './enum'
 import { useChefContract } from './hooks'
 
-export default function useMasterChef(chef: Chef) {
+export default function useDialerContract(chef: Chef) {
   const { account } = useActiveWeb3React()
 
-  const sushi = useSushiContract()
+  const tele = useTeleContract()
 
   const contract = useChefContract(chef)
 
@@ -20,9 +19,7 @@ export default function useMasterChef(chef: Chef) {
       try {
         let tx
 
-        if (chef === Chef.MASTERCHEF) {
-          tx = await contract?.deposit(pid, amount)
-        } else {
+        if (chef === Chef.DIALER_CONTRACT) {
           tx = await contract?.deposit(pid, amount, account)
         }
 
@@ -41,12 +38,10 @@ export default function useMasterChef(chef: Chef) {
       try {
         let tx
 
-        if (chef === Chef.MASTERCHEF) {
-          tx = await contract?.withdraw(pid, amount)
+        if (chef === Chef.DIALER_CONTRACT) {
+          tx = await contract?.withdraw(pid, amount, account)
         } else if (chef === Chef.MINICHEF || chef === Chef.OLD_FARMS) {
           tx = await contract?.withdrawAndHarvest(pid, amount, account)
-        } else {
-          tx = await contract?.withdraw(pid, amount, account)
         }
 
         return tx
@@ -63,18 +58,16 @@ export default function useMasterChef(chef: Chef) {
       try {
         let tx
 
-        if (chef === Chef.MASTERCHEF) {
-          tx = await contract?.deposit(pid, Zero)
-        } else if (chef === Chef.MASTERCHEF_V2) {
-          const pendingSushi = await contract?.pendingSushi(pid, account)
+        if (chef === Chef.DIALER_CONTRACT) {
+          const pendingTele = await contract?.pendingTele(pid, account)
 
-          const balanceOf = await sushi?.balanceOf(contract?.address)
+          const balanceOf = await tele?.balanceOf(contract?.address)
 
-          // If MasterChefV2 doesn't have enough sushi to harvest, batch in a harvest.
-          if (pendingSushi.gt(balanceOf)) {
+          // If DialerContract doesn't have enough sushi to harvest, batch in a harvest.
+          if (pendingTele.gt(balanceOf)) {
             tx = await contract?.batch(
               [
-                contract?.interface?.encodeFunctionData('harvestFromMasterChef'),
+                contract?.interface?.encodeFunctionData('harvestFromDialerContract'),
                 contract?.interface?.encodeFunctionData('harvest', [pid, account]),
               ],
               true
@@ -92,7 +85,7 @@ export default function useMasterChef(chef: Chef) {
         return e
       }
     },
-    [account, chef, contract, sushi]
+    [account, chef, contract, tele]
   )
 
   return { deposit, withdraw, harvest }

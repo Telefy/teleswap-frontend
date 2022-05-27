@@ -3,8 +3,23 @@
     "inputs": [
       {
         "internalType": "contract IERC20",
-        "name": "_sushi",
+        "name": "_tele",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_devaddr",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_startBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_bonusEndBlock",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -99,6 +114,12 @@
   },
   {
     "anonymous": false,
+    "inputs": [],
+    "name": "LogInit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [
       {
         "indexed": true,
@@ -163,19 +184,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "sushiPerSecond",
-        "type": "uint256"
-      }
-    ],
-    "name": "LogSushiPerSecond",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "uint256",
         "name": "pid",
@@ -184,7 +192,7 @@
       {
         "indexed": false,
         "internalType": "uint64",
-        "name": "lastRewardTime",
+        "name": "lastRewardBlock",
         "type": "uint64"
       },
       {
@@ -196,7 +204,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "accSushiPerShare",
+        "name": "accTelePerShare",
         "type": "uint256"
       }
     ],
@@ -255,7 +263,20 @@
   },
   {
     "inputs": [],
-    "name": "SUSHI",
+    "name": "BONUS_MULTIPLIER",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "TELE",
     "outputs": [
       {
         "internalType": "contract IERC20",
@@ -320,6 +341,19 @@
   },
   {
     "inputs": [],
+    "name": "bonusEndBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "claimOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -349,6 +383,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "devaddr",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -364,6 +411,30 @@
     "name": "emergencyWithdraw",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_from",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_to",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMultiplier",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -552,12 +623,12 @@
     "outputs": [
       {
         "internalType": "uint128",
-        "name": "accSushiPerShare",
+        "name": "accTelePerShare",
         "type": "uint128"
       },
       {
         "internalType": "uint64",
-        "name": "lastRewardTime",
+        "name": "lastRewardBlock",
         "type": "uint64"
       },
       {
@@ -632,6 +703,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_devaddr",
+        "type": "address"
+      }
+    ],
+    "name": "setDev",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract IMigratorChef",
         "name": "_migrator",
         "type": "address"
@@ -643,21 +727,8 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_sushiPerSecond",
-        "type": "uint256"
-      }
-    ],
-    "name": "setSushiPerSecond",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
-    "name": "sushiPerSecond",
+    "name": "startBlock",
     "outputs": [
       {
         "internalType": "uint256",
@@ -718,12 +789,12 @@
         "components": [
           {
             "internalType": "uint128",
-            "name": "accSushiPerShare",
+            "name": "accTelePerShare",
             "type": "uint128"
           },
           {
             "internalType": "uint64",
-            "name": "lastRewardTime",
+            "name": "lastRewardBlock",
             "type": "uint64"
           },
           {
@@ -732,7 +803,7 @@
             "type": "uint64"
           }
         ],
-        "internalType": "struct MiniChefV2.PoolInfo",
+        "internalType": "struct DialerContract.PoolInfo",
         "name": "pool",
         "type": "tuple"
       }

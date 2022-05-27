@@ -107,7 +107,6 @@ export const pairFieldsQuery = gql`
     token1Price
     totalSupply
     txCount
-    timestamp
   }
   fragment PairToken on Token {
     id

@@ -1,4 +1,4 @@
-import { ChainId } from '@telefy/teleswap-core-sdk'
+import { ChainId, TELE_ADDRESS } from '@telefy/teleswap-core-sdk'
 import { GRAPH_HOST } from 'services/graph/constants'
 import {
   dayDatasQuery,
@@ -33,6 +33,7 @@ export const EXCHANGE = {
   [ChainId.HECO]: 'heco-exchange/heco',
   [ChainId.FUSE]: 'sushiswap/fuse-exchange',
   [ChainId.MOONBEAM]: 'sushiswap/moonbeam-exchange',
+  [ChainId.RINKEBY]: 'telefy/teleswap-subgraph-rinkeby',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -41,6 +42,8 @@ export const exchange = async (chainId = ChainId.MAINNET, query, variables = {})
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
 export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
+  console.log('pair fn')
+
   const { pairs } = await exchange(chainId, query, variables)
   return pairs
 }
@@ -172,10 +175,10 @@ export const getMphPrice = async (variables = {}) => {
   })
 }
 
-export const getSushiPrice = async (variables = {}) => {
-  // console.log('getSushiPrice')
+export const getTelePrice = async (chainId: number, variables = {}) => {
+  // console.log('getTelePrice')
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
-    id: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+    id: TELE_ADDRESS[chainId],
     ...variables,
   })
 }

@@ -5,7 +5,7 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { SupportedChainId as ChainId } from 'constants/chains'
-import { MASTERCHEF_ADDRESS, MASTERCHEF_V2_ADDRESS, MINICHEF_ADDRESS, Token } from '@telefy/teleswap-core-sdk'
+import { DIALER_CONTRACT_ADDRESS, MINICHEF_ADDRESS, Token } from '@telefy/teleswap-core-sdk'
 import AssetInput from 'farm-components/AssetInput'
 import Button from 'farm-components/Button'
 import { HeadlessUiModal } from 'farm-components/Modal'
@@ -25,12 +25,11 @@ import React, { useState } from 'react'
 
 import { Chef, PairType } from './enum'
 import { useUserInfo } from './hooks'
-import useMasterChef from './useMasterChef'
+import useDialerContract from './useDialerContract'
 import { useIsDarkMode } from '../../state/user/hooks'
 
 const APPROVAL_ADDRESSES = {
-  [Chef.MASTERCHEF]: { [ChainId.MAINNET]: MASTERCHEF_ADDRESS[ChainId.MAINNET] },
-  [Chef.MASTERCHEF_V2]: { [ChainId.MAINNET]: MASTERCHEF_V2_ADDRESS[ChainId.MAINNET] },
+  [Chef.DIALER_CONTRACT]: { [ChainId.MAINNET]: DIALER_CONTRACT_ADDRESS[ChainId.MAINNET] },
   [Chef.MINICHEF]: {
     // [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
     // [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],
@@ -54,14 +53,14 @@ const ManageBar = ({ farm }) => {
   const [toggle, setToggle] = useState(true)
   const [depositValue, setDepositValue] = useState<string>()
   const [withdrawValue, setWithdrawValue] = useState<string>()
-  const { deposit, withdraw } = useMasterChef(farm.chef)
+  const { deposit, withdraw } = useDialerContract(farm.chef)
   const addTransaction = useTransactionAdder()
   const liquidityToken = new Token(
     // @ts-ignore TYPE NEEDS FIXING
     chainId || 1,
     getAddress(farm.pair.id),
     farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
-    farm.pair.type === PairType.KASHI ? 'KMP' : 'SLP'
+    farm.pair.type === PairType.KASHI ? 'KMP' : 'TEL-LP'
   )
   const balance = useCurrencyBalance(account ?? undefined, liquidityToken)
   const stakedAmount = useUserInfo(farm, liquidityToken)

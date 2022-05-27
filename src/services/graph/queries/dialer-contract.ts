@@ -12,7 +12,7 @@ export const poolsV2Query = gql`
       pair
       allocPoint
       slpBalance
-      masterChef {
+      dialerContract {
         id
         totalAllocPoint
       }
@@ -25,8 +25,8 @@ export const poolsV2Query = gql`
   }
 `
 
-export const masterChefV2PairAddressesQuery = gql`
-  query masterChefV2PairAddresses(
+export const DialerContractPairAddressesQuery = gql`
+  query DialerContractPairAddresses(
     $first: Int! = 1000
     $skip: Int! = 0
     $orderBy: String! = "id"

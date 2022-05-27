@@ -19,8 +19,8 @@ import React, { useMemo, useState } from 'react'
 
 import { useKashiMediumRiskLendingPair } from '../kashi/hooks'
 import { PairType } from './enum'
-import { usePendingSushi, useUserInfo } from './hooks'
-import useMasterChef from './useMasterChef'
+import { usePendingTele, useUserInfo } from './hooks'
+import useDialerContract from './useDialerContract'
 import usePendingReward from './usePendingReward'
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -39,7 +39,7 @@ const RewardRow = ({ value, symbol }) => {
 const InvestmentDetails = ({ farm }) => {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
-  const { harvest } = useMasterChef(farm.chef)
+  const { harvest } = useDialerContract(farm.chef)
   const router = useHistory()
   const addTransaction = useTransactionAdder()
   const kashiPair = useKashiMediumRiskLendingPair(account, farm.pair.id)
@@ -56,7 +56,7 @@ const InvestmentDetails = ({ farm }) => {
             chainId,
             getAddress(farm.pair.id),
             farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
-            farm.pair.symbol ?? farm.pair.type === PairType.KASHI ? 'KMP' : 'SLP',
+            farm.pair.symbol ?? farm.pair.type === PairType.KASHI ? 'KMP' : 'TEL-LP',
             farm.pair.name
           )
         : undefined,
@@ -67,7 +67,7 @@ const InvestmentDetails = ({ farm }) => {
 
   const kashiAssetAmount = useMemo(() => {
     let amountArgument: JSBI
-    if (stakedAmount?.greaterThan(0)) {
+    if (stakedAmount?.greaterThan(0) && kashiPair) {
       amountArgument = toAmount(kashiPair.asset, stakedAmount.quotient)
     } else {
       amountArgument = JSBI.BigInt(0)
@@ -75,7 +75,7 @@ const InvestmentDetails = ({ farm }) => {
     return kashiPair ? CurrencyAmount.fromRawAmount(kashiPair.asset.token, amountArgument) : undefined
   }, [kashiPair, stakedAmount])
 
-  const pendingSushi = usePendingSushi(farm)
+  const pendingTele = usePendingTele(farm)
   const pendingReward = usePendingReward(farm)
 
   const positionFiatValue = useUSDCPriceSubgraph(kashiPair ? kashiPair.asset.token : undefined)
@@ -83,7 +83,7 @@ const InvestmentDetails = ({ farm }) => {
   const secondaryRewardOnly = chainId && [ChainId.FUSE].includes(chainId)
 
   const rewardValue = !secondaryRewardOnly
-    ? (farm?.rewards?.[0]?.rewardPrice ?? 0) * Number(pendingSushi?.toExact() ?? 0) +
+    ? (farm?.rewards?.[0]?.rewardPrice ?? 0) * Number(pendingTele?.toExact() ?? 0) +
       (farm?.rewards?.[1]?.rewardPrice ?? 0) * Number(pendingReward ?? 0)
     : (farm?.rewards?.[0]?.rewardPrice ?? 0) * Number(pendingReward ?? 0)
 
@@ -164,7 +164,7 @@ const InvestmentDetails = ({ farm }) => {
                 <>
                   {i === 0 && (
                     <RewardRow
-                      value={formatNumber(pendingSushi?.toSignificant(6) ?? 0)}
+                      value={formatNumber(pendingTele?.toSignificant(6) ?? 0)}
                       symbol={reward.currency.symbol}
                     />
                   )}
@@ -195,7 +195,7 @@ const InvestmentDetails = ({ farm }) => {
         color="blue"
         disabled={
           pendingTx ||
-          !((pendingSushi && pendingSushi.greaterThan(JSBI.BigInt(0))) || (pendingReward && Number(pendingReward) > 0))
+          !((pendingTele && pendingTele.greaterThan(JSBI.BigInt(0))) || (pendingReward && Number(pendingReward) > 0))
         }
         onClick={onHarvest}
       >
