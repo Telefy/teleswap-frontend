@@ -1992,7 +1992,10 @@ img, video {
 } */
 .bg-dark-900 {
   --tw-bg-opacity: 1;
-  /* background-color: #692572; */
+  /* background-color: #3b0a41; */
+}
+.bg-dark-1919{
+  background-color: #3b0a41;
 }
 .bg-transparent {
   background-color: transparent;
@@ -2760,7 +2763,7 @@ img, video {
 }
 .text-low-emphesis {
   --tw-text-opacity: 1;
-  color: #491b4f;
+  color: #7e3088;
   /* color: rgb(87 87 87/var(--tw-text-opacity)); */
 }
 .text-dark-700 {
@@ -4361,6 +4364,7 @@ color: #444;
 }
 .grid-dark{
   background-color: #3b0941;
+  border-radius: 8px;
 }
 .grid-dark .text-low-emphesis{
   color: #a553af;
@@ -4403,7 +4407,36 @@ color: #444;
   .grid-dark .grid-header-text{
     color: #fff;
   }
-  .grid-light .grid-header-text{
+  /* .grid-light .grid-header-text{
 
+  } */
+  .coin-placeholder{
+    position: absolute;
+    right: 0;
+  }
+  .tele-input{
+    position: relative;
+    max-width: 220px;
+    text-overflow: ellipsis;
+  }
+  .telefarms-title{
+    background-color: #44124c;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .telefarms-title-light{
+    background-color: #fde6ff;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  #btn-create-new-pool img{
+    transition: transform .7s ease-in-out;
+  }
+  #btn-create-new-pool:hover img{
+    transform: rotate(360deg);
+    transition: transform .7s ease-in-out;
+  }
+  .rounded-24{
+    border-radius: 24px;
   }
 /*# sourceMappingURL=26b848d58538f4f7.css.map*/

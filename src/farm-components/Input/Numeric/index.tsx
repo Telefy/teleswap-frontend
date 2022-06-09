@@ -45,7 +45,7 @@ export const Input: FC<Input> = forwardRef<HTMLInputElement, Input>(
         maxLength={79}
         spellCheck="false"
         className={classNames(
-          'relative font-bold outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary',
+          'relative font-bold outline-none tele-input border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary',
           className
         )}
       />
