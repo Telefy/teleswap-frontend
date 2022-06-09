@@ -30,7 +30,7 @@ export default function Farm(): JSX.Element {
     () => (router.get('account') ? (router.get('account') as string) : account),
     [account, router.get('account')]
   )
-  console.log({ queryOrActiveAccount })
+  // console.log({ queryOrActiveAccount })
 
   const FILTER = {
     // @ts-ignore TYPE NEEDS FIXING

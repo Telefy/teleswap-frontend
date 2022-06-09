@@ -177,8 +177,8 @@ export const getMphPrice = async (variables = {}) => {
 
 export const getTelePrice = async (chainId: number, variables = {}) => {
   // console.log('getTelePrice')
-  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
-    id: TELE_ADDRESS[chainId],
+  return getTokenPrice(chainId, tokenPriceQuery, {
+    id: TELE_ADDRESS[chainId].toLowerCase(),
     ...variables,
   })
 }

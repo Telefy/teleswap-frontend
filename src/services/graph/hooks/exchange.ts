@@ -175,7 +175,7 @@ export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
 
 // @ts-ignore TYPE NEEDS FIXING
 export function useTelePrice(chainId: number, swrConfig: SWRConfiguration = undefined) {
-  return useSWR(['sushiPrice'], () => getTelePrice(chainId), swrConfig)
+  return useSWR(['telePrice'], () => getTelePrice(chainId), swrConfig)
 }
 
 // @ts-ignore TYPE NEEDS FIXING
