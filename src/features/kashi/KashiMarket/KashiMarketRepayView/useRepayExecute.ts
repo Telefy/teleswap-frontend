@@ -10,7 +10,7 @@ import {
   Currency,
   CurrencyAmount,
   KASHI_ADDRESS,
-  SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS,
+  TELESWAP_MULTI_EXACT_SWAPPER_ADDRESS,
   TradeType,
   toShare,
 } from '@telefy/teleswap-core-sdk'
@@ -74,11 +74,11 @@ export const useRepayExecute: UseRepayExecute = () => {
         cooker.removeCollateral(BigNumber.from(market.userCollateralShare.toString()), true)
         cooker.bentoTransferCollateral(
           BigNumber.from(market.userCollateralShare.toString()),
-          SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1]
+          TELESWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1]
         )
         cooker.repayShare(BigNumber.from(market.userBorrowPart.toString()))
         cooker.action(
-          SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1],
+          TELESWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1],
           BigNumberZERO,
           hexConcat([
             hexlify('0x3087d742'),

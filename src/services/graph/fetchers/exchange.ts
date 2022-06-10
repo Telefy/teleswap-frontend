@@ -20,19 +20,19 @@ import { pager } from './pager'
 
 export const EXCHANGE = {
   [ChainId.MAINNET]: 'sushiswap/exchange',
-  [ChainId.XDAI]: 'sushiswap/xdai-exchange',
+  [ChainId.XDAI]: 'teleswap/xdai-exchange',
   [ChainId.MATIC]: 'jiro-ono/matic-exchange-staging',
-  [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
-  [ChainId.BSC]: 'sushiswap/bsc-exchange',
-  [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
-  [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
+  [ChainId.FANTOM]: 'teleswap/fantom-exchange',
+  [ChainId.BSC]: 'teleswap/bsc-exchange',
+  [ChainId.HARMONY]: 'teleswap/harmony-exchange',
+  [ChainId.AVALANCHE]: 'teleswap/avalanche-exchange',
   [ChainId.CELO]: 'jiro-ono/sushitestsubgraph',
-  [ChainId.ARBITRUM_ONE]: 'sushiswap/arbitrum-exchange',
-  [ChainId.MOONRIVER]: 'sushiswap/moonriver-exchange',
+  [ChainId.ARBITRUM_ONE]: 'teleswap/arbitrum-exchange',
+  [ChainId.MOONRIVER]: 'teleswap/moonriver-exchange',
   [ChainId.OKEX]: 'okex-exchange/oec',
   [ChainId.HECO]: 'heco-exchange/heco',
-  [ChainId.FUSE]: 'sushiswap/fuse-exchange',
-  [ChainId.MOONBEAM]: 'sushiswap/moonbeam-exchange',
+  [ChainId.FUSE]: 'teleswap/fuse-exchange',
+  [ChainId.MOONBEAM]: 'teleswap/moonbeam-exchange',
   [ChainId.RINKEBY]: 'telefy/teleswap-subgraph-rinkeby',
 }
 

@@ -53,11 +53,11 @@ const FarmList = ({ farms, term }) => {
   return items ? (
     <>
       <div className={darkMode ? 'grid-dark' : 'grid-light'}>
-        <div className="grid grid-cols-4 min-w-[768px]">
+        <div className="grid grid-cols-5 min-w-[768px]">
           <div
             className={classNames(
               'flex gap-1 items-center grid-header-text cursor-pointer',
-              TABLE_TR_TH_CLASSNAME(0, 4)
+              TABLE_TR_TH_CLASSNAME(0, 5)
             )}
             onClick={() => requestSort('pair.token0.symbol')}
           >
@@ -69,7 +69,7 @@ const FarmList = ({ farms, term }) => {
           <div
             className={classNames(
               'flex gap-1 items-center grid-header-text cursor-pointer justify-end',
-              TABLE_TR_TH_CLASSNAME(1, 4)
+              TABLE_TR_TH_CLASSNAME(1, 5)
             )}
             onClick={() => requestSort('tvl')}
           >
@@ -78,7 +78,12 @@ const FarmList = ({ farms, term }) => {
             </Typography>
             <SortIcon id={sortConfig.key} direction={sortConfig.direction} active={sortConfig.key === 'tvl'} />
           </div>
-          <div className={classNames('grid-header-text', TABLE_TR_TH_CLASSNAME(2, 4))}>
+          <div className={classNames('grid-header-text', TABLE_TR_TH_CLASSNAME(2, 5))}>
+            <Typography variant="sm" weight={700}>
+              {i18n._(t`Multiplier`)}
+            </Typography>
+          </div>
+          <div className={classNames('grid-header-text', TABLE_TR_TH_CLASSNAME(3, 5))}>
             <Typography variant="sm" weight={700}>
               {i18n._(t`Rewards`)}
             </Typography>
@@ -86,7 +91,7 @@ const FarmList = ({ farms, term }) => {
           <div
             className={classNames(
               'flex gap-1 items-center grid-header-text cursor-pointer justify-end',
-              TABLE_TR_TH_CLASSNAME(3, 4)
+              TABLE_TR_TH_CLASSNAME(4, 5)
             )}
             onClick={() => requestSort('roiPerYear')}
           >

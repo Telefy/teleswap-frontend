@@ -41,7 +41,7 @@ const computeSushiPairAddress = ({ tokenA, tokenB }: { tokenA: Token; tokenB: To
 }
 
 /**
- * Given two tokens return the sushiswap liquidity token that represents its liquidity shares
+ * Given two tokens return the teleswap liquidity token that represents its liquidity shares
  * @param tokenA one of the two tokens
  * @param tokenB the other token
  */

@@ -16,18 +16,18 @@ import { request } from 'graphql-request'
 
 export const MINICHEF = {
   [ChainId.MATIC]: 'jiro-ono/minichef-staging-updates',
-  [ChainId.XDAI]: 'sushiswap/xdai-minichef',
-  [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
+  [ChainId.XDAI]: 'teleswap/xdai-minichef',
+  [ChainId.HARMONY]: 'teleswap/harmony-minichef',
   [ChainId.ARBITRUM_ONE]: 'jiro-ono/arbitrum-minichef-staging',
-  [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
-  [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',
-  [ChainId.FUSE]: 'sushiswap/fuse-minichef',
-  [ChainId.FANTOM]: 'sushiswap/fantom-minichef',
-  [ChainId.MOONBEAM]: 'sushiswap/moonbeam-minichef',
+  [ChainId.CELO]: 'teleswap/celo-minichef-v2',
+  [ChainId.MOONRIVER]: 'teleswap/moonriver-minichef',
+  [ChainId.FUSE]: 'teleswap/fuse-minichef',
+  [ChainId.FANTOM]: 'teleswap/fantom-minichef',
+  [ChainId.MOONBEAM]: 'teleswap/moonbeam-minichef',
 }
 
 export const OLD_MINICHEF = {
-  [ChainId.CELO]: 'sushiswap/celo-minichef',
+  [ChainId.CELO]: 'teleswap/celo-minichef',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -41,8 +41,8 @@ export const oldMiniChef = async (query, chainId = ChainId.MAINNET) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${OLD_MINICHEF[chainId]}`, query)
 
 export const DIALER_CONTRACT = {
-  [ChainId.MAINNET]: 'sathishkumarsb/mainnettele43',
-  [ChainId.RINKEBY]: 'sathishkumarsb/mainnettele43',
+  [ChainId.MAINNET]: 'lokisanhitleson/teleswapdialersubgraphrinkebyv1',
+  [ChainId.RINKEBY]: 'lokisanhitleson/teleswapdialersubgraphrinkebyv1',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -51,7 +51,7 @@ export const DialerContract = async (query, chainId = ChainId.MAINNET, variables
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${DIALER_CONTRACT[chainId]}`, query, variables)
 
 export const MASTERCHEF_V1 = {
-  [ChainId.MAINNET]: 'sushiswap/master-chef',
+  [ChainId.MAINNET]: 'teleswap/master-chef',
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -85,11 +85,7 @@ export const getMasterChefV1PairAddreses = async () => {
 }
 
 export const getDialerContractFarms = async (variables = undefined) => {
-  console.log(variables, 'farm 3')
-
   const { pools } = await DialerContract(poolsV2Query, undefined, variables)
-  console.log(pools, 'graphfetch1')
-
   const tokens = await getTokenSubset(ChainId.MAINNET, {
     // @ts-ignore TYPE NEEDS FIXING
     tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),

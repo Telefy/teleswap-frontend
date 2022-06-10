@@ -335,7 +335,7 @@ function V2PairMigration({
           .then((response: TransactionResponse) => {
             ReactGA.event({
               category: 'Migrate',
-              action: `${isNotUniswap ? 'SushiSwap' : 'V2'}->V3`,
+              action: `${isNotUniswap ? 'TeleSwap' : 'V2'}->V3`,
               label: `${currency0.symbol}/${currency1.symbol}`,
             })
 
@@ -377,7 +377,7 @@ function V2PairMigration({
     <AutoColumn gap="20px">
       <TYPE.body my={9} style={{ fontWeight: 400 }}>
         <Trans>
-          This tool will safely migrate your {isNotUniswap ? 'SushiSwap' : 'V2'} liquidity to Telefy. The process is
+          This tool will safely migrate your {isNotUniswap ? 'Teleswap' : 'V2'} liquidity to Telefy. The process is
           completely trustless thanks to the{' '}
         </Trans>
         {chainId && migrator && (
@@ -432,7 +432,7 @@ function V2PairMigration({
               <TYPE.body fontSize={14} style={{ marginBottom: 8, fontWeight: 500, opacity: 0.8 }} textAlign="center">
                 <Trans>
                   You are the first liquidity provider for this Telefy pool. Your liquidity will migrate at the current{' '}
-                  {isNotUniswap ? 'SushiSwap' : 'V2'} price.
+                  {isNotUniswap ? 'Teleswap' : 'V2'} price.
                 </Trans>
               </TYPE.body>
 
@@ -445,7 +445,7 @@ function V2PairMigration({
                   <RowBetween>
                     <TYPE.body fontWeight={500} fontSize={14}>
                       <Trans>
-                        {isNotUniswap ? 'SushiSwap' : 'V2'} {invertPrice ? currency1.symbol : currency0.symbol} Price:
+                        {isNotUniswap ? 'Teleswap' : 'V2'} {invertPrice ? currency1.symbol : currency0.symbol} Price:
                       </Trans>{' '}
                       {invertPrice
                         ? `${v2SpotPrice?.invert()?.toSignificant(6)} ${currency0.symbol}`
@@ -463,7 +463,7 @@ function V2PairMigration({
                 <RowBetween>
                   <TYPE.body fontSize={14}>
                     <Trans>
-                      {isNotUniswap ? 'SushiSwap' : 'V2'} {invertPrice ? currency1.symbol : currency0.symbol} Price:
+                      {isNotUniswap ? 'Teleswap' : 'V2'} {invertPrice ? currency1.symbol : currency0.symbol} Price:
                     </Trans>
                   </TYPE.body>
                   <TYPE.black fontSize={14}>

@@ -26,5 +26,5 @@ export const GRAPH_HOST = {
 
 export const TRIDENT = {
   [ChainId.MATIC]: 'matthewlilley/trident-polygon',
-  [ChainId.KOVAN]: 'sushiswap/trident-kovan',
+  [ChainId.KOVAN]: 'teleswap/trident-kovan',
 }

@@ -52,7 +52,7 @@ export default function Farm(): JSX.Element {
 
   const rewards = useFarmRewards({ chainId })
 
-  const data = rewards.filter((farm) => {
+  const data = rewards.filter((farm: any) => {
     // @ts-ignore TYPE NEEDS FIXING
     return type in FILTER ? FILTER[type](farm) : true
   })

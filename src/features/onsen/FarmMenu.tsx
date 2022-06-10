@@ -80,11 +80,11 @@ const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: 
       ),
       [FarmFilter.Kashi]:
         chainId && [ChainId.MAINNET, ChainId.ARBITRUM_ONE].includes(chainId) ? (
-          <MenuLink href={'/farm?filter=kashi'} label={i18n._(t`Kashi Farms`)} />
+          <MenuLink href={'/farm?filter=kashi'} label={i18n._(t`Lending Farms`)} />
         ) : undefined,
       [FarmFilter.Sushi]:
         chainId && [ChainId.MAINNET, ChainId.ARBITRUM_ONE].includes(chainId) ? (
-          <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`SushiSwap Farms`)} />
+          <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`TeleSwap Farms`)} />
         ) : undefined,
       // @ts-ignore TYPE NEEDS FIXING
       [FarmFilter.Old]:
