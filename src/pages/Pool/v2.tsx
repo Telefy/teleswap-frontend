@@ -145,15 +145,15 @@ export default function Pool() {
               <RowBetween>
                 <TYPE.white fontSize={14}>
                   <Trans>
-                    Liquidity providers earn a 0.27% fee on all trades proportional to their share of the pool. Fees are
-                    added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
+                    Liquidity providers earn a 0.225% fee on all trades proportional to their share of the pool. Fees
+                    are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.
                   </Trans>
                 </TYPE.white>
               </RowBetween>
               {/* <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
                 target="_blank"
-                href="https://uniswap.org/docs/v2/core-concepts/pools/"
+                href="https://info.telefy.finance"
               >
                 <TYPE.white fontSize={14}>
                   <Trans>Read more about providing liquidity</Trans>

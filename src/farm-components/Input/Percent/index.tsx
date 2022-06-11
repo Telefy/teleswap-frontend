@@ -32,7 +32,7 @@ export const Input = React.memo(
         <input
           value={value}
           onChange={(event) => {
-            // replace commas with periods, because uniswap exclusively uses period as the decimal separator
+            // replace commas with periods, because teleswap exclusively uses period as the decimal separator
             enforcer(event.target.value.replace(/,/g, '.').replace(/%/g, ''))
           }}
           // universal input options

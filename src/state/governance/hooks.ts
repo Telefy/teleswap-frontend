@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { TransactionResponse } from '@ethersproject/providers'
 import { abi as GOV_ABI } from '@uniswap/governance/build/GovernorAlpha.json'
 import { CurrencyAmount, Token } from '@telefy/teleswap-core-sdk'
@@ -67,9 +68,9 @@ function useLatestProposalCount(): number | undefined {
  */
 function useDataFromEventLogs():
   | {
-      description: string
-      details: { target: string; functionSig: string; callData: string }[]
-    }[][]
+    description: string
+    details: { target: string; functionSig: string; callData: string }[]
+  }[][]
   | undefined {
   const { library, chainId } = useActiveWeb3React()
   const [formattedEvents, setFormattedEvents] =
@@ -82,12 +83,12 @@ function useDataFromEventLogs():
     () =>
       govContracts?.filter((govContract) => !!govContract)?.length > 0
         ? govContracts
-            .filter((govContract): govContract is ethers.Contract => !!govContract)
-            .map((contract) => ({
-              ...contract.filters.ProposalCreated(),
-              fromBlock: 10861678, // TODO could optimize this on a per-contract basis, this is the safe value
-              toBlock: 'latest',
-            }))
+          .filter((govContract): govContract is ethers.Contract => !!govContract)
+          .map((contract) => ({
+            ...contract.filters.ProposalCreated(),
+            fromBlock: 10861678, // TODO could optimize this on a per-contract basis, this is the safe value
+            toBlock: 'latest',
+          }))
         : undefined,
     [govContracts]
   )
@@ -160,9 +161,9 @@ export function useAllProposalData(): ProposalData[] {
   const proposalIndexes = useMemo(() => {
     return chainId === SupportedChainId.MAINNET
       ? [
-          typeof proposalCount === 'number' ? new Array(proposalCount).fill(0).map((_, i) => [i + 1]) : [], // dynamic for current governor alpha
-          [[1], [2], [3], [4]], // hardcoded for governor alpha V0
-        ]
+        typeof proposalCount === 'number' ? new Array(proposalCount).fill(0).map((_, i) => [i + 1]) : [], // dynamic for current governor alpha
+        [[1], [2], [3], [4]], // hardcoded for governor alpha V0
+      ]
       : []
   }, [chainId, proposalCount])
 
@@ -281,7 +282,7 @@ export function useDelegateCallback(): (delegatee: string | undefined) => undefi
     (delegatee: string | undefined) => {
       if (!library || !chainId || !account || !isAddress(delegatee ?? '')) return undefined
       const args = [delegatee]
-      if (!uniContract) throw new Error('No UNI Contract!')
+      if (!uniContract) throw new Error('No TELE Contract!')
       return uniContract.estimateGas.delegate(...args, {}).then((estimatedGasLimit) => {
         return uniContract
           .delegate(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })

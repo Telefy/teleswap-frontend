@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { Router, Trade as V2Trade } from '@mazelon/teleswap-sdk'
@@ -127,23 +128,23 @@ function useSwapCallArguments(
         deadline: deadline.toString(),
         ...(signatureData
           ? {
-              inputTokenPermit:
-                'allowed' in signatureData
-                  ? {
-                      expiry: signatureData.deadline,
-                      nonce: signatureData.nonce,
-                      s: signatureData.s,
-                      r: signatureData.r,
-                      v: signatureData.v as any,
-                    }
-                  : {
-                      deadline: signatureData.deadline,
-                      amount: signatureData.amount,
-                      s: signatureData.s,
-                      r: signatureData.r,
-                      v: signatureData.v as any,
-                    },
-            }
+            inputTokenPermit:
+              'allowed' in signatureData
+                ? {
+                  expiry: signatureData.deadline,
+                  nonce: signatureData.nonce,
+                  s: signatureData.s,
+                  r: signatureData.r,
+                  v: signatureData.v as any,
+                }
+                : {
+                  deadline: signatureData.deadline,
+                  amount: signatureData.amount,
+                  s: signatureData.s,
+                  r: signatureData.r,
+                  v: signatureData.v as any,
+                },
+          }
           : {}),
       })
       if (argentWalletContract && trade.inputAmount.currency.isToken) {
@@ -211,7 +212,7 @@ export function swapErrorToUserReadableMessage(error: any): string {
     case 'Telefy: TRANSFER_FAILED':
       return t`The output token cannot be transferred. There may be an issue with the output token.`
     case 'Telefy: K':
-      return t`The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer.`
+      return t`The Telefy invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer.`
     case 'Too little received':
     case 'Too much requested':
     case 'STF':
@@ -223,9 +224,8 @@ export function swapErrorToUserReadableMessage(error: any): string {
         console.error(error, reason)
         return t`An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Telefy.`
       }
-      return t`Unknown error${
-        reason ? `: "${reason}"` : ''
-      }. Try increasing your slippage tolerance. Note: fee on transfer and rebase tokens are incompatible with Telefy.`
+      return t`Unknown error${reason ? `: "${reason}"` : ''
+        }. Try increasing your slippage tolerance. Note: fee on transfer and rebase tokens are incompatible with Telefy.`
   }
 }
 
@@ -269,11 +269,11 @@ export function useSwapCallback(
               !value || isZero(value)
                 ? { from: account, to: address, data: calldata }
                 : {
-                    from: account,
-                    to: address,
-                    data: calldata,
-                    value,
-                  }
+                  from: account,
+                  to: address,
+                  data: calldata,
+                  value,
+                }
 
             return library
               .estimateGas(tx)
@@ -341,11 +341,10 @@ export function useSwapCallback(
             const withRecipient =
               recipient === account
                 ? base
-                : `${base} to ${
-                    recipientAddressOrName && isAddress(recipientAddressOrName)
-                      ? shortenAddress(recipientAddressOrName)
-                      : recipientAddressOrName
-                  }`
+                : `${base} to ${recipientAddressOrName && isAddress(recipientAddressOrName)
+                  ? shortenAddress(recipientAddressOrName)
+                  : recipientAddressOrName
+                }`
 
             const tradeVersion = getTradeVersion(trade)
 

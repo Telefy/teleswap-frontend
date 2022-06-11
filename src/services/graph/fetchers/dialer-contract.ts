@@ -41,8 +41,8 @@ export const oldMiniChef = async (query, chainId = ChainId.MAINNET) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${OLD_MINICHEF[chainId]}`, query)
 
 export const DIALER_CONTRACT = {
-  [ChainId.MAINNET]: 'lokisanhitleson/teleswapdialersubgraphrinkebyv1',
-  [ChainId.RINKEBY]: 'lokisanhitleson/teleswapdialersubgraphrinkebyv1',
+  [ChainId.MAINNET]: 'telefy/teleswap-dialer-subgraph-rinkeby',
+  [ChainId.RINKEBY]: 'telefy/teleswap-dialer-subgraph-rinkeby',
 }
 
 // @ts-ignore TYPE NEEDS FIXING

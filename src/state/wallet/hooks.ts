@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Currency, Token, CurrencyAmount, Ether } from '@telefy/teleswap-core-sdk'
 import JSBI from 'jsbi'
 import { useMemo } from 'react'
@@ -25,9 +26,9 @@ export function useETHBalances(uncheckedAddresses?: (string | undefined)[]): {
     () =>
       uncheckedAddresses
         ? uncheckedAddresses
-            .map(isAddress)
-            .filter((a): a is string => a !== false)
-            .sort()
+          .map(isAddress)
+          .filter((a): a is string => a !== false)
+          .sort()
         : [],
     [uncheckedAddresses]
   )
@@ -80,13 +81,13 @@ export function useTokenBalancesWithLoadingIndicator(
       () =>
         address && validatedTokens.length > 0
           ? validatedTokens.reduce<{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }>((memo, token, i) => {
-              const value = balances?.[i]?.result?.[0]
-              const amount = value ? JSBI.BigInt(value.toString()) : undefined
-              if (amount) {
-                memo[token.address] = CurrencyAmount.fromRawAmount(token, amount)
-              }
-              return memo
-            }, {})
+            const value = balances?.[i]?.result?.[0]
+            const amount = value ? JSBI.BigInt(value.toString()) : undefined
+            if (amount) {
+              memo[token.address] = CurrencyAmount.fromRawAmount(token, amount)
+            }
+            return memo
+          }, {})
           : {},
       [address, validatedTokens, balances]
     ),
@@ -146,7 +147,7 @@ export function useAllTokenBalances(): { [tokenAddress: string]: CurrencyAmount<
   return balances ?? {}
 }
 
-// get the total owned, unclaimed, and unharvested UNI for account
+// get the total owned, unclaimed, and unharvested TELE for account
 export function useAggregateUniBalance(): CurrencyAmount<Token> | undefined {
   const { account, chainId } = useActiveWeb3React()
 

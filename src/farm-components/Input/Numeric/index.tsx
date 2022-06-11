@@ -28,7 +28,7 @@ export const Input: FC<Input> = forwardRef<HTMLInputElement, Input>(
         ref={ref}
         value={value}
         onChange={(event) => {
-          // replace commas with periods, because uniswap exclusively uses period as the decimal separator
+          // replace commas with periods, because teleswap exclusively uses period as the decimal separator
           enforcer(event.target.value.replace(/,/g, '.'))
         }}
         // universal input options

@@ -592,10 +592,7 @@ export default function AddLiquidity({
                     <TYPE.main fontSize={14} fontWeight={400} style={{ marginBottom: '.5rem', lineHeight: '125%' }}>
                       <Trans>
                         Your liquidity will only earn fees when the market price of the pair is within your range.{' '}
-                        <ExternalLink
-                          href={'https://docs.uniswap.org/concepts/introduction/liquidity-user-guide#4-set-price-range'}
-                          style={{ fontSize: '14px' }}
-                        >
+                        <ExternalLink href={'https://telefy.finance'} style={{ fontSize: '14px' }}>
                           Need help picking a range?
                         </ExternalLink>
                       </Trans>

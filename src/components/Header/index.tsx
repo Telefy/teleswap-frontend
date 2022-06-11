@@ -352,7 +352,7 @@ export default function Header() {
         {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
           <Trans>Vote</Trans>
         </StyledNavLink>
-        <StyledExternalLink id={`stake-nav-link`} href={'https://info.uniswap.org'}>
+        <StyledExternalLink id={`stake-nav-link`} href={'https://info.telefy.finance'}>
           <Trans>Charts</Trans>
           <sup>↗</sup>
         </StyledExternalLink> */}
@@ -370,10 +370,10 @@ export default function Header() {
                 <TYPE.white padding="0 2px">
                   {claimTxn && !claimTxn?.receipt ? (
                     <Dots>
-                      <Trans>Claiming UNI</Trans>
+                      <Trans>Claiming TELE</Trans>
                     </Dots>
                   ) : (
-                    <Trans>Claim UNI</Trans>
+                    <Trans>Claim TELE</Trans>
                   )}
                 </TYPE.white>
               </UNIAmount>

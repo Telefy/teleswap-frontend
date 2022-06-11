@@ -383,7 +383,7 @@ function V2PairMigration({
         {chainId && migrator && (
           <ExternalLink href={getExplorerLink(chainId, migrator.address, ExplorerDataType.ADDRESS)}>
             <TYPE.blue display="inline">
-              <Trans>Uniswap migration contract↗</Trans>
+              <Trans>Teleswap migration contract↗</Trans>
             </TYPE.blue>
           </ExternalLink>
         )}
@@ -401,7 +401,7 @@ function V2PairMigration({
                 </Trans>
               </TYPE.mediumHeader>
             </RowFixed>
-            <Badge variant={BadgeVariant.WARNING}>{isNotUniswap ? 'Sushi' : 'V2'}</Badge>
+            <Badge variant={BadgeVariant.WARNING}>{isNotUniswap ? 'TELE' : 'V2'}</Badge>
           </RowBetween>
           <LiquidityInfo token0Amount={token0Value} token1Amount={token1Value} />
         </AutoColumn>

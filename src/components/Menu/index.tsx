@@ -173,7 +173,7 @@ export default function Menu() {
           </MenuItem>
           {/* {account && (
             <UNIbutton onClick={openClaimModal} padding="8px 16px" width="100%" borderRadius="12px" mt="0.5rem">
-              <Trans>Claim UNI</Trans>
+              <Trans>Claim TELE</Trans>
             </UNIbutton>
           )} */}
         </MenuFlyout>

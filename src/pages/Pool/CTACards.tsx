@@ -120,7 +120,7 @@ const StyledImage = styled.img`
 export default function CTACards() {
   return (
     <CTASection>
-      <CTA1 href={'https://docs.uniswap.org/concepts/introduction/liquidity-user-guide'}>
+      <CTA1 href={'https://info.telefy.finance'}>
         <ResponsiveColumn>
           <HeaderText>
             <Trans>Telefy</Trans>
@@ -134,7 +134,7 @@ export default function CTACards() {
           </RowBetween>
         </ResponsiveColumn>
       </CTA1>
-      <CTA2 href={'https://info.uniswap.org/#/pools'}>
+      <CTA2 href={'https://info.telefy.finance/#/pools'}>
         <ResponsiveColumn>
           <HeaderText style={{ alignSelf: 'flex-start' }}>
             <Trans>Top pools</Trans>

@@ -151,24 +151,24 @@ export default function Vote() {
               <AutoColumn gap="md">
                 <RowBetween>
                   <TYPE.white fontWeight={600}>
-                    <Trans>Uniswap Governance</Trans>
+                    <Trans>Telefy Governance</Trans>
                   </TYPE.white>
                 </RowBetween>
                 <RowBetween>
                   <TYPE.white fontSize={14}>
                     <Trans>
-                      UNI tokens represent voting shares in Uniswap governance. You can vote on each proposal yourself
+                      TELE tokens represent voting shares in Telefy governance. You can vote on each proposal yourself
                       or delegate your votes to a third party.
                     </Trans>
                   </TYPE.white>
                 </RowBetween>
                 <ExternalLink
                   style={{ color: 'white', textDecoration: 'underline' }}
-                  href="https://uniswap.org/blog/uni"
+                  href="https://Telefy.finance"
                   target="_blank"
                 >
                   <TYPE.white fontSize={14}>
-                    <Trans>Read more about Uniswap governance</Trans>
+                    <Trans>Read more about Telefy governance</Trans>
                   </TYPE.white>
                 </ExternalLink>
               </AutoColumn>
@@ -259,7 +259,7 @@ export default function Vote() {
           })}
         </TopSection>
         <TYPE.subHeader color="text3">
-          <Trans>A minimum threshold of 0.25% of the total UNI supply is required to submit proposals</Trans>
+          <Trans>A minimum threshold of 0.25% of the total TELE supply is required to submit proposals</Trans>
         </TYPE.subHeader>
       </PageWrapper>
       <SwitchLocaleLink />
