@@ -15,6 +15,9 @@ export const poolsV2Query = gql`
       dialerContract {
         id
         totalAllocPoint
+        telePerBlock
+        bonusMultiplier
+        bonusEndBlock
       }
       rewarder {
         id

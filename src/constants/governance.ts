@@ -15,7 +15,7 @@ const governanceContracts = (): Record<string, string> =>
 
 export const COMMON_CONTRACT_NAMES: Record<number, { [address: string]: string }> = {
   [SupportedChainId.MAINNET]: {
-    [UNI_ADDRESS[SupportedChainId.MAINNET]]: 'UNI',
+    [UNI_ADDRESS[SupportedChainId.MAINNET]]: 'TELE',
     [TIMELOCK_ADDRESS[SupportedChainId.MAINNET]]: 'Timelock',
     ...governanceContracts(),
   },

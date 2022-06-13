@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import JSBI from 'jsbi'
 import { Percent, CurrencyAmount, Currency, TradeType, Token } from '@telefy/teleswap-core-sdk'
 import { Trade as V2Trade } from '@mazelon/teleswap-sdk'
@@ -36,21 +37,21 @@ const PERMITTABLE_TOKENS: {
   [1]: {
     [USDC.address]: { type: PermitType.AMOUNT, name: 'USD Coin', version: '2' },
     [DAI.address]: { type: PermitType.ALLOWED, name: 'Dai Stablecoin', version: '1' },
-    [UNI[1].address]: { type: PermitType.AMOUNT, name: 'Uniswap' },
+    [UNI[1].address]: { type: PermitType.AMOUNT, name: 'Teleswap' },
   },
   [4]: {
     ['0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735']: { type: PermitType.ALLOWED, name: 'Dai Stablecoin', version: '1' },
-    [UNI[4].address]: { type: PermitType.AMOUNT, name: 'Uniswap' },
+    [UNI[4].address]: { type: PermitType.AMOUNT, name: 'Teleswap' },
   },
   [3]: {
-    [UNI[3].address]: { type: PermitType.AMOUNT, name: 'Uniswap' },
+    [UNI[3].address]: { type: PermitType.AMOUNT, name: 'Teleswap' },
     ['0x07865c6E87B9F70255377e024ace6630C1Eaa37F']: { type: PermitType.AMOUNT, name: 'USD Coin', version: '2' },
   },
   [5]: {
-    [UNI[5].address]: { type: PermitType.AMOUNT, name: 'Uniswap' },
+    [UNI[5].address]: { type: PermitType.AMOUNT, name: 'Teleswap' },
   },
   [42]: {
-    [UNI[42].address]: { type: PermitType.AMOUNT, name: 'Uniswap' },
+    [UNI[42].address]: { type: PermitType.AMOUNT, name: 'Teleswap' },
   },
 }
 
@@ -184,31 +185,31 @@ export function useERC20Permit(
 
         const message = allowed
           ? {
-              holder: account,
-              spender,
-              allowed,
-              nonce: nonceNumber,
-              expiry: signatureDeadline,
-            }
+            holder: account,
+            spender,
+            allowed,
+            nonce: nonceNumber,
+            expiry: signatureDeadline,
+          }
           : {
-              owner: account,
-              spender,
-              value,
-              nonce: nonceNumber,
-              deadline: signatureDeadline,
-            }
+            owner: account,
+            spender,
+            value,
+            nonce: nonceNumber,
+            deadline: signatureDeadline,
+          }
         const domain = permitInfo.version
           ? {
-              name: permitInfo.name,
-              version: permitInfo.version,
-              verifyingContract: tokenAddress,
-              chainId,
-            }
+            name: permitInfo.name,
+            version: permitInfo.version,
+            verifyingContract: tokenAddress,
+            chainId,
+          }
           : {
-              name: permitInfo.name,
-              verifyingContract: tokenAddress,
-              chainId,
-            }
+            name: permitInfo.name,
+            verifyingContract: tokenAddress,
+            chainId,
+          }
         const data = JSON.stringify({
           types: {
             EIP712Domain: permitInfo.version ? EIP712_DOMAIN_TYPE : EIP712_DOMAIN_TYPE_NO_VERSION,

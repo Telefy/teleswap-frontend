@@ -10,6 +10,7 @@ import { featureEnabled } from 'functions'
 import { aprToApy } from 'functions/convert'
 import {
   useAverageBlockTime,
+  useBlock,
   useCeloPrice,
   useEthPrice,
   useFantomPrice,
@@ -35,10 +36,9 @@ import { useCallback, useMemo } from 'react'
 export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
   const positions = usePositions(chainId)
   const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  console.log('FARM 1');
 
   const farms = useFarms({ chainId })
-  const farmAddresses = useMemo(() => farms.map((farm) => farm.pair.toLowerCase()), [farms])
+  const farmAddresses = useMemo(() => farms.map((farm: any) => farm.pair.toLowerCase()), [farms])
 
   const { data: swapPairs } = useSushiPairs({
     chainId,
@@ -61,6 +61,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
     },
     shouldFetch: !!block1d && !!farmAddresses,
   })
+  console.log(swapPairs1d, 'swapPairs 1 day');
 
   const { data: kashiPairs } = useKashiPairs({
     chainId,
@@ -68,11 +69,13 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
     shouldFetch: !!farmAddresses && featureEnabled(Feature.KASHI, chainId),
   })
 
-  const { data: averageBlockTime } = useAverageBlockTime({ chainId })
+  const { data: averageBlockTime } = useAverageBlockTime({ chainId }) // 15.072
+  const { data: currentBlock } = useBlock({ chainId })
   const { data: masterChefV1TotalAllocPoint } = useMasterChefV1TotalAllocPoint()
   const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
 
   const { data: telePrice } = useTelePrice(chainId)
+
   const { data: ethPrice } = useEthPrice()
   const { data: maticPrice } = useMaticPrice()
   const { data: gnoPrice } = useGnoPrice()
@@ -86,7 +89,8 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
   const { data: magicPrice } = useMagicPrice()
   const { data: glimmerPrice } = useGlimmerPrice()
 
-  const blocksPerDay = 86400 / Number(averageBlockTime)
+
+  const blocksPerDay = 86400 / Number(averageBlockTime) // 5732.484076433121019
 
   // @ts-ignore TYPE NEEDS FIXING
   const map = useCallback(
@@ -107,17 +111,28 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
 
       const type = swapPair ? PairType.SWAP : PairType.KASHI
 
-      const blocksPerHour = 3600 / averageBlockTime
+      const blocksPerHour = 3600 / averageBlockTime  // 238.853503184713376
 
       function getRewards() {
+
+        const bonusMultiplier = pool?.owner?.bonusEndBlock >= currentBlock.number ? pool?.owner?.bonusMultiplier : 1 || 1
+        // const bonusMultiplier = 10
+
+        console.log(pool?.owner?.bonusEndBlock, "endBloxck");
+        console.log(bonusMultiplier, "bonusMultiplier");
+
         // TODO: Some subgraphs give telePerBlock & sushiPerSecond, and DialerContract gives nothing
         const telePerBlock =
-          pool?.owner?.telePerBlock / 1e18 ||
+          (pool?.owner?.telePerBlock / 1e18) * bonusMultiplier ||
           (pool?.owner?.telePerSecond / 1e18) * averageBlockTime ||
           masterChefV1SushiPerBlock
+        // 100
+
+        console.log(telePerBlock, "telePerBlock");
 
         // @ts-ignore TYPE NEEDS FIXING
-        const rewardPerBlock = (pool.allocPoint / pool.owner.totalAllocPoint) * telePerBlock
+        const rewardPerBlock = (pool.allocPoint / Number(pool.owner.totalAllocPoint)) * Number(telePerBlock)
+        // const rewardPerBlock = (pool.allocPoint / 10) * telePerBlock
 
         const defaultReward = {
           currency: TELE[chainId],
@@ -132,8 +147,6 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
         ]
 
         if (pool.chef === Chef.DIALER_CONTRACT) {
-          // override for mcv2...
-          pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
 
           // CVX-WETH hardcode 0 rewards since ended, can remove after swapping out rewarder
           if (pool.id === '1') {
@@ -325,6 +338,8 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
       }
 
       const rewards = getRewards()
+      console.log(rewards, 'rewards ------------');
+
 
       const balance = swapPair ? Number(pool.balance / 1e18) : pool.balance / 10 ** kashiPair.token0.decimals
 
@@ -334,7 +349,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
 
       const feeApyPerYear =
         swapPair && swapPair1d
-          ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.reserveUSD) * 100, 3650) / 100
+          ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.00225 * 365) / pair?.reserveUSD) * 100, 3650) / 100
           : 0
 
       const feeApyPerMonth = feeApyPerYear / 12
@@ -345,6 +360,7 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
         rewards.reduce((previousValue, currentValue) => {
           return previousValue + currentValue.rewardPerBlock * currentValue.rewardPrice
         }, 0) / tvl
+
 
       const rewardAprPerHour = roiPerBlock * blocksPerHour
       const rewardAprPerDay = rewardAprPerHour * 24

@@ -63,7 +63,7 @@ msgstr "-{feeAmountFormatted}%"
 #: src/components/earn/PoolCard.tsx
 #: src/pages/Earn/Manage.tsx
 #: src/pages/Earn/Manage.tsx
-msgid "0 UNI / week"
+msgid "0  / week"
 msgstr "0 UNI / week"
 
 #: src/components/FeeSelector/index.tsx

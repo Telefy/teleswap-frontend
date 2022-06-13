@@ -29,7 +29,10 @@ import useDialerContract from './useDialerContract'
 import { useIsDarkMode } from '../../state/user/hooks'
 
 const APPROVAL_ADDRESSES = {
-  [Chef.DIALER_CONTRACT]: { [ChainId.MAINNET]: DIALER_CONTRACT_ADDRESS[ChainId.MAINNET] },
+  [Chef.DIALER_CONTRACT]: {
+    [ChainId.MAINNET]: DIALER_CONTRACT_ADDRESS[ChainId.MAINNET],
+    [ChainId.RINKEBY]: DIALER_CONTRACT_ADDRESS[ChainId.RINKEBY],
+  },
   [Chef.MINICHEF]: {
     // [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
     // [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],

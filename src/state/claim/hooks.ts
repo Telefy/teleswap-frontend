@@ -28,7 +28,7 @@ function fetchClaimMapping(): Promise<ClaimAddressMapping> {
   return (
     FETCH_CLAIM_MAPPING_PROMISE ??
     (FETCH_CLAIM_MAPPING_PROMISE = fetch(
-      `https://raw.githubusercontent.com/Uniswap/mrkl-drop-data-chunks/final/chunks/mapping.json`
+      `https://raw.githubusercontent.com/Teleswap/mrkl-drop-data-chunks/final/chunks/mapping.json`
     )
       .then((res) => res.json())
       .catch((error) => {
@@ -43,7 +43,7 @@ function fetchClaimFile(key: string): Promise<{ [address: string]: UserClaimData
   return (
     FETCH_CLAIM_FILE_PROMISES[key] ??
     (FETCH_CLAIM_FILE_PROMISES[key] = fetch(
-      `https://raw.githubusercontent.com/Uniswap/mrkl-drop-data-chunks/final/chunks/${key}.json`
+      `https://raw.githubusercontent.com/Teleswap/mrkl-drop-data-chunks/final/chunks/${key}.json`
     )
       .then((res) => res.json())
       .catch((error) => {
@@ -121,7 +121,7 @@ export function useUserClaimData(account: string | null | undefined): UserClaimD
   return account && chainId === 1 ? claimInfo[account] : null
 }
 
-// check if user is in blob and has not yet claimed UNI
+// check if user is in blob and has not yet claimed TELE
 export function useUserHasAvailableClaim(account: string | null | undefined): boolean {
   const userClaimData = useUserClaimData(account)
   const distributorContract = useMerkleDistributorContract()
@@ -165,7 +165,7 @@ export function useClaimCallback(account: string | null | undefined): {
         .claim(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Claimed ${unclaimedAmount?.toSignificant(4)} UNI`,
+            summary: `Claimed ${unclaimedAmount?.toSignificant(4)} TELE`,
             claim: { recipient: account },
           })
           return response.hash

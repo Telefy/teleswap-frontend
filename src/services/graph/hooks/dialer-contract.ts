@@ -44,11 +44,8 @@ export function useMasterChefV1Farms({ chainId, swrConfig = undefined }: useFarm
 }
 
 export function useDialerContractFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
-  console.log('farm 2.1')
-
   const shouldFetch = chainId && (chainId === ChainId.MAINNET || chainId === ChainId.RINKEBY)
   const { data } = useSWR(shouldFetch ? 'DialerContractFarms' : null, () => getDialerContractFarms(), swrConfig)
-  console.log(data, 'farm 3.1')
 
   return useMemo(() => {
     if (!data) return []
@@ -102,11 +99,13 @@ export function useMiniChefFarms({ chainId, swrConfig = undefined }: useFarmsPro
 
 export function useFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const DialerContractFarms = useDialerContractFarms({ chainId })
-  const miniChefFarms = useMiniChefFarms({ chainId })
-  const oldMiniChefFarms = useOldMiniChefFarms()
+  // const miniChefFarms = useMiniChefFarms({ chainId })
+  // const oldMiniChefFarms = useOldMiniChefFarms()
   return useMemo(
-    () => concat(DialerContractFarms, miniChefFarms, oldMiniChefFarms).filter((pool) => pool && pool.pair),
-    [DialerContractFarms, miniChefFarms, oldMiniChefFarms]
+    () => DialerContractFarms.filter((pool: any) => pool && pool.pair),
+    // () => concat(DialerContractFarms, miniChefFarms, oldMiniChefFarms).filter((pool) => pool && pool.pair),
+    [DialerContractFarms]
+    // [DialerContractFarms, miniChefFarms, oldMiniChefFarms]
   )
 }
 

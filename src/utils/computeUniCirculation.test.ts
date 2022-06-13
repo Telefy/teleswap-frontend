@@ -29,7 +29,7 @@ describe('computeUniCirculation', () => {
       tokenAmount(224_575_341)
     )
   })
-  it('subtracts unclaimed uni', () => {
+  it('subtracts unclaimed TELE', () => {
     expect(computeUniCirculation(token, BigNumber.from(1600387200 + 15 * 24 * 60 * 60), tokenAmount(1000))).toEqual(
       tokenAmount(154_999_000)
     )

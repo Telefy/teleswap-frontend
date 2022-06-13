@@ -129,6 +129,13 @@ export const formatNumber = (number: any, usd = false, scale = true, decimals = 
   return parseFloat(String(num)).toPrecision(4)
 }
 
+export const formatNumberDecimals = (number: any, decimals = 0) => {
+  if (isNaN(number) || number === '' || number === undefined) {
+    return '0'
+  }
+  return Math.round((Number(number) + Number.EPSILON) * 10 ** decimals) / 10 ** decimals
+}
+
 export function formatNumberScale(number: any, usd = false) {
   if (isNaN(number) || number === '' || number === undefined) {
     return usd ? '$0.00' : '0'

@@ -93,12 +93,12 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
               </TYPE.body>
               <TYPE.body>
-                <Trans>Unclaimed UNI</Trans>
+                <Trans>Unclaimed TELE</Trans>
               </TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            <Trans>When you withdraw, your UNI is claimed and your liquidity is removed from the mining pool.</Trans>
+            <Trans>When you withdraw, your TELE is claimed and your liquidity is removed from the mining pool.</Trans>
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? <Trans>Withdraw & Claim</Trans>}
@@ -112,7 +112,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <Trans>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} TEL-LP</Trans>
             </TYPE.body>
             <TYPE.body fontSize={20}>
-              <Trans>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} UNI</Trans>
+              <Trans>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} TELE</Trans>
             </TYPE.body>
           </AutoColumn>
         </LoadingView>
@@ -127,7 +127,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <Trans>Withdrew TEL-LP!</Trans>
             </TYPE.body>
             <TYPE.body fontSize={20}>
-              <Trans>Claimed UNI!</Trans>
+              <Trans>Claimed TELE!</Trans>
             </TYPE.body>
           </AutoColumn>
         </SubmittedView>

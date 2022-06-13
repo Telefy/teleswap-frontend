@@ -184,7 +184,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
                 {hypotheticalRewardRate
                   .multiply((60 * 60 * 24 * 7).toString())
                   .toSignificant(4, { groupSeparator: ',' })}{' '}
-                UNI / week
+                TELE / week
               </Trans>
             </TYPE.black>
           </HypotheticalRewardRate>

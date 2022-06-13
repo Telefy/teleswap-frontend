@@ -500,7 +500,7 @@ describe('list reducer', () => {
 
       it('each of those initialized lists is empty', () => {
         const byUrl = store.getState().byUrl
-        // note we don't expect the uniswap default list to be prepopulated
+        // note we don't expect the teleswap default list to be prepopulated
         // this is ok.
         Object.keys(byUrl).forEach((url) => {
           if (url !== 'https://unpkg.com/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json') {

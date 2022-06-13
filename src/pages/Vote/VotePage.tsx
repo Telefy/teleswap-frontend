@@ -232,7 +232,7 @@ export default function VotePage({
               <GreyCard>
                 <TYPE.black>
                   <Trans>
-                    Only UNI votes that were self delegated or delegated to another address before block{' '}
+                    Only TELE votes that were self delegated or delegated to another address before block{' '}
                     {proposalData.startBlock} are eligible for voting.{' '}
                   </Trans>
                   {showLinkForUnlock && (

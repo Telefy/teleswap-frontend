@@ -15,6 +15,7 @@ import { useActiveWeb3React } from 'hooks/web3'
 import React, { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useIsDarkMode } from '../../state/user/hooks'
+import Icon from '../../assets/svg/teleicon.svg'
 
 export default function Farm(): JSX.Element {
   const { i18n } = useLingui()
@@ -30,7 +31,7 @@ export default function Farm(): JSX.Element {
     () => (router.get('account') ? (router.get('account') as string) : account),
     [account, router.get('account')]
   )
-  console.log({ queryOrActiveAccount })
+  // console.log({ queryOrActiveAccount })
 
   const FILTER = {
     // @ts-ignore TYPE NEEDS FIXING
@@ -52,7 +53,7 @@ export default function Farm(): JSX.Element {
 
   const rewards = useFarmRewards({ chainId })
 
-  const data = rewards.filter((farm) => {
+  const data = rewards.filter((farm: any) => {
     // @ts-ignore TYPE NEEDS FIXING
     return type in FILTER ? FILTER[type](farm) : true
   })
@@ -71,9 +72,9 @@ export default function Farm(): JSX.Element {
     <>
       {/* <NextSeo title="Farm" description="Farm SUSHI" /> */}
       <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
-        <div>
+        <div className={darkMode ? 'telefarms-title' : 'telefarms-title-light'}>
           <Typography variant="h2" style={{ color: darkMode ? 'white' : '#6e087a' }} weight={700}>
-            {i18n._(t`Onsen Menu`)}
+            {i18n._(t`Telefy Farms `)}
           </Typography>
           <Typography variant="sm" weight={400}>
             {i18n._(t`Earn fees and rewards by depositing and staking your tokens to the platform.`)}
@@ -81,12 +82,13 @@ export default function Farm(): JSX.Element {
         </div>
         <div className="flex gap-3">
           <Button id="btn-create-new-pool" size="sm" className={darkMode ? 'background-dark' : 'background-light'}>
+            <img width={'30px'} src={Icon} alt="teleicon" />
             <a
               href="https://docs.google.com/document/d/1VcdrqAn1sR8Wa0BSSU-jAl68CfoECR62LCzIyzUpZ_U"
               target="_blank"
               rel="noreferrer"
             >
-              {i18n._(t`Apply for Onsen`)}
+              {i18n._(t`Apply for Telefy Farms`)}
             </a>
           </Button>
         </div>

@@ -170,6 +170,7 @@ const AssetInputPanel = ({
   currencyLogo,
   size,
 }: AssetInputPanelProps) => {
+  // console.log(value, 'widthset function top')
   const error = useAssetInputContextError()
   const isDesktop = true
   const { i18n } = useLingui()
@@ -180,6 +181,7 @@ const AssetInputPanel = ({
   useEffect(() => {
     if (isDesktop && span.current) {
       setWidth(value ? span?.current?.clientWidth + 6 : 60)
+      console.log(value, 'widthset function')
     }
   }, [isDesktop, value])
 
@@ -241,7 +243,10 @@ const AssetInputPanel = ({
             />
 
             {isDesktop && (
-              <span className="absolute leading-7 pointer-events-none text-low-emphesis" style={{ left: width }}>
+              <span
+                className="absolute coin-placeholder leading-7 pointer-events-none text-low-emphesis"
+                style={{ left: '220px' }}
+              >
                 {currency?.symbol}
               </span>
             )}
