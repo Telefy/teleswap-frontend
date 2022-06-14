@@ -103,7 +103,7 @@ const ManageBar = ({ farm }) => {
             />
           </div>
 
-          <Typography variant="sm" className="text-secondary">
+          <Typography variant="sm" className="sub-text">
             {i18n._(t`Use one of the buttons to set a percentage or enter a value manually using the input field`)}
           </Typography>
         </div>
@@ -128,7 +128,7 @@ const ManageBar = ({ farm }) => {
               }}
               className={classNames(
                 'text-md border border-opacity-50',
-                toggle ? 'focus:ring-blue border-blue' : 'focus:ring-pink border-pink'
+                toggle ? 'stake-button-dark' : 'stake-button-light'
               )}
             >
               {multiplier === '100' ? 'MAX' : multiplier + '%'}

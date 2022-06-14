@@ -20,19 +20,19 @@ interface ListPanelProps {
 const ListPanel = ({ header, items, footer, className = '' }: ListPanelProps) => {
   return (
     <div className={classNames(className, 'flex flex-col')}>
-      {header && <div className="overflow-hidden border rounded-t border-dark-700">{header}</div>}
+      {header && <div className="overflow-hidden border rounded-t border-light-700">{header}</div>}
       {items && (
         <div
           className={classNames(
             header ? '' : 'border-t rounded-t',
             footer ? 'bg-dark-800' : 'border-b rounded-b bg-dark-900',
-            'border-l border-r border-dark-700 divide-y divide-dark-700 overflow-hidden'
+            'border-l border-r border-light-700 divide-y divide-light-700 overflow-hidden'
           )}
         >
           {items}
         </div>
       )}
-      {footer && <div className="overflow-hidden border rounded-b bg-dark-900 border-dark-700">{footer}</div>}
+      {footer && <div className="overflow-hidden border rounded-b bg-dark-900 border-light-700">{footer}</div>}
     </div>
   )
 }
