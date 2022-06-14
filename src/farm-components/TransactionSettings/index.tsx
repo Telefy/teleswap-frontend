@@ -20,6 +20,7 @@ import React, { FC, useState } from 'react'
 import Button from '../Button'
 import QuestionHelper from '../QuestionHelper'
 import Typography from '../Typography'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 enum DeadlineError {
   InvalidInput = 'InvalidInput',
@@ -40,7 +41,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
   const [deadline, setDeadline] = useUserTransactionTTL()
   const [deadlineInput, setDeadlineInput] = useState('')
   const [deadlineError, setDeadlineError] = useState<DeadlineError | false>(false)
-
+  const darkMode = useIsDarkMode()
   function parseCustomDeadline(value: string) {
     // populate what the user typed and clear the error
     setDeadlineInput(value)
@@ -118,7 +119,8 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
           <div>
             <Button
               size="sm"
-              color={slippageIsDefault ? 'blue' : 'gray'}
+              className={darkMode ? 'button-dark' : 'button-light'}
+              color={slippageIsDefault ? 'pink' : 'gray'}
               variant="outlined"
               onClick={() => dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))}
             >

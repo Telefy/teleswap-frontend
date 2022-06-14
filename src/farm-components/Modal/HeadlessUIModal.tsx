@@ -14,6 +14,7 @@ import SubmittedModalContent, { SubmittedModalContentProps } from 'farm-componen
 import { classNames } from 'functions'
 import { cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useState } from 'react'
 import React, { Fragment } from 'react'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 const MAX_WIDTH_CLASS_MAPPING = {
   sm: 'lg:max-w-sm',
@@ -48,7 +49,6 @@ type HeadlessUiModalType<P> = FC<P> & {
 
 const HeadlessUiModal: HeadlessUiModalType<Props> = ({ children: childrenProp, trigger: triggerProp }) => {
   const [open, setOpen] = useState(false)
-
   const onClick = useCallback(() => {
     setOpen(true)
   }, [])
@@ -103,6 +103,7 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
   unmount,
 }) => {
   const isDesktop = true // make it dynamic
+  const darkMode = useIsDarkMode()
   return (
     <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave} unmount={unmount}>
       <Dialog as="div" className="fixed z-50 inset-0" onClose={onDismiss} unmount={unmount}>
@@ -142,7 +143,7 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
           >
             <div
               className={classNames(
-                transparent ? '' : 'bg-dark-1919',
+                darkMode ? 'bg-dark-1919' : 'bg-light-1919',
                 isDesktop ? MAX_WIDTH_CLASS_MAPPING[maxWidth] : '',
                 isDesktop ? `w-full` : 'w-[85vw] max-h-[85vh] overflow-y-auto mx-auto',
                 'inline-block align-bottom rounded-24 text-left overflow-hidden transform p-4'

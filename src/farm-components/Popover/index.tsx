@@ -6,7 +6,7 @@ import React, { Fragment, useCallback, useEffect, useState } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
-
+import { useIsDarkMode } from '../../state/user/hooks'
 export interface PopoverProps {
   content: React.ReactNode
   children: React.ReactNode
@@ -42,7 +42,7 @@ export default function Popover({ content, children, placement = 'auto', show, m
       node.setAttribute('id', 'popover-portal')
     }
   }, [])
-
+  const darkMode = useIsDarkMode()
   return (
     <HeadlessuiPopover as={Fragment}>
       {({ open }) => (
@@ -58,7 +58,9 @@ export default function Popover({ content, children, placement = 'auto', show, m
             ReactDOM.createPortal(
               <HeadlessuiPopover.Panel
                 static
-                className="z-[1000] shadow-xl shadow-dark-1000/80 rounded overflow-hidden"
+                className={`z-[1000] shadow-xl shadow-dark-1000/80 rounded overflow-hidden ${
+                  darkMode ? 'popover-dark' : 'popover-light'
+                }`}
                 ref={setPopperElement as any}
                 style={styles.popper}
                 {...attributes.popper}

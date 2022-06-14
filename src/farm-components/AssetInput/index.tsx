@@ -20,7 +20,7 @@ import { useUSDCValue } from 'hooks/useUSDCPrice'
 import { useActiveWeb3React } from 'hooks/web3'
 import Lottie from 'lottie-react'
 import React, { createContext, FC, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react'
-
+import { useIsDarkMode } from '../../state/user/hooks'
 interface AssetInputProps {
   value?: string
   currency?: Currency
@@ -63,7 +63,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const [open, setOpen] = useState(false)
-
+  const darkMode = useIsDarkMode()
   const bentoOrWalletBalance = useBentoOrWalletBalance(
     account && !balanceProp ? account : undefined,
     props.currency,
@@ -177,7 +177,7 @@ const AssetInputPanel = ({
   const usdcValue = useUSDCValue(tryParseAmountUni(Number(value) === 0 ? '1' : value, currency))
   const span = useRef<HTMLSpanElement | null>(null)
   const [width, setWidth] = useState(0)
-
+  const darkMode = useIsDarkMode()
   useEffect(() => {
     if (isDesktop && span.current) {
       setWidth(value ? span?.current?.clientWidth + 6 : 60)
@@ -244,7 +244,9 @@ const AssetInputPanel = ({
 
             {isDesktop && (
               <span
-                className="absolute coin-placeholder leading-7 pointer-events-none text-low-emphesis"
+                className={`absolute coin-placeholder leading-7 pointer-events-none text-low-emphesis ${
+                  darkMode ? 'coin-placeholder-dark' : 'coin-placeholder-light'
+                }`}
                 style={{ left: '220px' }}
               >
                 {currency?.symbol}
@@ -254,7 +256,15 @@ const AssetInputPanel = ({
           <Typography
             id={currency.symbol + '-usdc-value'}
             variant="xs"
-            className={error ? 'text-red' : usdcValue && value ? 'text-green' : 'text-low-emphesis'}
+            className={
+              error
+                ? 'text-red'
+                : usdcValue && value
+                ? 'text-green'
+                : 'text-low-emphesis' && darkMode
+                ? 'text-light'
+                : 'text-dark'
+            }
           >
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
           </Typography>
@@ -263,7 +273,7 @@ const AssetInputPanel = ({
           <ExclamationCircleIcon className="w-8 h-8 mr-2 text-red" />
         ) : (
           showMax && (
-            <Button size="xs" variant="outlined" color="gray" className="!border" onClick={() => onMax()}>
+            <Button size="xs" variant="outlined" color="gray" className="max-btn" onClick={() => onMax()}>
               Max
             </Button>
           )

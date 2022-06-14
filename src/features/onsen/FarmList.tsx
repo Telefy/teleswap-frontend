@@ -53,7 +53,7 @@ const FarmList = ({ farms, term }) => {
   return items ? (
     <>
       <div className={darkMode ? 'grid-dark' : 'grid-light'}>
-        <div className="grid grid-cols-5 min-w-[768px]">
+        <div className="grid grid-cols-5 min-w-[768px] grid-header-custom">
           <div
             className={classNames(
               'flex gap-1 items-center grid-header-text cursor-pointer',
