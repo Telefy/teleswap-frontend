@@ -46,17 +46,17 @@ const MenuLink: FC<{ href?: string; label: string; onClick?(): void }> = ({ href
 enum FarmFilter {
   All = 'All Farms',
   Portfolio = 'Your Farms',
-  Kashi = 'Kashi Farms',
-  Sushi = 'Sushi Farms',
+  Lending = 'Lending Farms',
+  TelLp = 'TEL-LP Farms',
   Old = 'Old Farms',
 }
 
 const filters: Record<string, FarmFilter> = {
   portfolio: FarmFilter.Portfolio,
   farm: FarmFilter.All,
-  kashi: FarmFilter.Kashi,
+  lending: FarmFilter.Lending,
   old: FarmFilter.Old,
-  sushi: FarmFilter.Sushi,
+  telLp: FarmFilter.TelLp,
 }
 
 const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: number }) => {
@@ -78,13 +78,13 @@ const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: 
       ) : (
         <MenuLink onClick={toggleWalletModal} label={i18n._(t`Your Farms`)} />
       ),
-      [FarmFilter.Kashi]:
-        chainId && [ChainId.MAINNET, ChainId.ARBITRUM_ONE].includes(chainId) ? (
-          <MenuLink href={'/farm?filter=kashi'} label={i18n._(t`Lending Farms`)} />
+      [FarmFilter.Lending]:
+        chainId && [ChainId.MAINNET, ChainId.ARBITRUM_ONE, ChainId.RINKEBY].includes(chainId) && false ? (
+          <MenuLink href={'/farm?filter=lending'} label={i18n._(t`Lending Farms`)} />
         ) : undefined,
-      [FarmFilter.Sushi]:
-        chainId && [ChainId.MAINNET, ChainId.ARBITRUM_ONE].includes(chainId) ? (
-          <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`TeleSwap Farms`)} />
+      [FarmFilter.TelLp]:
+        chainId && [ChainId.MAINNET, ChainId.ARBITRUM_ONE, ChainId.RINKEBY].includes(chainId) && false ? (
+          <MenuLink href={'/farm?filter=telLp'} label={i18n._(t`TEL-LP Farms`)} />
         ) : undefined,
       // @ts-ignore TYPE NEEDS FIXING
       [FarmFilter.Old]:

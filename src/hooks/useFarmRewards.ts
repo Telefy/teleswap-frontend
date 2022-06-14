@@ -50,7 +50,6 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
     shouldFetch: !!farmAddresses,
   })
 
-  console.log(swapPairs, 'swapPairs');
   const { data: swapPairs1d } = useSushiPairs({
     chainId,
     variables: {
@@ -61,7 +60,6 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
     },
     shouldFetch: !!block1d && !!farmAddresses,
   })
-  console.log(swapPairs1d, 'swapPairs 1 day');
 
   const { data: kashiPairs } = useKashiPairs({
     chainId,
@@ -115,11 +113,8 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
 
       function getRewards() {
 
-        const bonusMultiplier = pool?.owner?.bonusEndBlock >= currentBlock.number ? pool?.owner?.bonusMultiplier : 1 || 1
+        const bonusMultiplier = pool?.owner?.bonusEndBlock >= currentBlock?.number ? pool?.owner?.bonusMultiplier : 1 || 1
         // const bonusMultiplier = 10
-
-        console.log(pool?.owner?.bonusEndBlock, "endBloxck");
-        console.log(bonusMultiplier, "bonusMultiplier");
 
         // TODO: Some subgraphs give telePerBlock & sushiPerSecond, and DialerContract gives nothing
         const telePerBlock =
@@ -127,8 +122,6 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
           (pool?.owner?.telePerSecond / 1e18) * averageBlockTime ||
           masterChefV1SushiPerBlock
         // 100
-
-        console.log(telePerBlock, "telePerBlock");
 
         // @ts-ignore TYPE NEEDS FIXING
         const rewardPerBlock = (pool.allocPoint / Number(pool.owner.totalAllocPoint)) * Number(telePerBlock)
@@ -338,7 +331,6 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
       }
 
       const rewards = getRewards()
-      console.log(rewards, 'rewards ------------');
 
 
       const balance = swapPair ? Number(pool.balance / 1e18) : pool.balance / 10 ** kashiPair.token0.decimals
