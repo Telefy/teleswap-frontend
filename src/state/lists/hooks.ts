@@ -22,7 +22,7 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
   const map = list.tokens.reduce<TokenAddressMap>((tokenMap, tokenInfo) => {
     const token = new WrappedTokenInfo(tokenInfo, list)
     if (tokenMap[token.chainId]?.[token.address] !== undefined) {
-      console.error(new Error(`Duplicate token! ${token.address}`))
+      console.warn(`Duplicate token! ${token.address} from ${list.name}`)
       return tokenMap
     }
     return {
@@ -59,6 +59,8 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
 // merge tokens contained within lists from urls
 function useCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMap {
   const lists = useAllLists()
+  console.log(lists, 'lists ========')
+
   return useMemo(() => {
     if (!urls) return {}
     return (
@@ -94,6 +96,8 @@ export function useInactiveListUrls(): string[] {
 // get all the tokens from active lists, combine with local default tokens
 export function useCombinedActiveList(): TokenAddressMap {
   const activeListUrls = useActiveListUrls()
+  console.log(activeListUrls, 'activeListUrls =======')
+
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
   return combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST)
 }

@@ -19,6 +19,9 @@ interface FarmListItem {
 // @ts-ignore TYPE NEEDS FIXING
 const FarmListItem: FC<FarmListItem> = ({ farm, onClick }) => {
   const { i18n } = useLingui()
+  console.log(farm.pair.token0.id, 'farm.pair.token0.id ====')
+  console.log(farm.pair.token1.id, 'farm.pair.token1.id ====')
+
   const token0 = useCurrency(farm.pair.token0.id) ?? undefined
   const token1 = useCurrency(farm.pair.token1.id) ?? undefined
 

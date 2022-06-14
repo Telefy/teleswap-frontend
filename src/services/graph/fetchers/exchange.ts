@@ -42,8 +42,6 @@ export const exchange = async (chainId = ChainId.MAINNET, query, variables = {})
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
 export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
-  console.log('pair fn')
-
   const { pairs } = await exchange(chainId, query, variables)
   return pairs
 }
