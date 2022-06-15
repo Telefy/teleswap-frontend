@@ -14,8 +14,6 @@ const NavLink = ({ children, exact = false, activeClassName = 'text-high-emphesi
 
   const className = isActive ? `${childClassName} ${activeClassName}`.trim() : childClassName
 
-  // console.log({ asPath, pathname, route, query })
-
   return (
     <a href={props.href} {...props}>
       {React.cloneElement(child, {

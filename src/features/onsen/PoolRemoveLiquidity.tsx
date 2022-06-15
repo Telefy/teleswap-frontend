@@ -4,6 +4,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE } from '@telefy/teleswap-core-sdk'
+import ReactGA from 'react-ga'
 import JSBI from 'jsbi'
 import AssetInput from 'farm-components/AssetInput'
 import Button from 'farm-components/Button'
@@ -267,10 +268,10 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
               txHash={response.hash}
             />
           )
-
-          gtag('event', 'Remove', {
-            event_category: 'Liquidity',
-            event_label: [currencyA?.symbol, currencyB?.symbol].join('/'),
+          ReactGA.event({
+            category: 'Liquidity',
+            action: 'Remove',
+            label: [currencyA?.symbol, currencyB?.symbol].join('/'),
           })
         })
         .catch((error: Error) => {
@@ -278,9 +279,10 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
           // we only care if the error is something _other_ than the user rejected the tx
           console.error(error)
 
-          gtag('event', 'Remove Failed', {
-            event_category: 'Liquidity',
-            event_label: [currencyA?.symbol, currencyB?.symbol].join('/'),
+          ReactGA.event({
+            category: 'Liquidity',
+            action: 'Remove Failed',
+            label: [currencyA?.symbol, currencyB?.symbol].join('/'),
           })
         })
     }

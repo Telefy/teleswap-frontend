@@ -170,7 +170,6 @@ const AssetInputPanel = ({
   currencyLogo,
   size,
 }: AssetInputPanelProps) => {
-  // console.log(value, 'widthset function top')
   const error = useAssetInputContextError()
   const isDesktop = true
   const { i18n } = useLingui()

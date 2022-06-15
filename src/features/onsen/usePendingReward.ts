@@ -41,7 +41,6 @@ const usePending = (farm) => {
       try {
         // @ts-ignore TYPE NEEDS FIXING
         const pending = await contract[chainId]?.pendingTokens(farm.id, account, '0')
-        // console.log({ farm })
         // todo: do not assume [0] or that rewardToken has 18 decimals (only works w/ mastechefv2 currently)
         const formatted = farm.rewardToken
           ? Fraction.from(

@@ -80,7 +80,6 @@ export function usePendingTele(farm) {
   }, [farm, account])
 
   const result = useSingleCallResult(args ? contract : null, 'pendingTele', args)?.result
-  console.log(result, 'pendingTele')
 
   const value = result?.[0]
 
