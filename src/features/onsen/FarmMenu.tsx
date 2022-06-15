@@ -8,6 +8,7 @@ import Typography from 'farm-components/Typography'
 import { useWalletModalToggle } from 'state/application/hooks'
 import React, { FC, Fragment, ReactNode, useMemo, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 const MenuLink: FC<{ href?: string; label: string; onClick?(): void }> = ({ href, label, onClick }) => {
   const router = useHistory()
@@ -67,7 +68,7 @@ const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: 
   const filter = search as string
 
   const toggleWalletModal = useWalletModalToggle()
-
+  const darkMode = useIsDarkMode()
   const [selected, setSelected] = useState<FarmFilter>(filters[filter] || FarmFilter.All)
 
   const items = useMemo(() => {
@@ -103,9 +104,17 @@ const OnsenFilter = ({ account, chainId }: { account?: string | null; chainId?: 
     <div className="flex gap-2 items-center w-[180px]">
       <Menu as="div" className="relative inline-block w-full text-left">
         <div>
-          <Menu.Button className="w-full px-4 py-2.5 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900">
+          <Menu.Button
+            className={`w-full px-4 py-2.5 text-sm font-bold bg-transparent rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900 ${
+              darkMode ? 'select-input-border-dark' : 'select-input-border-light'
+            }`}
+          >
             <div className="flex flex-row items-center justify-between">
-              <Typography weight={700} variant="sm">
+              <Typography
+                weight={700}
+                variant="sm"
+                className={darkMode ? 'select-text-color-dark' : 'select-text-color-light'}
+              >
                 {selected}
               </Typography>
               <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />

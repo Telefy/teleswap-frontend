@@ -3,6 +3,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import React, { FC } from 'react'
 import { Search as SearchIcon } from 'react-feather'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 interface Search {
   term?: string
@@ -11,10 +12,15 @@ interface Search {
 
 const Search: FC<Search> = ({ term, search }) => {
   const { i18n } = useLingui()
+  const darkMode = useIsDarkMode()
 
   return (
     <div className="flex flex-grow items-center gap-4 w-full sm:w-auto">
-      <div className="focus-within:ring-2 ring-blue flex flex-grow gap-2 items-center rounded border border-dark-800 bg-dark-900 bg-opacity-50 py-2 px-3 w-full sm:w-auto">
+      <div
+        className={`focus-within:ring-2 ring-blue flex flex-grow gap-2 items-center rounded border-dark-800 bg-dark-900 bg-opacity-50 py-2 px-3 w-full sm:w-auto ${
+          darkMode ? 'input-border-dark' : 'input-border-light'
+        }`}
+      >
         <SearchIcon strokeWidth={3} width={20} height={20} />
         <input
           className="bg-transparent text-high-emphesis w-full placeholder:text-low-emphesis"
