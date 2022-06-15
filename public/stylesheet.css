@@ -4550,4 +4550,32 @@ color: #444;
   .border-light-700{
     border-color: #ddd;
   }
+  .input-border-dark{
+   border: 1px solid #e588ef;
+  }
+  .input-border-light{
+    border: 1px solid #6e087a;
+   }
+   .select-input-border-dark{
+    border: 1px solid #e588ef;
+   }
+   .select-input-border-light{
+    border: 1px solid #6e087a;
+   }
+  .select-input-border-light:hover{
+    background-color: #c58dc9;
+    color: #fff;
+  }
+  .input-border-light input{
+    color: #444;
+  }
+  .input-border-dark input{
+    color: #fff;
+    }
+  .select-text-color-light{
+    color: #444;
+  }
+  .select-text-color-dark{
+    color: #fff;
+  }
 /*# sourceMappingURL=26b848d58538f4f7.css.map*/
