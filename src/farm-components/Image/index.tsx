@@ -27,7 +27,7 @@ declare type ImageProps = Omit<
   lazyRoot?: React.RefObject<HTMLElement> | null
   lazyBoundary?: string
   placeholder?: any
-  blurDataURL?: string
+  blurdataurl?: string
   unoptimized?: boolean
   objectFit?: any
   objectPosition?: any
@@ -47,16 +47,15 @@ const Image: FC<ImageProps> = ({ src, width, height, layout, ...rest }) => {
     <div style={{ width, height }} className="overflow-hidden rounded">
       {useBlur ? (
         <img
-          loader={loader}
           src={src}
           width={width}
           height={height}
           placeholder="blur"
-          blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`}
+          blurdataurl={`data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`}
           {...rest}
         />
       ) : (
-        <img loader={loader} src={src} width={width} height={height} placeholder="empty" {...rest} />
+        <img src={src} width={width} height={height} placeholder="empty" {...rest} />
       )}
     </div>
   )

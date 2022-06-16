@@ -83,11 +83,7 @@ export default function Farm(): JSX.Element {
         <div className="flex gap-3">
           <Button id="btn-create-new-pool" size="sm" className={darkMode ? 'background-dark' : 'background-light'}>
             <img width={'30px'} src={Icon} alt="teleicon" />
-            <a
-              href="https://docs.google.com/document/d/1VcdrqAn1sR8Wa0BSSU-jAl68CfoECR62LCzIyzUpZ_U"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a target="_blank" rel="noreferrer">
               {i18n._(t`Apply for Telefy Farms`)}
             </a>
           </Button>
