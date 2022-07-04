@@ -21,6 +21,7 @@ import { ExternalLink as LinkIcon } from 'react-feather'
 import { ExternalLink, LinkStyledButton, TYPE } from '../../theme'
 import { Trans } from '@lingui/macro'
 import { useAppDispatch } from 'state/hooks'
+import { useIsDarkMode } from '../../state/user/hooks'
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -227,6 +228,7 @@ export default function AccountDetails({
   const { chainId, account, connector } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
   const dispatch = useAppDispatch()
+  const darkMode = useIsDarkMode()
 
   function formatConnectorName() {
     const { ethereum } = window
@@ -340,7 +342,10 @@ export default function AccountDetails({
                     <>
                       <div>
                         {getStatusIcon()}
-                        <p> {account && shortenAddress(account)}</p>
+                        <p className={darkMode ? 'shortenaddress-dark' : 'shortenaddress-light'}>
+                          {' '}
+                          {account && shortenAddress(account)}
+                        </p>
                       </div>
                     </>
                   )}

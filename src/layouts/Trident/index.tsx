@@ -26,7 +26,7 @@ export const TridentHeader: FC<TridentHeaderProps> = ({
       <Background variant={pattern} />
       <Container
         maxWidth={maxWidth}
-        className={classNames('flex flex-col gap-5 z-[1] p-6 lg:py-10', condensed && 'py-5', className)}
+        className={classNames('flex flex-col gap-5 z-[1] p-1 lg:py-2', condensed && 'py-5', className)}
       >
         {children}
       </Container>

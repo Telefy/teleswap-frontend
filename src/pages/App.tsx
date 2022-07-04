@@ -30,6 +30,7 @@ import { RedirectDuplicateTokenIdsV2 } from './AddLiquidityV2/redirects'
 import { PositionPage } from './Pool/PositionPage'
 import AddLiquidity from './AddLiquidity'
 import ApeModeQueryParamReader from 'hooks/useApeModeQueryParamReader'
+import TeleStake from './telestake'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -101,6 +102,7 @@ export default function App() {
               <Route exact strict path="/pool/v2" component={PoolV2} />
               <Route exact strict path="/pool" component={Pool} />
               <Route exact strict path="/farm" component={Farm} />
+              <Route exact strict path="/telestake" component={TeleStake} />
               <Route exact strict path="/pool/:tokenId" component={PositionPage} />
 
               <Route exact strict path="/add/v2/:currencyIdA?/:currencyIdB?" component={RedirectDuplicateTokenIdsV2} />

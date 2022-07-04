@@ -325,38 +325,45 @@ export default function Header() {
       <HeaderRow>
         <Title href=".">
           <UniIcon>
-            <img width={'120px'} src={darkMode ? LogoDark : Logo} alt="logo" />
+            <div className="telefy-logo">
+              <img src={darkMode ? LogoDark : Logo} alt="logo" />
+            </div>
           </UniIcon>
         </Title>
       </HeaderRow>
-      <HeaderLinks>
-        <StyledNavLink id={`swap-nav-link`} to={'/swap?use=V2'}>
-          <Trans>Swap</Trans>
-        </StyledNavLink>
-        <StyledNavLink
-          id={`pool-nav-link`}
-          to={'/pool/v2'}
-          isActive={(match, { pathname }) =>
-            Boolean(match) ||
-            pathname.startsWith('/add') ||
-            pathname.startsWith('/remove') ||
-            pathname.startsWith('/increase') ||
-            pathname.startsWith('/find')
-          }
-        >
-          <Trans>Pool</Trans>
-        </StyledNavLink>
-        <StyledNavLink id={`swap-nav-link`} to={'/farm'}>
-          <Trans>Farm</Trans>
-        </StyledNavLink>
-        {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
+      <div className="main-header">
+        <HeaderLinks>
+          <StyledNavLink id={`swap-nav-link`} to={'/swap?use=V2'}>
+            <Trans>Swap</Trans>
+          </StyledNavLink>
+          <StyledNavLink
+            id={`pool-nav-link`}
+            to={'/pool/v2'}
+            isActive={(match, { pathname }) =>
+              Boolean(match) ||
+              pathname.startsWith('/add') ||
+              pathname.startsWith('/remove') ||
+              pathname.startsWith('/increase') ||
+              pathname.startsWith('/find')
+            }
+          >
+            <Trans>Pool</Trans>
+          </StyledNavLink>
+          <StyledNavLink id={`swap-nav-link`} to={'/farm'}>
+            <Trans>Farm</Trans>
+          </StyledNavLink>
+          <StyledNavLink id={`swap-nav-link`} to={'/telestake'}>
+            <Trans>Tele Stake</Trans>
+          </StyledNavLink>
+          {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
           <Trans>Vote</Trans>
         </StyledNavLink>
         <StyledExternalLink id={`stake-nav-link`} href={'https://info.telefy.finance'}>
           <Trans>Charts</Trans>
           <sup>↗</sup>
         </StyledExternalLink> */}
-      </HeaderLinks>
+        </HeaderLinks>
+      </div>
       <HeaderControls>
         <HeaderElement>
           <HideSmall>

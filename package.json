@@ -164,5 +164,8 @@
     ]
   },
   "license": "GPL-3.0-or-later",
-  "dependencies": {}
+  "dependencies": {
+    "rc-slider": "^10.0.0",
+    "reactstrap": "^9.1.1"
+  }
 }
