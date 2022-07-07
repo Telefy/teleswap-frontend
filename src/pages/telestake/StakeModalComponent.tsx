@@ -4,8 +4,8 @@ import Button from 'farm-components/Button'
 import { useIsDarkMode } from '../../state/user/hooks'
 import Icon from '../../assets/svg/teleicon.svg'
 import { Modal, ModalFooter, ModalHeader, ModalBody, Input } from 'reactstrap'
-import Slider from 'rc-slider'
-import 'rc-slider/assets/index.css'
+import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css'
+import RangeSlider from 'react-bootstrap-range-slider'
 
 function StakeModalComponent() {
   const darkMode = useIsDarkMode()
@@ -14,13 +14,7 @@ function StakeModalComponent() {
     setModalStake(!modalStake)
   }
   const stakeModal = () => setModalStake(!modalStake)
-  const [value, setValue] = useState()
-  const sliderProps = {
-    min: 0,
-    max: 100,
-    step: 25,
-    marks: { 0: 0, 25: 25, 50: 50, 75: 75, 100: 100 },
-  }
+  const [value, setValue] = useState<any | 0>(0)
   return (
     <div>
       <Modal
@@ -63,7 +57,21 @@ function StakeModalComponent() {
               <div className="balance">Balance - 197595.066</div>
             </div>
             <div className="stake-slider">
-              <Slider value={value} onChange={(val) => setValue(value)} {...sliderProps} />
+              <RangeSlider
+                value={value}
+                min={0}
+                max={100}
+                tooltipPlacement="top"
+                tooltip="on"
+                onChange={(changeEvent) => {
+                  console.log(changeEvent.target.value)
+                  setValue(changeEvent.target.value)
+                }}
+              />
+              <div className="slider-placeholder">
+                <div>0</div>
+                <div>100</div>
+              </div>
             </div>
             <div className="button-group-flex mt-1">
               <div>

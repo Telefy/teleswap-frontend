@@ -18,6 +18,7 @@ import { Input } from 'reactstrap'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import 'rc-slider/assets/index.css'
 import LockedModalComponent from './LockedModalComponent'
+import ConvertLockedModalComponent from './ConvertLockedModalComponent'
 import FlexibleModalComponent from './FlexibleModalComponent'
 import StakeModalComponent from './StakeModalComponent'
 import UnstakeModalComponent from './UnstakeModalComponent'
@@ -78,12 +79,19 @@ export default function TeleStake(): JSX.Element {
   })
   const [modalFlexible, setFlexibleModal] = React.useState(false)
   const [modalLocked, setLockedModal] = React.useState(false)
+  const [modalConvertLocked, setConvertLockedModal] = React.useState(false)
   const [isStakedAlready, setIsStakedAlready] = useState(false)
+  const [isConvertToLock, setIsConvertToLock] = useState(false)
   const [modalStake, setModalStake] = React.useState(false)
   const [modalUnStake, setModalUnStake] = React.useState(false)
   const flexibleModal = () => {
     setFlexibleModal(!modalFlexible)
     setIsStakedAlready(true)
+  }
+  const convertLockedModal = () => {
+    setConvertLockedModal(!modalConvertLocked)
+    setFlexibleModal(false)
+    setIsStakedAlready(false)
   }
   // const lockedModal = () => setLockedModal(!modalLocked)
   const toggleWalletModal = useWalletModalToggle()
@@ -130,13 +138,11 @@ export default function TeleStake(): JSX.Element {
                 <div className="apy-block">
                   <div className="box-content-top">
                     <div className="box-content-top-item">
-                      <div>Flexible Pay :</div>{' '}
-                      <div className="tele-input">
-                        <Input placeholder="000.00" />
-                      </div>
+                      <div>Flexible Staking APY :</div>
+                      <div className="bold">35.33%</div>
                     </div>
                     <div className="box-content-top-item">
-                      <div>Locked Pay :</div> <div className="bold">Up to 91.06%</div>
+                      <div>Locked Staking APY :</div> <div className="bold">Up to 91.06%</div>
                     </div>
                   </div>
                 </div>
@@ -208,11 +214,59 @@ export default function TeleStake(): JSX.Element {
                         Learn More <span>&gt;&gt;</span>
                       </a>
                     </p>
-                    <Button>Convert to Lock</Button>
+                    <Button onClick={convertLockedModal}>Convert to Lock</Button>
                   </div>
                 </div>
               )}
             </div>
+
+            <div>
+              {isStakedAlready && (
+                <div className="telecard-content">
+                  <div className="confirm-lock-title">
+                    <div className="title">My Position</div>
+                    <div>Locked</div>
+                  </div>
+                  <div className="tele-lock-unlock-block">
+                    <div className="tele-lock-unlock-block-item">
+                      <div className="inner-title">TELE Locked</div>
+                      <div className="locked-value">155098.00</div>
+                      <div className="bottom-value">-2637738 USD</div>
+                    </div>
+                    <div className="tele-lock-unlock-block-item">
+                      <div className="inner-title">Unlocks In</div>
+                      <div className="locked-value">5 Weeks</div>
+                      <div className="bottom-value">08 July 2022</div>
+                    </div>
+                  </div>
+                  <div className="stake-tele-block mt-1">
+                    <div className="flexible">
+                      <Button onClick={stakeModal}>Add TELE</Button>
+                    </div>
+                    <div className="locked">
+                      <Button onClick={convertLockedModal}>Extend</Button>
+                    </div>
+                  </div>
+                  <div className="apy-block2">
+                    <div className="box-content-top">
+                      <div className="box-content-top-item">
+                        <div>APY :</div> <div className="bold">4.25%</div>
+                      </div>
+                      <div className="box-content-top-item">
+                        <div>Lock Duration : </div> <div className="bold">10 Weeks</div>
+                      </div>
+                      <div className="box-content-top-item">
+                        <div>Yield Boost : </div> <div className="bold">4.8x</div>
+                      </div>
+                      <div className="box-content-top-item">
+                        <div>Recent TELE Profit : </div> <div className="bold">200.20</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {!isStakedAlready && (
               <div className="telecard-footer">
                 <div className="box-content">
@@ -254,6 +308,7 @@ export default function TeleStake(): JSX.Element {
       {modalFlexible && <FlexibleModalComponent />}
       {modalStake && <StakeModalComponent />}
       {modalUnStake && <UnstakeModalComponent />}
+      {modalConvertLocked && <ConvertLockedModalComponent />}
     </>
   )
 }

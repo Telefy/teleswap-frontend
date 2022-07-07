@@ -4,33 +4,30 @@ import Button from 'farm-components/Button'
 import { useIsDarkMode } from '../../state/user/hooks'
 import Icon from '../../assets/svg/teleicon.svg'
 import { Modal, ModalFooter, ModalHeader, ModalBody, Input } from 'reactstrap'
-import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css'
-import RangeSlider from 'react-bootstrap-range-slider'
 
-function LockedModalComponent() {
+function ConvertLockedModalComponent() {
   const darkMode = useIsDarkMode()
-  const [modalLocked, setLockedModal] = React.useState(true)
+  const [modalConvertLocked, setConvertLockedModal] = React.useState(true)
   // const closeModal = () => {
   //   setLockedModal(!modalLocked)
   // }
-  const [value, setValue] = useState<any | 0>(0)
   return (
     <div>
       <div>
         <Modal
           className={`animated flexible-modal fadeIn ${darkMode ? 'locked-modal-dark' : 'locked-modal-light'}`}
-          isOpen={modalLocked}
+          isOpen={modalConvertLocked}
           backdrop={false}
         >
           <ModalHeader>
             <div className="flexiblecard-header">
               {/* <img src={Icon} alt="teleicon" /> */}
-              <h1>Lock TELE</h1>
+              <h1>Convert to Lock</h1>
               {/* <p>Stake, Earn - And More!</p> */}
               <div
                 className="modal-close-btn"
                 onClick={() => {
-                  setLockedModal(false)
+                  setConvertLockedModal(false)
                 }}
               >
                 &times;
@@ -53,7 +50,9 @@ function LockedModalComponent() {
                     </div>
                     <div className="locked-content-right-item">
                       <div>
-                        <div className="bold">1438.46</div>
+                        <div className="tele-input">
+                          <Input placeholder="000.00" />
+                        </div>
                       </div>
                       <div>
                         <div className="text-under">-67465979 USD</div>
@@ -63,40 +62,8 @@ function LockedModalComponent() {
                 </div>
                 {/* <div className="balance">Balance - 197595.066</div> */}
               </div>
-              <div className="stake-slider2">
-                <RangeSlider
-                  value={value}
-                  min={0}
-                  max={100}
-                  tooltipPlacement="top"
-                  tooltip="on"
-                  onChange={(changeEvent) => setValue(changeEvent.target.value)}
-                />
-                <div className="slider-placeholder mb-1">
-                  <div>0</div>
-                  <div>100</div>
-                </div>
-                <div className={darkMode ? 'divider-dark' : 'divider-light'}></div>
-                <div className="button-group-flex2">
-                  <div>
-                    <Button className="bg-purple">25%</Button>
-                  </div>
-                  <div>
-                    <Button>50%</Button>
-                  </div>
-                  <div>
-                    <Button>75%</Button>
-                  </div>
-                  <div>
-                    <Button>MAX</Button>
-                  </div>
-                </div>
-              </div>
-              {/* <div className="stake-slider2">
-                <Slider value={value} onChange={(val) => setValue(value)} {...sliderProps} />
-              </div> */}
 
-              <div className="mt-1">Lock Duration</div>
+              <div className="mt-1">Add Duration</div>
               <div className="button-group-flex">
                 <div>
                   <Button>1W</Button>
@@ -152,4 +119,4 @@ function LockedModalComponent() {
     </div>
   )
 }
-export default LockedModalComponent
+export default ConvertLockedModalComponent
