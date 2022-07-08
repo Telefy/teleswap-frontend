@@ -12,7 +12,6 @@ import { useLocation } from 'react-router-dom'
 import { useIsDarkMode } from '../../state/user/hooks'
 import Icon from '../../assets/svg/teleicon.svg'
 import styled from 'styled-components'
-import { MouseoverTooltip, MouseoverTooltipContent } from 'components/Tooltip'
 import { Info } from 'react-feather'
 import { Input } from 'reactstrap'
 import { useWalletModalToggle } from '../../state/application/hooks'
@@ -104,9 +103,14 @@ export default function TeleStake(): JSX.Element {
   return (
     <>
       {/* <NextSeo title="Farm" description="Farm SUSHI" /> */}
-      <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
+      <TridentHeader
+        className={`sm:!flex-row justify-between items-center ${
+          darkMode ? 'staking-header-title-dark' : 'staking-header-title-light'
+        }`}
+        pattern="bg-bubble"
+      >
         <div className={darkMode ? 'telestake-title' : 'telestake-title-light'}>
-          <Typography variant="h2" style={{ color: darkMode ? 'white' : '#6e087a' }} weight={700}>
+          <Typography className="title-main" style={{ color: darkMode ? 'white' : '#6e087a' }}>
             {i18n._(t`Tele Staking `)}
           </Typography>
           {/* <Typography variant="sm" weight={400}>
@@ -123,7 +127,7 @@ export default function TeleStake(): JSX.Element {
           </Button>
         </div> */}
       </TridentHeader>
-      <div className={darkMode ? 'divider-dark' : 'divider-light'}></div>
+      {/* <div className={darkMode ? 'divider-dark' : 'divider-light'}></div> */}
       <TridentBody>
         <div className="flex flex-col w-full items-center justify-between gap-6">
           <div className={darkMode ? 'telecard-dark' : 'telecard-light'}>

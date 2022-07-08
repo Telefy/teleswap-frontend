@@ -4671,7 +4671,7 @@ padding: 15px;
   text-align: end;
 }
 .connect-wal-btn{
-  margin: 30px 0;
+  margin: 10px 0;
 }
 .connect-wal-btn .title{
   padding: 10px 0;
@@ -5083,7 +5083,7 @@ padding: 15px;
   background: #6a1977;
   padding: 15px 24px;
   font-weight: 600;
-  font-size: 22px;
+  font-size: 18px;
   border-radius: 14px;
 }
 .flexiblecard-header p{
@@ -5100,7 +5100,7 @@ padding: 15px;
 .modal-close-btn{
   position: absolute;
   right: 20px;
-  top: 20px;
+  top: 16px;
   padding: 12px;
   cursor: pointer;
   font-weight: normal;
@@ -5162,6 +5162,7 @@ padding: 15px;
   background: #430c4b;
   border: 1px solid #782a64;
   margin-top: 10px;
+  font-size: 14px;
 }
 .footer-buttons Button{
   width: 100%;
@@ -5234,6 +5235,15 @@ padding: 15px;
 }
 .font-md{
   font-size: 16px;
+}
+.staking-header-title-dark, .staking-header-title-light{
+  height: auto!important;
+}
+.title-main{
+  font-size: 20px!important;
+}
+.box-content-top-item div {
+  font-size: 14px!important;
 }
 }
 .locked Button{
@@ -5558,4 +5568,19 @@ input[type=range].range-slider::-webkit-slider-runnable-track {
   height: 4px;
   background: #b21ee3!important;
   border-radius: 2px;
+}
+
+.staking-header-title-dark{
+  height: 40px;
+  padding: 10px;
+  border-bottom: 1px solid #4b1d52;
+}
+.staking-header-title-light{
+  height: 40px;
+  padding: 10px;
+  border-bottom: 1px solid #f8d6fe;
+}
+.title-main{
+  font-size: 22px;
+  font-weight: 600;
 }
