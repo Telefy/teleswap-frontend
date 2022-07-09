@@ -435,7 +435,7 @@ export default function Swap({ history }: RouteComponentProps) {
             {showWrap ? null : (
               <Row style={{ justifyContent: !trade ? 'center' : 'space-between' }}>
                 <RowFixed>
-                  {[V3TradeState.VALID, V3TradeState.SYNCING, V3TradeState.NO_ROUTE_FOUND].includes(v3TradeState) &&
+                  {/* {[V3TradeState.VALID, V3TradeState.SYNCING, V3TradeState.NO_ROUTE_FOUND].includes(v3TradeState) &&
                     (toggledVersion === Version.v3 && isTradeBetter(v3Trade, v2Trade) ? (
                       <BetterTradeLink version={Version.v2} otherTradeNonexistent={!v3Trade} />
                     ) : toggledVersion === Version.v2 && isTradeBetter(v2Trade, v3Trade) ? (
@@ -465,7 +465,7 @@ export default function Swap({ history }: RouteComponentProps) {
                           </TYPE.main>
                         </ButtonGray>
                       )
-                    ))}
+                    ))} */}
 
                   {toggledVersion === Version.v3 && trade && isTradeBetter(v2Trade, v3Trade) && (
                     <ButtonGray

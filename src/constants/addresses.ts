@@ -14,10 +14,14 @@ export const MULTICALL2_ADDRESSES: AddressMap = {
 }
 export const V2_FACTORY_ADDRESSES: AddressMap = constructSameAddressMap(V2_FACTORY_ADDRESS, false)
 
-export const V2_ROUTER_ADDRESS: AddressMap = constructSameAddressMap(
-  '0x43A5D560D7e6d7c09fb3903224616607Ad45864A',
-  false
-)
+export const V2_ROUTER_ADDRESS: AddressMap = {
+  [SupportedChainId.MAINNET]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
+  [SupportedChainId.ROPSTEN]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
+  [SupportedChainId.RINKEBY]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
+  [SupportedChainId.GOERLI]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
+  [SupportedChainId.KOVAN]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
+  [SupportedChainId.ARBITRUM_ONE]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
+}
 
 // most current governance contract address should always be the 0 index
 // only support governance on mainnet
