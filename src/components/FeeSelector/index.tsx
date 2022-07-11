@@ -54,7 +54,7 @@ export default function FeeSelector({
           >
             <AutoColumn gap="sm" justify="flex-start">
               <ResponsiveText>
-                <Trans>0.3% fee</Trans>
+                <Trans>0.27% fee</Trans>
               </ResponsiveText>
               <TYPE.main fontWeight={400} fontSize="12px" textAlign="left">
                 <Trans>Best for most pairs.</Trans>
