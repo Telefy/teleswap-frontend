@@ -1,34 +1,21 @@
 import { FACTORY_ADDRESS as V2_FACTORY_ADDRESS } from '@mazelon/teleswap-sdk'
 import { FACTORY_ADDRESS as V3_FACTORY_ADDRESS } from '@mazelon/teleswap-v3-sdk'
+import { ROUTER_ADDRESS, TELE_ADDRESS } from '@telefy/teleswap-core-sdk'
 import { constructSameAddressMap } from '../utils/constructSameAddressMap'
 import { SupportedChainId } from './chains'
 
 type AddressMap = { [chainId: number]: string }
 
-export const UNI_ADDRESS: AddressMap = constructSameAddressMap('0xF1e345Ea7c33fd6c05F5512a780Eb5839EE31674', false)
+export const UNI_ADDRESS: AddressMap = TELE_ADDRESS
 
 export const MULTICALL2_ADDRESSES: AddressMap = {
   ...constructSameAddressMap('0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696', false),
   [SupportedChainId.ARBITRUM_KOVAN]: '0xc80e33a6f02cf08557a0ca3d94d1474d73f64bc1',
   [SupportedChainId.ARBITRUM_ONE]: '0x7262248e04a0917178b1ea8250fb2cad2cb00c2a',
 }
-export const V2_FACTORY_ADDRESSES: AddressMap = {
-  [SupportedChainId.MAINNET]: V2_FACTORY_ADDRESS,
-  [SupportedChainId.ROPSTEN]: '0x678e6a7Ebf554677E7387784ebD46047D05eC13e',
-  [SupportedChainId.RINKEBY]: '0x678e6a7Ebf554677E7387784ebD46047D05eC13e',
-  [SupportedChainId.GOERLI]: '0x678e6a7Ebf554677E7387784ebD46047D05eC13e',
-  [SupportedChainId.KOVAN]: '0x678e6a7Ebf554677E7387784ebD46047D05eC13e',
-  [SupportedChainId.ARBITRUM_ONE]: '0x678e6a7Ebf554677E7387784ebD46047D05eC13e',
-}
+export const V2_FACTORY_ADDRESSES: AddressMap = V2_FACTORY_ADDRESS
 
-export const V2_ROUTER_ADDRESS: AddressMap = {
-  [SupportedChainId.MAINNET]: '0x09576CB4ad396A6Eb2aD01F8Fe10E56baCb2b98f',
-  [SupportedChainId.ROPSTEN]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
-  [SupportedChainId.RINKEBY]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
-  [SupportedChainId.GOERLI]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
-  [SupportedChainId.KOVAN]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
-  [SupportedChainId.ARBITRUM_ONE]: '0xABdE7Fc101E23Ee2aF360820cc9f6eD4816E603c',
-}
+export const V2_ROUTER_ADDRESS: AddressMap = ROUTER_ADDRESS
 
 // most current governance contract address should always be the 0 index
 // only support governance on mainnet
