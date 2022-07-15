@@ -1,7 +1,6 @@
 import { stringify } from 'qs'
 import React, { useMemo } from 'react'
-import { useLocation } from 'react-router'
-import { Link } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import { DEFAULT_VERSION, Version } from '../../hooks/useToggledVersion'
