@@ -20,6 +20,7 @@ import ConvertLockedModalComponent from './ConvertLockedModalComponent'
 import FlexibleModalComponent from './FlexibleModalComponent'
 import StakeModalComponent from './StakeModalComponent'
 import UnstakeModalComponent from './UnstakeModalComponent'
+import { useVaultApprove, useCheckVaultApprovalStatus } from '../../hooks/useApprove'
 
 const StyledInfo = styled(Info)`
   opacity: 0.4;
@@ -96,9 +97,13 @@ export default function TeleStake(): JSX.Element {
   const [isFlexibleLockedBoxShown, setFlexibleLockedBoxShown] = useState(false)
   const stakeModal = () => setModalStake(!modalStake)
   const unStakeModal = () => setModalUnStake(!modalUnStake)
-  const buttonHandler = () => {
+  const enableButtonHandler = () => {
     setFlexibleLockedBoxShown(!isFlexibleLockedBoxShown)
   }
+
+  // Integration code starts
+  const { isVaultApproved, setLastUpdated } = useCheckVaultApprovalStatus()
+  const { handleApprove, pendingTx } = useVaultApprove(setLastUpdated)
 
   return (
     <>
@@ -155,13 +160,13 @@ export default function TeleStake(): JSX.Element {
                     <Button onClick={toggleWalletModal}>Connect Wallet</Button>
                   </div>
                 )}
-                {account && !isFlexibleLockedBoxShown && (
+                {account && !isVaultApproved && (
                   <div className="connect-wal-btn">
                     <div className="title">Stake TELE</div>
-                    <Button onClick={buttonHandler}>Enable</Button>
+                    <Button onClick={handleApprove}>Enable</Button>
                   </div>
                 )}
-                {!isStakedAlready && isFlexibleLockedBoxShown && (
+                {account && isVaultApproved && (
                   <div className="mt-1 flexiblelocked-btn-group">
                     <div className="title">Stake TELE</div>
                     <div className="stake-tele-block">
