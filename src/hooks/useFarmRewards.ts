@@ -38,6 +38,8 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
   const { data: block1d } = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
   const farms = useFarms({ chainId })
+  console.log(farms, 'farms --');
+
   const farmAddresses = useMemo(() => farms.map((farm: any) => farm.pair.toLowerCase()), [farms])
 
   const { data: swapPairs } = useSushiPairs({
@@ -49,6 +51,8 @@ export default function useFarmRewards({ chainId = ChainId.MAINNET }) {
     },
     shouldFetch: !!farmAddresses,
   })
+  console.log(swapPairs, 'swapPairs');
+
 
   const { data: swapPairs1d } = useSushiPairs({
     chainId,

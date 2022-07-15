@@ -13,6 +13,8 @@ import {
   poolsV2Query,
 } from 'services/graph/queries'
 import { request } from 'graphql-request'
+import { AddressZero } from '@ethersproject/constants'
+import { isAddress } from 'functions/validate'
 
 export const MINICHEF = {
   [ChainId.MATIC]: 'jiro-ono/minichef-staging-updates',
@@ -41,7 +43,7 @@ export const oldMiniChef = async (query, chainId = ChainId.MAINNET) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${OLD_MINICHEF[chainId]}`, query)
 
 export const DIALER_CONTRACT = {
-  [ChainId.MAINNET]: 'telefy/teleswap-dialer-subgraph-rinkeby',
+  [ChainId.MAINNET]: 'telefy/teleswap-dialer-subgraph',
   [ChainId.RINKEBY]: 'telefy/teleswap-dialer-subgraph-rinkeby',
 }
 
@@ -84,12 +86,19 @@ export const getMasterChefV1PairAddreses = async () => {
   return pools?.map((pool) => pool.pair)
 }
 
-export const getDialerContractFarms = async (variables = undefined) => {
-  const { pools } = await DialerContract(poolsV2Query, undefined, variables)
-  const tokens = await getTokenSubset(ChainId.MAINNET, {
-    // @ts-ignore TYPE NEEDS FIXING
-    tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
-  })
+export const getDialerContractFarms = async (chainId: number, variables = undefined) => {
+  const { pools } = await DialerContract(poolsV2Query, chainId, variables)
+  console.log(pools, 'pools ---')
+  // @ts-ignore TYPE NEEDS FIXING
+  let tokenAddresses = Array.from(pools.map((pool) => pool.rewarder.rewardToken))
+  tokenAddresses = tokenAddresses.filter((address) => isAddress(address) && address !== AddressZero)
+  let tokens: any[] = []
+  if (tokenAddresses.length > 0) {
+    tokens = await getTokenSubset(chainId, {
+      tokenAddresses,
+    })
+  }
+  console.log(tokens, 'tokens --')
 
   // @ts-ignore TYPE NEEDS FIXING
   return pools.map((pool) => ({

@@ -45,7 +45,7 @@ export function useMasterChefV1Farms({ chainId, swrConfig = undefined }: useFarm
 
 export function useDialerContractFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const shouldFetch = chainId && (chainId === ChainId.MAINNET || chainId === ChainId.RINKEBY)
-  const { data } = useSWR(shouldFetch ? 'DialerContractFarms' : null, () => getDialerContractFarms(), swrConfig)
+  const { data } = useSWR(shouldFetch ? 'DialerContractFarms' : null, () => getDialerContractFarms(chainId), swrConfig)
 
   return useMemo(() => {
     if (!data) return []

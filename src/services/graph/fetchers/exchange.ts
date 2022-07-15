@@ -19,7 +19,7 @@ import {
 import { pager } from './pager'
 
 export const EXCHANGE = {
-  [ChainId.MAINNET]: 'sushiswap/exchange',
+  [ChainId.MAINNET]: 'telefy/teleswap-subgraph',
   [ChainId.XDAI]: 'teleswap/xdai-exchange',
   [ChainId.MATIC]: 'jiro-ono/matic-exchange-staging',
   [ChainId.FANTOM]: 'teleswap/fantom-exchange',
