@@ -23,7 +23,7 @@ import AppBody from '../AppBody'
 import { Dots } from '../Pool/styleds'
 import { BlueCard } from '../../components/Card'
 import { TYPE } from '../../theme'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { Trans } from '@lingui/macro'
 
 enum Fields {

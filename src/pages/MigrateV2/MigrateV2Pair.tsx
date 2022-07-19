@@ -1,7 +1,7 @@
 import JSBI from 'jsbi'
 import React, { useCallback, useMemo, useState, useEffect, ReactNode } from 'react'
 import { Fraction, Percent, Price, Token, CurrencyAmount } from '@telefy/teleswap-core-sdk'
-import { Redirect, RouteComponentProps } from 'react-router'
+import { Redirect, RouteComponentProps } from 'react-router-dom'
 import { Text } from 'rebass'
 import { AutoColumn } from '../../components/Column'
 import CurrencyLogo from '../../components/CurrencyLogo'

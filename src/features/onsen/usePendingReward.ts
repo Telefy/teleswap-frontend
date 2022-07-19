@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable prettier/prettier */
+import { Contract } from '@ethersproject/contracts'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@telefy/teleswap-core-sdk'
 import { Fraction } from 'entities/bignumber'
@@ -6,7 +8,8 @@ import { useCloneRewarderContract, useComplexRewarderContract } from 'hooks/useC
 import { useBlockNumber } from 'state/application/hooks'
 import { useActiveWeb3React } from 'hooks/web3'
 import { useEffect, useMemo, useState } from 'react'
-
+import { AddressZero } from '@ethersproject/constants'
+import { isAddress } from 'functions/validate'
 import { Chef } from './enum'
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -15,10 +18,12 @@ const usePending = (farm) => {
 
   const { chainId, account, library } = useActiveWeb3React()
   const currentBlockNumber = useBlockNumber()
-
-  const cloneRewarder = useCloneRewarderContract(farm?.rewarder?.id)
-
-  const complexRewarder = useComplexRewarderContract(farm?.rewarder?.id)
+  let cloneRewarder: Contract | null = null
+  let complexRewarder: Contract | null = null
+  if (isAddress(farm?.rewarder?.id) && farm?.rewarder?.id !== AddressZero) {
+    cloneRewarder = useCloneRewarderContract(farm?.rewarder?.id)
+    complexRewarder = useComplexRewarderContract(farm?.rewarder?.id)
+  }
 
   const contract = useMemo(
     () => ({

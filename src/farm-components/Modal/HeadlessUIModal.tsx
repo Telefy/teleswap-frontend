@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable react/prop-types */
 import { Dialog, Transition } from '@headlessui/react'
 import ModalAction, { ModalActionProps } from 'farm-components/Modal/Action'
@@ -106,7 +107,7 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
   const darkMode = useIsDarkMode()
   return (
     <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave} unmount={unmount}>
-      <Dialog as="div" className="fixed z-50 inset-0" onClose={onDismiss} unmount={unmount}>
+      <Dialog as="div" className="fixed z-2 inset-0" onClose={() => {}} unmount={unmount}>
         <div className="relative flex items-center justify-center block min-h-screen text-center">
           <Transition.Child
             unmount={false}

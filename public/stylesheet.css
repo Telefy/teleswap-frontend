@@ -5584,3 +5584,7 @@ input[type=range].range-slider::-webkit-slider-runnable-track {
   font-size: 22px;
   font-weight: 600;
 }
+  .z-2{
+    z-index: 2!important;
+  }
+/*# sourceMappingURL=26b848d58538f4f7.css.map*/

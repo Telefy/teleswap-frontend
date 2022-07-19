@@ -4,7 +4,7 @@ import { classNames } from 'functions'
 import { useWalletModalToggle } from 'state/application/hooks'
 import React from 'react'
 import { Activity } from 'react-feather'
-import { UnsupportedChainIdError, useWeb3React } from 'web3-react-core'
+import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { useIsDarkMode } from '../../state/user/hooks'
 
 import Button, { ButtonProps } from '../Button'
