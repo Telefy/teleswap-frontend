@@ -6,6 +6,7 @@ import { updateVersion } from './global/actions'
 import user from './user/reducer'
 import transactions from './transactions/reducer'
 import swap from './swap/reducer'
+import poolsReducer from './pools'
 import mint from './mint/reducer'
 import mintV3 from './mint/v3/reducer'
 import lists from './lists/reducer'
@@ -16,6 +17,7 @@ import onsen from 'features/onsen/onsenSlice'
 import slippage from './slippage/slippageSlice'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
+import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 
 const store = configureStore({
   reducer: {
@@ -23,6 +25,7 @@ const store = configureStore({
     user,
     transactions,
     swap,
+    pools: poolsReducer,
     mint,
     mintV3,
     burn,
@@ -32,7 +35,13 @@ const store = configureStore({
     onsen,
     slippage,
   },
-  middleware: [...getDefaultMiddleware({ thunk: false }), save({ states: PERSISTED_KEYS, debounce: 1000 })],
+  middleware: [
+    ...getDefaultMiddleware({
+      thunk: true,
+      serializableCheck: false,
+    }),
+    save({ states: PERSISTED_KEYS, debounce: 1000 }),
+  ],
   preloadedState: load({ states: PERSISTED_KEYS }),
 })
 

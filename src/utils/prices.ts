@@ -69,3 +69,7 @@ export function warningSeverity(priceImpact: Percent | undefined): WarningSeveri
   }
   return 0
 }
+
+export const arrayUniq = (arr: Array<any>) => {
+  return arr.filter((value, index, self) => self.indexOf(value) === index)
+}

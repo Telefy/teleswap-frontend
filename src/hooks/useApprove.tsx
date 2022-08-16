@@ -1,76 +1,32 @@
-import { useCallback, useMemo } from 'react'
+/* eslint-disable react/react-in-jsx-scope */
+import { useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { Contract } from '@ethersproject/contracts'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useAppDispatch } from 'state'
-import { updateUserAllowance } from 'state/actions'
-import { useTranslation } from 'contexts/Localization'
-import { useTeleContract, useSousChef, useVaultPoolContract } from 'hooks/useContract'
-import useToast from 'hooks/useToast'
+import { useTeleContract, useTelePoolContract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { ToastDescriptionWithTx } from 'components/Toast'
 import { useSWRContract, UseSWRContractKey } from 'hooks/useSWRContract'
+import { useTransactionAdder, useHasPendingApproval } from '../state/transactions/hooks'
+import { useAppDispatch } from 'state/hooks'
+import { addTransaction } from 'state/transactions/actions'
 
-export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol) => {
-  const { toastSuccess } = useToast()
-  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const { callWithGasPrice } = useCallWithGasPrice()
-  const { t } = useTranslation()
-  const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
-  const sousChefContract = useSousChef(sousId)
-
-  const handleApprove = useCallback(async () => {
-    const receipt = await fetchWithCatchTxError(() => {
-      return callWithGasPrice(lpContract, 'approve', [sousChefContract.address, MaxUint256])
-    })
-    if (receipt?.status) {
-      toastSuccess(
-        t('Contract Enabled'),
-        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now stake in the %symbol% pool!', { symbol: earningTokenSymbol })}
-        </ToastDescriptionWithTx>
-      )
-      dispatch(updateUserAllowance({ sousId, account }))
-    }
-  }, [
-    account,
-    dispatch,
-    lpContract,
-    sousChefContract,
-    sousId,
-    earningTokenSymbol,
-    t,
-    toastSuccess,
-    callWithGasPrice,
-    fetchWithCatchTxError,
-  ])
-
-  return { handleApprove, pendingTx }
-}
-
-// Approve CAKE auto pool
+// Approve TELE auto pool
 export const useVaultApprove = (setLastUpdated: () => void) => {
-  const { t } = useTranslation()
-  const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const vaultPoolContract = useVaultPoolContract()
+  const vaultPoolContract = useTelePoolContract()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const { signer: cakeContract } = useCake()
+  const teleContract = useTeleContract()
+  const dispatch = useAppDispatch()
 
   const handleApprove = async () => {
-    const receipt = await fetchWithCatchTxError(() => {
-      return callWithGasPrice(cakeContract, 'approve', [vaultPoolContract.address, MaxUint256])
-    })
-    if (receipt?.status) {
-      toastSuccess(
-        t('Contract Enabled'),
-        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now stake in the %symbol% vault!', { symbol: 'CAKE' })}
-        </ToastDescriptionWithTx>
-      )
-      setLastUpdated()
+    let receipt: any
+    if (vaultPoolContract && teleContract) {
+      receipt = await fetchWithCatchTxError(() => {
+        return callWithGasPrice(teleContract, 'approve', [vaultPoolContract.address, MaxUint256])
+      }, 'Contract Enabled! You can now stake in the TELE vault!')
+      if (receipt?.status) {
+        setLastUpdated()
+      }
     }
   }
 
@@ -80,7 +36,7 @@ export const useVaultApprove = (setLastUpdated: () => void) => {
 export const useCheckVaultApprovalStatus = () => {
   const { account } = useWeb3React()
   const teleContract = useTeleContract()
-  const vaultPoolContract = useVaultPoolContract()
+  const vaultPoolContract = useTelePoolContract()
 
   const key = useMemo<UseSWRContractKey>(
     () =>
@@ -88,10 +44,10 @@ export const useCheckVaultApprovalStatus = () => {
         ? {
             contract: teleContract,
             methodName: 'allowance',
-            params: [account, vaultPoolContract.address],
+            params: [account, vaultPoolContract?.address],
           }
         : null,
-    [account, teleContract, vaultPoolContract.address]
+    [account, teleContract, vaultPoolContract?.address]
   )
 
   const { data, mutate } = useSWRContract(key)

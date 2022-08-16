@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Button from 'farm-components/Button'
 import Typography from 'farm-components/Typography'
@@ -21,6 +21,7 @@ import FlexibleModalComponent from './FlexibleModalComponent'
 import StakeModalComponent from './StakeModalComponent'
 import UnstakeModalComponent from './UnstakeModalComponent'
 import { useVaultApprove, useCheckVaultApprovalStatus } from '../../hooks/useApprove'
+import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
 
 const StyledInfo = styled(Info)`
   opacity: 0.4;
@@ -43,39 +44,6 @@ export default function TeleStake(): JSX.Element {
   const type = !router.get('filter') ? 'all' : (router.get('filter') as string)
   const darkMode = useIsDarkMode()
 
-  const FILTER = {
-    // @ts-ignore TYPE NEEDS FIXING
-    all: (farm) => farm.allocPoint !== '0' && farm.chef !== Chef.OLD_FARMS,
-    // @ts-ignore TYPE NEEDS FIXING
-    portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
-    // @ts-ignore TYPE NEEDS FIXING
-    sushi: (farm) => farm.pair.type === PairType.SWAP && farm.allocPoint !== '0',
-    // @ts-ignore TYPE NEEDS FIXING
-    kashi: (farm) => farm.pair.type === PairType.KASHI && farm.allocPoint !== '0',
-    // @ts-ignore TYPE NEEDS FIXING
-    '2x': (farm) =>
-      (farm.chef === Chef.DIALER_CONTRACT || farm.chef === Chef.MINICHEF) &&
-      farm.rewards.length > 1 &&
-      farm.allocPoint !== '0',
-    // @ts-ignore TYPE NEEDS FIXING
-    old: (farm) => farm.chef === Chef.OLD_FARMS,
-  }
-
-  const rewards = useFarmRewards({ chainId })
-  const data = rewards.filter((farm: any) => {
-    // @ts-ignore TYPE NEEDS FIXING
-    return type in FILTER ? FILTER[type](farm) : true
-  })
-
-  const options = {
-    keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],
-    threshold: 0,
-  }
-
-  const { result, term, search } = useFuse({
-    data,
-    options,
-  })
   const [modalFlexible, setFlexibleModal] = React.useState(false)
   const [modalLocked, setLockedModal] = React.useState(false)
   const [modalConvertLocked, setConvertLockedModal] = React.useState(false)
@@ -104,6 +72,9 @@ export default function TeleStake(): JSX.Element {
   // Integration code starts
   const { isVaultApproved, setLastUpdated } = useCheckVaultApprovalStatus()
   const { handleApprove, pendingTx } = useVaultApprove(setLastUpdated)
+  const { pools, userDataLoaded } = usePoolsWithVault()
+  console.log(pools, 'pools')
+  usePoolsPageFetch()
 
   return (
     <>
@@ -163,7 +134,9 @@ export default function TeleStake(): JSX.Element {
                 {account && !isVaultApproved && (
                   <div className="connect-wal-btn">
                     <div className="title">Stake TELE</div>
-                    <Button onClick={handleApprove}>Enable</Button>
+                    <Button onClick={handleApprove} disabled={pendingTx}>
+                      {pendingTx ? <Trans>Enabling...</Trans> : <Trans>Enable</Trans>}
+                    </Button>
                   </div>
                 )}
                 {account && isVaultApproved && (

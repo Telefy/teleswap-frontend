@@ -19,7 +19,7 @@
     "@reach/portal": "^0.10.3",
     "@react-hook/window-scroll": "^1.3.0",
     "@reduxjs/toolkit": "^1.3.5",
-    "@telefy/teleswap-core-sdk": "^1.2.3",
+    "@telefy/teleswap-core-sdk": "^1.2.4",
     "@telefy/teleswap-tele-sdk": "^1.0.0",
     "@telefy/teleswap-trident-sdk": "^1.0.0",
     "@typechain/ethers-v5": "^7.0.0",
@@ -162,7 +162,9 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "bignumber.js": "^9.0.2",
     "react-bootstrap-range-slider": "^3.0.8",
-    "reactstrap": "^9.1.1"
+    "reactstrap": "^9.1.1",
+    "redux-persist": "^6.0.0"
   }
 }

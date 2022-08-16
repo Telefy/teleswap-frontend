@@ -1,4 +1,4 @@
-import { Percent, Token } from '@telefy/teleswap-core-sdk'
+import { ChainId, Percent, Token } from '@telefy/teleswap-core-sdk'
 import { computePairAddress, Pair } from '@mazelon/teleswap-sdk'
 import JSBI from 'jsbi'
 import flatMap from 'lodash.flatmap'
@@ -29,6 +29,7 @@ import { SupportedLocale } from 'constants/locales'
 import { useAppDispatch, useAppSelector } from 'state/hooks'
 import { createAction } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
+import { GAS_PRICE_GWEI } from 'state/types'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -218,6 +219,11 @@ export function useRemoveUserAddedToken(): (chainId: number, address: string) =>
     },
     [dispatch]
   )
+}
+
+export function useGasPrice(chainId: number): string {
+  const userGas = useSelector<AppState, AppState['user']['gasPrice']>((state) => state.user.gasPrice)
+  return chainId === ChainId.MAINNET ? userGas : GAS_PRICE_GWEI.testnet
 }
 
 export function useUserAddedTokens(): Token[] {

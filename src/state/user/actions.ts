@@ -24,6 +24,7 @@ export const updateUserSlippageTolerance = createAction<{ userSlippageTolerance:
   'user/updateUserSlippageTolerance'
 )
 export const updateUserDeadline = createAction<{ userDeadline: number }>('user/updateUserDeadline')
+export const updateGasPrice = createAction<{ gasPrice: string }>('user/updateGasPrice')
 export const addSerializedToken = createAction<{ serializedToken: SerializedToken }>('user/addSerializedToken')
 export const removeSerializedToken = createAction<{ chainId: number; address: string }>('user/removeSerializedToken')
 export const addSerializedPair = createAction<{ serializedPair: SerializedPair }>('user/addSerializedPair')

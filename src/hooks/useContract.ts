@@ -27,6 +27,7 @@ import BORING_HELPER_ABI from 'abis/boring-helper.json'
 import DIALER_CONTRACT_ABI from 'abis/dialer-contract.json'
 import MINICHEF_ABI from 'abis/minichef-v2.json'
 import TELE_ABI from 'abis/tele.json'
+import TELE_POOL_ABI from 'abis/tele-pool.json'
 import CLONE_REWARDER_ABI from 'abis/clone-rewarder.json'
 import COMPLEX_REWARDER_ABI from 'abis/complex-rewarder.json'
 
@@ -51,6 +52,7 @@ import {
   DIALER_CONTRACT_ADDRESS,
   MINICHEF_ADDRESS,
   TELE_ADDRESS,
+  TELE_POOL_ADDRESS,
 } from '@telefy/teleswap-core-sdk'
 import { OLD_FARMS } from 'config/farms'
 // sushi staking
@@ -61,10 +63,20 @@ import { Quoter, UniswapV3Factory, UniswapV3Pool } from 'types/v3'
 import { NonfungiblePositionManager } from 'types/v3/NonfungiblePositionManager'
 import { V3Migrator } from 'types/v3/V3Migrator'
 import { getContract } from 'utils'
-import { Erc20, ArgentWalletDetector, EnsPublicResolver, EnsRegistrar, Multicall2, Weth } from '../abis/types'
+import {
+  Erc20,
+  ArgentWalletDetector,
+  EnsPublicResolver,
+  EnsRegistrar,
+  Multicall2,
+  Weth,
+  Multicall,
+  MulticallStake,
+} from '../abis/types'
 import { UNI, WETH9_EXTENDED } from '../constants/tokens'
 import { useActiveWeb3React } from './web3'
 import { SupportedChainId as ChainId } from 'constants/chains'
+import { MulticallState } from 'state/multicall/reducer'
 
 // returns null on errors
 export function useContract<T extends Contract = Contract>(
@@ -224,6 +236,10 @@ export function useTeleContract(withSignerIfPossible = true): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? TELE_ADDRESS[chainId] : undefined, TELE_ABI, withSignerIfPossible)
 }
+export function useTelePoolContract(withSignerIfPossible = true): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? TELE_POOL_ADDRESS[chainId] : undefined, TELE_POOL_ABI, withSignerIfPossible)
+}
 // @ts-ignore TYPE NEEDS FIXING
 export function useComplexRewarderContract(address, withSignerIfPossible?: boolean): Contract | null {
   return useContract(address, COMPLEX_REWARDER_ABI, withSignerIfPossible)
@@ -243,4 +259,7 @@ const MULTICALL_ADDRESS = {
 }
 export function useInterfaceMulticall(): Contract | null | undefined {
   return useContract(MULTICALL_ADDRESS, MULTICALL_ABI, false)
+}
+export function useMulticallContract(signer: boolean) {
+  return useContract<MulticallStake>(MULTICALL_ADDRESS, MULTICALL_ABI, signer) as MulticallStake
 }

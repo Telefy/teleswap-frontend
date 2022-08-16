@@ -13,6 +13,7 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance,
   updateUserDeadline,
+  updateGasPrice,
   toggleURLWarning,
   updateUserSingleHopOnly,
   updateHideClosedPositions,
@@ -20,6 +21,7 @@ import {
   updateUserUseSushiGuard,
 } from './actions'
 import { SupportedLocale } from 'constants/locales'
+import { GAS_PRICE_GWEI } from 'state/types'
 
 const currentTimestamp = () => new Date().getTime()
 
@@ -48,6 +50,8 @@ export interface UserState {
 
   // deadline set by user in minutes, used in all txns
   userDeadline: number
+
+  gasPrice: string
 
   tokens: {
     [chainId: number]: {
@@ -80,6 +84,7 @@ export const initialState: UserState = {
   userSlippageTolerance: 'auto',
   userSlippageToleranceHasBeenMigratedToAuto: true,
   userDeadline: DEFAULT_DEADLINE_FROM_NOW,
+  gasPrice: GAS_PRICE_GWEI.default,
   tokens: {},
   pairs: {},
   timestamp: currentTimestamp(),
@@ -145,6 +150,9 @@ export default createReducer(initialState, (builder) =>
     .addCase(updateUserDeadline, (state, action) => {
       state.userDeadline = action.payload.userDeadline
       state.timestamp = currentTimestamp()
+    })
+    .addCase(updateGasPrice, (state, action) => {
+      state.gasPrice = action.payload.gasPrice
     })
     .addCase(updateUserSingleHopOnly, (state, action) => {
       state.userSingleHopOnly = action.payload.userSingleHopOnly
