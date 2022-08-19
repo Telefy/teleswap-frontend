@@ -7,7 +7,7 @@ import useFarmRewards from 'hooks/useFarmRewards'
 import useFuse from 'hooks/useFuse'
 import { TridentBody, TridentHeader } from 'layouts/Trident'
 import { useActiveWeb3React } from 'hooks/web3'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useIsDarkMode } from '../../state/user/hooks'
 import Icon from '../../assets/svg/teleicon.svg'
@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import { Info } from 'react-feather'
 import { Input } from 'reactstrap'
 import { useWalletModalToggle } from '../../state/application/hooks'
+import StakeBodyComponent from './StakeBodyComponent'
 import LockedModalComponent from './LockedModalComponent'
 import ConvertLockedModalComponent from './ConvertLockedModalComponent'
 import FlexibleModalComponent from './FlexibleModalComponent'
@@ -35,8 +36,6 @@ const StyledInfo = styled(Info)`
 
 export default function TeleStake(): JSX.Element {
   const { i18n } = useLingui()
-
-  const { chainId, account } = useActiveWeb3React()
 
   const param = useLocation().search
   const router = new URLSearchParams(param)
@@ -72,8 +71,8 @@ export default function TeleStake(): JSX.Element {
   // Integration code starts
   const { isVaultApproved, setLastUpdated } = useCheckVaultApprovalStatus()
   const { handleApprove, pendingTx } = useVaultApprove(setLastUpdated)
-  const { pools, userDataLoaded } = usePoolsWithVault()
-  console.log(pools, 'pools')
+  // const { pools, userDataLoaded } = usePoolsWithVault()
+  // console.log(pools, 'pools')
   usePoolsPageFetch()
 
   return (
@@ -105,184 +104,18 @@ export default function TeleStake(): JSX.Element {
       </TridentHeader>
       {/* <div className={darkMode ? 'divider-dark' : 'divider-light'}></div> */}
       <TridentBody>
-        <div className="flex flex-col w-full items-center justify-between gap-6">
-          <div className={darkMode ? 'telecard-dark' : 'telecard-light'}>
-            <div className="telecard-header">
-              <img src={Icon} alt="teleicon" />
-              <h1 className="font-md">Tele Stake</h1>
-              <p>Stake, Earn - And More!</p>
-            </div>
-            {!isStakedAlready && (
-              <div className="telecard-content">
-                <div className="apy-block">
-                  <div className="box-content-top">
-                    <div className="box-content-top-item">
-                      <div>Flexible Staking APY :</div>
-                      <div className="bold">35.33%</div>
-                    </div>
-                    <div className="box-content-top-item">
-                      <div>Locked Staking APY :</div> <div className="bold">Up to 91.06%</div>
-                    </div>
-                  </div>
-                </div>
-                {!account && (
-                  <div className="connect-wal-btn">
-                    <div className="title">Start Earning</div>
-                    <Button onClick={toggleWalletModal}>Connect Wallet</Button>
-                  </div>
-                )}
-                {account && !isVaultApproved && (
-                  <div className="connect-wal-btn">
-                    <div className="title">Stake TELE</div>
-                    <Button onClick={handleApprove} disabled={pendingTx}>
-                      {pendingTx ? <Trans>Enabling...</Trans> : <Trans>Enable</Trans>}
-                    </Button>
-                  </div>
-                )}
-                {account && isVaultApproved && (
-                  <div className="mt-1 flexiblelocked-btn-group">
-                    <div className="title">Stake TELE</div>
-                    <div className="stake-tele-block">
-                      <div className="flexible">
-                        <Button onClick={flexibleModal}>Flexible</Button>
-                      </div>
-                      <div className="locked">
-                        <Button
-                          onClick={() => {
-                            setLockedModal(true)
-                          }}
-                        >
-                          Locked
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-            <div>
-              {isStakedAlready && (
-                <div className="telecard-content">
-                  <div className="title">My Position</div>
-                  <div className="custom-input2">
-                    <Input type="text" value="13456.12" />
-                    <div className="stk-btn-holder">
-                      <Button onClick={unStakeModal}>&#8722;</Button>
-                      <Button onClick={stakeModal}>&#43;</Button>
-                    </div>
-                    {/* <div className={darkMode ? 'divider-dark' : 'divider-light'}></div> */}
-                    <div className="input-caption-left2">-2637738 USD</div>
-                  </div>
-                  <div className="apy-block2">
-                    <div className="box-content-top">
-                      <div className="box-content-top-item">
-                        <div>APY :</div> <div className="bold">4.25%</div>
-                      </div>
-                      <div className="box-content-top-item">
-                        <div>Recent TELE Profit :</div> <div className="bold">91.06%</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="unstakefee">
-                    <div>0.2% nnstaking fee before</div>
-                    <div className="time">1d:12m:05s</div>
-                  </div>
-                  <div className="lock-stake-info">
-                    <p>
-                      <span className="alert-icon">&#9888;</span> Lock stacking offers higher APY while providing other
-                      benefits.{' '}
-                      <a className="link">
-                        Learn More <span>&gt;&gt;</span>
-                      </a>
-                    </p>
-                    <Button onClick={convertLockedModal}>Convert to Lock</Button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div>
-              {isStakedAlready && (
-                <div className="telecard-content">
-                  <div className="confirm-lock-title">
-                    <div className="title">My Position</div>
-                    <div>Locked</div>
-                  </div>
-                  <div className="tele-lock-unlock-block">
-                    <div className="tele-lock-unlock-block-item">
-                      <div className="inner-title">TELE Locked</div>
-                      <div className="locked-value">155098.00</div>
-                      <div className="bottom-value">-2637738 USD</div>
-                    </div>
-                    <div className="tele-lock-unlock-block-item">
-                      <div className="inner-title">Unlocks In</div>
-                      <div className="locked-value">5 Weeks</div>
-                      <div className="bottom-value">08 July 2022</div>
-                    </div>
-                  </div>
-                  <div className="stake-tele-block mt-1">
-                    <div className="flexible">
-                      <Button onClick={stakeModal}>Add TELE</Button>
-                    </div>
-                    <div className="locked">
-                      <Button onClick={convertLockedModal}>Extend</Button>
-                    </div>
-                  </div>
-                  <div className="apy-block2">
-                    <div className="box-content-top">
-                      <div className="box-content-top-item">
-                        <div>APY :</div> <div className="bold">4.25%</div>
-                      </div>
-                      <div className="box-content-top-item">
-                        <div>Lock Duration : </div> <div className="bold">10 Weeks</div>
-                      </div>
-                      <div className="box-content-top-item">
-                        <div>Yield Boost : </div> <div className="bold">4.8x</div>
-                      </div>
-                      <div className="box-content-top-item">
-                        <div>Recent TELE Profit : </div> <div className="bold">200.20</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {!isStakedAlready && (
-              <div className="telecard-footer">
-                <div className="box-content">
-                  <div className="box-content-item">
-                    <div>
-                      Total staked:
-                      {/* <MouseoverTooltipContent content={'Total amount of CAKE staked in this pool'}>
-                      <StyledInfo />
-                    </MouseoverTooltipContent> */}
-                    </div>{' '}
-                    <div className="foot-value">187,539,941 TELE</div>
-                  </div>
-                  <div className="box-content-item">
-                    <div>Total locked:</div> <div className="foot-value">155,023,652 TELE</div>
-                  </div>
-                  <div className="box-content-item">
-                    <div>Average lock duration:</div> <div className="foot-value">38 weeks</div>
-                  </div>
-                  <div className="box-content-item">
-                    <div>Performance Fee</div> <div className="foot-value">0~2%</div>
-                  </div>
-                </div>
-                <div className="box-link">
-                  <a
-                    target="_blank"
-                    href="https://rinkeby-info.telefy.finance/token/0xf1e345ea7c33fd6c05f5512a780eb5839ee31674"
-                    rel="noreferrer"
-                  >
-                    See Token Info
-                  </a>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <StakeBodyComponent
+          isStakedAlready={isStakedAlready}
+          toggleWalletModal={toggleWalletModal}
+          isVaultApproved={isVaultApproved}
+          handleApprove={handleApprove}
+          pendingTx={pendingTx}
+          flexibleModal={flexibleModal}
+          setLockedModal={setLockedModal}
+          unStakeModal={unStakeModal}
+          stakeModal={stakeModal}
+          convertLockedModal={convertLockedModal}
+        />
       </TridentBody>
 
       {modalLocked && <LockedModalComponent />}

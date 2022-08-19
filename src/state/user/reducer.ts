@@ -13,6 +13,7 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance,
   updateUserDeadline,
+  updateUserPoolStakedOnly,
   updateGasPrice,
   toggleURLWarning,
   updateUserSingleHopOnly,
@@ -35,6 +36,7 @@ export interface UserState {
   userLocale: SupportedLocale | null
 
   userExpertMode: boolean
+  userPoolStakedOnly: boolean
 
   // true if SushiGuard protection is enabled
   userUseSushiGuard: boolean
@@ -78,6 +80,7 @@ export const initialState: UserState = {
   userDarkMode: null,
   matchesDarkMode: false,
   userExpertMode: false,
+  userPoolStakedOnly: false,
   userLocale: null,
   userSingleHopOnly: false,
   userHideClosedPositions: false,
@@ -138,6 +141,9 @@ export default createReducer(initialState, (builder) =>
     .addCase(updateUserExpertMode, (state, action) => {
       state.userExpertMode = action.payload.userExpertMode
       state.timestamp = currentTimestamp()
+    })
+    .addCase(updateUserPoolStakedOnly, (state, { payload: { userPoolStakedOnly } }) => {
+      state.userPoolStakedOnly = userPoolStakedOnly
     })
     .addCase(updateUserLocale, (state, action) => {
       state.userLocale = action.payload.userLocale

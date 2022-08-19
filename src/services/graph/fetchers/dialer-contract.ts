@@ -88,7 +88,6 @@ export const getMasterChefV1PairAddreses = async () => {
 
 export const getDialerContractFarms = async (chainId: number, variables = undefined) => {
   const { pools } = await DialerContract(poolsV2Query, chainId, variables)
-  console.log(pools, 'pools ---')
   // @ts-ignore TYPE NEEDS FIXING
   let tokenAddresses = Array.from(pools.map((pool) => pool.rewarder.rewardToken))
   tokenAddresses = tokenAddresses.filter((address) => isAddress(address) && address !== AddressZero)
@@ -98,7 +97,6 @@ export const getDialerContractFarms = async (chainId: number, variables = undefi
       tokenAddresses,
     })
   }
-  console.log(tokens, 'tokens --')
 
   // @ts-ignore TYPE NEEDS FIXING
   return pools.map((pool) => ({

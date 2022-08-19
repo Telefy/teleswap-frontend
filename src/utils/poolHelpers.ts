@@ -54,16 +54,16 @@ export const getAprData = (pool: DeserializedPool, performanceFee: number) => {
 
 export const getCakeVaultEarnings = (
   account: string,
-  cakeAtLastUserAction: BigNumber,
+  teleAtLastUserAction: BigNumber,
   userShares: BigNumber,
   pricePerFullShare: BigNumber,
   earningTokenPrice: number,
   fee?: BigNumber
 ) => {
   const hasAutoEarnings =
-    account && cakeAtLastUserAction && cakeAtLastUserAction.gt(0) && userShares && userShares.gt(0)
+    account && teleAtLastUserAction && teleAtLastUserAction.gt(0) && userShares && userShares.gt(0)
   const { cakeAsBigNumber } = convertSharesToCake(userShares, pricePerFullShare)
-  const autoCakeProfit = cakeAsBigNumber.minus(fee || BIG_ZERO).minus(cakeAtLastUserAction)
+  const autoCakeProfit = cakeAsBigNumber.minus(fee || BIG_ZERO).minus(teleAtLastUserAction)
   const autoCakeToDisplay = autoCakeProfit.gte(0) ? getBalanceNumber(autoCakeProfit, 18) : 0
 
   const autoUsdProfit = autoCakeProfit.times(earningTokenPrice)

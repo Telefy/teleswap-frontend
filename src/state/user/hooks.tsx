@@ -3,7 +3,7 @@ import { computePairAddress, Pair } from '@mazelon/teleswap-sdk'
 import JSBI from 'jsbi'
 import flatMap from 'lodash.flatmap'
 import { useCallback, useMemo } from 'react'
-import { shallowEqual } from 'react-redux'
+import { shallowEqual, useDispatch } from 'react-redux'
 import { V2_FACTORY_ADDRESSES } from '../../constants/addresses'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants/routing'
 
@@ -24,6 +24,7 @@ import {
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
   updateUserLocale,
+  updateUserPoolStakedOnly,
 } from './actions'
 import { SupportedLocale } from 'constants/locales'
 import { useAppDispatch, useAppSelector } from 'state/hooks'
@@ -369,4 +370,20 @@ export function useUserSushiGuard(): [boolean, (newUseSushiGuard: boolean) => vo
   )
 
   return [useSushiGuard, setUseSushiGuard]
+}
+
+export function useUserPoolStakedOnly(): [boolean, (stakedOnly: boolean) => void] {
+  const dispatch = useAppDispatch()
+  const userPoolStakedOnly = useSelector<AppState, AppState['user']['userPoolStakedOnly']>((state) => {
+    return state.user.userPoolStakedOnly
+  })
+
+  const setUserPoolStakedOnly = useCallback(
+    (stakedOnly: boolean) => {
+      dispatch(updateUserPoolStakedOnly({ userPoolStakedOnly: stakedOnly }))
+    },
+    [dispatch]
+  )
+
+  return [userPoolStakedOnly, setUserPoolStakedOnly]
 }

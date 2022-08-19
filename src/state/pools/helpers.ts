@@ -53,7 +53,6 @@ export const transformPool = (pool: SerializedPool, chainId: number): Deserializ
     startBlock,
     ...rest
   } = pool
-  console.log(chainId, 'chainid')
   return {
     ...rest,
     startBlock,
@@ -68,8 +67,6 @@ export const transformPool = (pool: SerializedPool, chainId: number): Deserializ
 }
 
 export const transformLockedVault = (vault: SerializedCakeVault): DeserializedCakeVault => {
-  console.log(vault, 'vault')
-
   const {
     totalShares: totalSharesAsString,
     totalLockedAmount: totalLockedAmountAsString,
@@ -83,7 +80,7 @@ export const transformLockedVault = (vault: SerializedCakeVault): DeserializedCa
   const {
     isLoading,
     userShares: userSharesAsString,
-    cakeAtLastUserAction: cakeAtLastUserActionAsString,
+    teleAtLastUserAction: teleAtLastUserActionAsString,
     lastDepositedTime,
     lastUserActionTime,
     userBoostedShare: userBoostedShareAsString,
@@ -100,7 +97,7 @@ export const transformLockedVault = (vault: SerializedCakeVault): DeserializedCa
   const pricePerFullShare = pricePerFullShareAsString ? new BigNumber(pricePerFullShareAsString) : BIG_ZERO
   const totalCakeInVault = new BigNumber(totalCakeInVaultAsString ? totalCakeInVaultAsString : '')
   const userShares = new BigNumber(userSharesAsString)
-  const cakeAtLastUserAction = new BigNumber(cakeAtLastUserActionAsString)
+  const teleAtLastUserAction = new BigNumber(teleAtLastUserActionAsString)
   const lockedAmount = new BigNumber(lockedAmountAsString)
   const userBoostedShare = new BigNumber(userBoostedShareAsString)
   const currentOverdueFee = currentOverdueFeeAsString ? new BigNumber(currentOverdueFeeAsString) : BIG_ZERO
@@ -125,7 +122,7 @@ export const transformLockedVault = (vault: SerializedCakeVault): DeserializedCa
     userData: {
       isLoading,
       userShares,
-      cakeAtLastUserAction,
+      teleAtLastUserAction,
       lastDepositedTime,
       lastUserActionTime,
       lockEndTime,

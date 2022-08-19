@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { createSelector } from '@reduxjs/toolkit'
-import { PoolsState, State, VaultKey, SerializedCakeVault } from '../types'
+import { PoolsState, State, VaultKey, SerializedCakeVault, DeserializedPool } from '../types'
 import { transformPool, transformLockedVault } from './helpers'
 import { initialPoolVaultState } from './index'
 
@@ -17,33 +17,35 @@ export const makePoolWithUserDataLoadingSelector = (sousId: number, chainId: num
     return { pool: transformPool(pool!, chainId), userDataLoaded }
   })
 
-export const poolsWithUserDataLoadingSelector = createSelector(
-  [selectPoolsData, selectUserDataLoaded],
-  (pools, userDataLoaded) => {
-    return { pools: pools.map(transformPool), userDataLoaded }
-  }
-)
+export const poolsWithUserDataLoadingSelector = (chainId: number) =>
+  createSelector([selectPoolsData, selectUserDataLoaded], (pools, userDataLoaded) => {
+    return { pools: pools.map((pool) => transformPool(pool, chainId)), userDataLoaded }
+  })
 
 export const makeVaultPoolByKey = (key: VaultKey) =>
   createSelector([selectVault(key)], (vault) => transformLockedVault(vault as SerializedCakeVault))
 
-export const poolsWithVaultSelector = createSelector(
-  [poolsWithUserDataLoadingSelector, makeVaultPoolByKey(VaultKey.TeleVault)],
-  (poolsWithUserDataLoading, deserializedCakeVault) => {
-    const { pools, userDataLoaded } = poolsWithUserDataLoading
-    const cakePool = pools.find((pool) => !pool.isFinished && pool.sousId === 0)
-    const withoutCakePool = pools.filter((pool) => pool.sousId !== 0)
+export const poolsWithVaultSelector = (chainId: number) =>
+  createSelector(
+    [poolsWithUserDataLoadingSelector(chainId), makeVaultPoolByKey(VaultKey.TeleVault)],
+    (poolsWithUserDataLoading, deserializedCakeVault) => {
+      const { pools, userDataLoaded } = poolsWithUserDataLoading
+      const cakePool = pools.find((pool) => !pool.isFinished && pool.sousId === 0)
+      const withoutCakePool = pools.filter((pool) => pool.sousId !== 0)
 
-    const cakeAutoVault = {
-      ...cakePool,
-      ...deserializedCakeVault,
-      vaultKey: VaultKey.TeleVault,
-      userData: { ...cakePool?.userData, ...deserializedCakeVault.userData },
-    }
+      const cakeAutoVault = {
+        ...cakePool,
+        ...deserializedCakeVault,
+        vaultKey: VaultKey.TeleVault,
+        userData:
+          cakePool && cakePool.userData && deserializedCakeVault.userData
+            ? {
+                ...cakePool.userData,
+                ...deserializedCakeVault.userData,
+              }
+            : undefined,
+      }
 
-    const cakeAutoVaultWithApr = {
-      ...cakeAutoVault,
+      return { pools: [cakeAutoVault as DeserializedPool, ...withoutCakePool], userDataLoaded }
     }
-    return { pools: [cakeAutoVaultWithApr, ...withoutCakePool], userDataLoaded }
-  }
-)
+  )

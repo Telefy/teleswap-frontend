@@ -55,7 +55,7 @@ export const initialPoolVaultState = Object.freeze({
   userData: {
     isLoading: true,
     userShares: '',
-    cakeAtLastUserAction: '',
+    teleAtLastUserAction: '',
     lastDepositedTime: '',
     lastUserActionTime: '',
     credit: '',
@@ -273,14 +273,6 @@ export const fetchCakeVaultFees = createAsyncThunk<
   return vaultFees
 })
 
-export const fetchCakeVaultUserData = createAsyncThunk<
-  SerializedLockedVaultUser,
-  { account: string; chainId: number; multicallContract: MulticallStake }
->('teleVault/fetchUser', async ({ account, chainId, multicallContract }) => {
-  const userData = await fetchVaultUser(account, chainId || ChainId.MAINNET, multicallContract)
-  return userData
-})
-
 export const PoolsSlice = createSlice({
   name: 'Pools',
   initialState,
@@ -326,6 +318,12 @@ export const PoolsSlice = createSlice({
       })
       state.userDataLoaded = true
     },
+    // Vault user data
+    fetchCakeVaultUserData: (state, action: PayloadAction<SerializedLockedVaultUser>) => {
+      const userData = action.payload
+      userData.isLoading = false
+      state.teleVault = { ...state.teleVault, userData }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetUserState, (state) => {
@@ -342,12 +340,6 @@ export const PoolsSlice = createSlice({
     builder.addCase(fetchCakeVaultFees.fulfilled, (state, action: PayloadAction<SerializedVaultFees>) => {
       const fees = action.payload
       state.teleVault = { ...state.teleVault, fees }
-    })
-    // Vault user data
-    builder.addCase(fetchCakeVaultUserData.fulfilled, (state, action: PayloadAction<SerializedLockedVaultUser>) => {
-      const userData = action.payload
-      userData.isLoading = false
-      state.teleVault = { ...state.teleVault, userData }
     })
     builder.addMatcher(
       isAnyOf(
@@ -375,6 +367,7 @@ export const {
   setPoolUserData,
   fetchCakeVaultPublicData,
   fetchPoolsUserDataAsync,
+  fetchCakeVaultUserData,
 } = PoolsSlice.actions
 
 export default PoolsSlice.reducer
