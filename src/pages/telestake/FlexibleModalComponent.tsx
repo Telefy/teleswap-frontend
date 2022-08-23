@@ -7,27 +7,29 @@ import { Modal, ModalFooter, ModalHeader, ModalBody, Input } from 'reactstrap'
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css'
 import RangeSlider from 'react-bootstrap-range-slider'
 
-function FlexibleModalComponent() {
+interface FlexibleModalComponentProps {
+  isOpen: boolean
+  onDismiss: () => void
+}
+
+function FlexibleModalComponent({ isOpen, onDismiss }: FlexibleModalComponentProps) {
   const darkMode = useIsDarkMode()
-  const [modalFlexible, setFlexibleModal] = React.useState(true)
-  const closeModal = () => {
-    setFlexibleModal(!modalFlexible)
-  }
   const [value, setValue] = useState<any | 0>(0)
 
   return (
     <div>
       <Modal
         className={`animated flexible-modal fadeIn ${darkMode ? 'locked-modal-dark' : 'locked-modal-light'}`}
-        isOpen={modalFlexible}
+        isOpen={isOpen}
+        onDismiss={onDismiss}
         backdrop={false}
       >
-        <ModalHeader toggle={closeModal}>
+        <ModalHeader>
           <div className="flexiblecard-header">
             {/* <img src={Icon} alt="teleicon" /> */}
             <h1 className="font-md">Stake TELE</h1>
             {/* <p>Stake, Earn - And More!</p> */}
-            <div className="modal-close-btn" onClick={closeModal}>
+            <div className="modal-close-btn" onClick={onDismiss}>
               &times;
             </div>
           </div>
@@ -97,8 +99,8 @@ function FlexibleModalComponent() {
         </ModalBody>
         <ModalFooter>
           <div className="footer-buttons">
-            <Button onClick={closeModal}>Confirm</Button>
-            <Button onClick={closeModal} className="btn-outline">
+            <Button onClick={onDismiss}>Confirm</Button>
+            <Button onClick={onDismiss} className="btn-outline">
               Get TELE
             </Button>
           </div>

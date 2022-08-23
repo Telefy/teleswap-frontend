@@ -69,10 +69,6 @@ export default function TeleStake(): JSX.Element {
   }
 
   // Integration code starts
-  const { isVaultApproved, setLastUpdated } = useCheckVaultApprovalStatus()
-  const { handleApprove, pendingTx } = useVaultApprove(setLastUpdated)
-  // const { pools, userDataLoaded } = usePoolsWithVault()
-  // console.log(pools, 'pools')
   usePoolsPageFetch()
 
   return (
@@ -107,9 +103,6 @@ export default function TeleStake(): JSX.Element {
         <StakeBodyComponent
           isStakedAlready={isStakedAlready}
           toggleWalletModal={toggleWalletModal}
-          isVaultApproved={isVaultApproved}
-          handleApprove={handleApprove}
-          pendingTx={pendingTx}
           flexibleModal={flexibleModal}
           setLockedModal={setLockedModal}
           unStakeModal={unStakeModal}
@@ -118,8 +111,6 @@ export default function TeleStake(): JSX.Element {
         />
       </TridentBody>
 
-      {modalLocked && <LockedModalComponent />}
-      {modalFlexible && <FlexibleModalComponent />}
       {modalStake && <StakeModalComponent />}
       {modalUnStake && <UnstakeModalComponent />}
       {modalConvertLocked && <ConvertLockedModalComponent />}

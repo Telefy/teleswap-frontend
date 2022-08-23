@@ -7,19 +7,21 @@ import { Modal, ModalFooter, ModalHeader, ModalBody, Input } from 'reactstrap'
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css'
 import RangeSlider from 'react-bootstrap-range-slider'
 
-function LockedModalComponent() {
+interface LockedModalComponentProps {
+  isOpen: boolean
+  onDismiss: () => void
+}
+
+function LockedModalComponent({ isOpen, onDismiss }: LockedModalComponentProps) {
   const darkMode = useIsDarkMode()
-  const [modalLocked, setLockedModal] = React.useState(true)
-  // const closeModal = () => {
-  //   setLockedModal(!modalLocked)
-  // }
   const [value, setValue] = useState<any | 0>(0)
   return (
     <div>
       <div>
         <Modal
           className={`animated flexible-modal fadeIn ${darkMode ? 'locked-modal-dark' : 'locked-modal-light'}`}
-          isOpen={modalLocked}
+          isOpen={isOpen}
+          onDismiss={onDismiss}
           backdrop={false}
         >
           <ModalHeader>
@@ -27,12 +29,7 @@ function LockedModalComponent() {
               {/* <img src={Icon} alt="teleicon" /> */}
               <h1>Lock TELE</h1>
               {/* <p>Stake, Earn - And More!</p> */}
-              <div
-                className="modal-close-btn"
-                onClick={() => {
-                  setLockedModal(false)
-                }}
-              >
+              <div className="modal-close-btn" onClick={onDismiss}>
                 &times;
               </div>
             </div>

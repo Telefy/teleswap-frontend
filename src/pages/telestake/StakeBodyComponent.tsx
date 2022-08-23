@@ -1,5 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Trans } from '@lingui/macro'
 import React, { useMemo, useState, useCallback } from 'react'
 import Button from 'farm-components/Button'
 import { useIsDarkMode } from '../../state/user/hooks'
@@ -8,7 +7,12 @@ import { Input } from 'reactstrap'
 import { useActiveWeb3React } from 'hooks/web3'
 import { usePoolsWithVault } from 'state/pools/hooks'
 import StakingApy from './StakingApyComponent'
-import { DeserializedPool, DeserializedPoolVault } from 'state/types'
+import {
+  DeserializedLockedVaultUser,
+  DeserializedPool,
+  DeserializedPoolVault,
+  DeserializedVaultFees,
+} from 'state/types'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
 import { getCakeVaultEarnings } from 'utils/poolHelpers'
@@ -23,15 +27,14 @@ import BigNumber from 'bignumber.js'
 import { useLocation } from 'react-router-dom'
 import { useAverageBlockTime } from 'services/graph'
 import { ChainId } from '@telefy/teleswap-core-sdk'
+import { useVaultPoolByKey } from 'state/pools/hooks'
+import VaultCardActions from './VaultCardActions'
 
 const NUMBER_OF_POOLS_VISIBLE = 12
 
 function StakeBodyComponent({
   isStakedAlready,
   toggleWalletModal,
-  isVaultApproved,
-  handleApprove,
-  pendingTx,
   flexibleModal,
   setLockedModal,
   unStakeModal,
@@ -41,7 +44,6 @@ function StakeBodyComponent({
   const darkMode = useIsDarkMode()
   const { account, chainId } = useActiveWeb3React()
   const { pools, userDataLoaded } = usePoolsWithVault(chainId || ChainId.MAINNET)
-  const { flexibleApy, lockedApy } = useVaultApy()
   const [sortOption, setSortOption] = useState('hot')
   const [numberOfPoolsVisible, setNumberOfPoolsVisible] = useState(NUMBER_OF_POOLS_VISIBLE)
   const [searchQuery, setSearchQuery] = useState('')
@@ -101,7 +103,14 @@ function StakeBodyComponent({
     return sortedPools
   }, [account, sortOption, pools, chosenPools, numberOfPoolsVisible, searchQuery])
 
-  return pools.length ? (
+  const vaultPool = useVaultPoolByKey(chosenPools.length ? chosenPools[0].vaultKey : 'teleVault')
+  const { userData, fees } = vaultPool
+  const { userShares, isLoading: isVaultUserDataLoading } = userData as DeserializedLockedVaultUser
+  const { performanceFeeAsDecimal } = fees as DeserializedVaultFees
+  const accountHasSharesStaked = userShares && userShares.gt(0)
+  const isLoading = !chosenPools.length || !chosenPools[0].userData || isVaultUserDataLoading
+
+  return chosenPools.length ? (
     <div className="flex flex-col w-full items-center justify-between gap-6">
       <div className={darkMode ? 'telecard-dark' : 'telecard-light'}>
         <div className="telecard-header">
@@ -112,39 +121,19 @@ function StakeBodyComponent({
         {!isStakedAlready && (
           <div className="telecard-content">
             <div className="apy-block">
-              <StakingApy pool={pools[0]} />
+              <StakingApy pool={chosenPools[0]} />
             </div>
-            {!account && (
+            {account ? (
+              <VaultCardActions
+                pool={chosenPools[0]}
+                accountHasSharesStaked={accountHasSharesStaked}
+                isLoading={isLoading}
+                performanceFee={performanceFeeAsDecimal}
+              />
+            ) : (
               <div className="connect-wal-btn">
                 <div className="title">Start Earning</div>
                 <Button onClick={toggleWalletModal}>Connect Wallet</Button>
-              </div>
-            )}
-            {account && !isVaultApproved && (
-              <div className="connect-wal-btn">
-                <div className="title">Stake TELE</div>
-                <Button onClick={handleApprove} disabled={pendingTx}>
-                  {pendingTx ? <Trans>Enabling...</Trans> : <Trans>Enable</Trans>}
-                </Button>
-              </div>
-            )}
-            {account && isVaultApproved && (
-              <div className="mt-1 flexiblelocked-btn-group">
-                <div className="title">Stake TELE</div>
-                <div className="stake-tele-block">
-                  <div className="flexible">
-                    <Button onClick={flexibleModal}>Flexible</Button>
-                  </div>
-                  <div className="locked">
-                    <Button
-                      onClick={() => {
-                        setLockedModal(true)
-                      }}
-                    >
-                      Locked
-                    </Button>
-                  </div>
-                </div>
               </div>
             )}
           </div>
@@ -247,13 +236,13 @@ function StakeBodyComponent({
                       <StyledInfo />
                     </MouseoverTooltipContent> */}
                 </div>{' '}
-                <div className="foot-value">187,539,941 TELE</div>
+                <div className="foot-value">10 TELE</div>
               </div>
               <div className="box-content-item">
-                <div>Total locked:</div> <div className="foot-value">155,023,652 TELE</div>
+                <div>Total locked:</div> <div className="foot-value">0 TELE</div>
               </div>
               <div className="box-content-item">
-                <div>Average lock duration:</div> <div className="foot-value">38 weeks</div>
+                <div>Average lock duration:</div> <div className="foot-value">0 weeks</div>
               </div>
               <div className="box-content-item">
                 <div>Performance Fee</div> <div className="foot-value">0~2%</div>
