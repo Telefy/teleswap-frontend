@@ -1,44 +1,30 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React, { useState } from 'react'
 import Button from 'farm-components/Button'
-import { useIsDarkMode } from '../../state/user/hooks'
-import Icon from '../../assets/svg/teleicon.svg'
+import { useIsDarkMode } from 'state/user/hooks'
+import Icon from '../../../assets/svg/teleicon.svg'
 import { Modal, ModalFooter, ModalHeader, ModalBody, Input } from 'reactstrap'
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css'
 import RangeSlider from 'react-bootstrap-range-slider'
-import { DeserializedPool } from 'state/types'
-import BigNumber from 'bignumber.js'
 
-interface VaultUnStakeModalProps {
-  pool: DeserializedPool
-  stakingMax: BigNumber
-  performanceFee?: number
-  isRemovingStake?: boolean
+interface NotEnoughTokensModalProps {
+  tokenSymbol: string
   onDismiss?: () => void
   isOpen: boolean
 }
 
-function UnstakeModalComponent({
-  pool,
-  stakingMax,
-  performanceFee,
-  isRemovingStake = false,
-  onDismiss,
-  isOpen,
-}: VaultUnStakeModalProps) {
+function NotEnoughTokensModal({ tokenSymbol, onDismiss, isOpen }: NotEnoughTokensModalProps) {
   const darkMode = useIsDarkMode()
-  const [modalUnStake, setModalStake] = React.useState(true)
-  const unStakeModal = () => setModalStake(!modalUnStake)
   const [value, setValue] = useState<any | 0>(0)
   return (
     <div>
       <Modal
         className={`animated flexible-modal fadeIn ${darkMode ? 'locked-modal-dark' : 'locked-modal-light'}`}
         isOpen={isOpen}
-        onDismiss={onDismiss}
+        toggle={onDismiss}
         backdrop={false}
       >
-        <ModalHeader>
+        <ModalHeader toggle={onDismiss}>
           <div className="flexiblecard-header">
             {/* <img src={Icon} alt="teleicon" /> */}
             <h1 className="font-md">Unstake</h1>
@@ -110,4 +96,4 @@ function UnstakeModalComponent({
     </div>
   )
 }
-export default UnstakeModalComponent
+export default NotEnoughTokensModal

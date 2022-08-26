@@ -4,19 +4,35 @@ import Button from 'farm-components/Button'
 import { useIsDarkMode } from '../../state/user/hooks'
 import Icon from '../../assets/svg/teleicon.svg'
 import { Modal, ModalFooter, ModalHeader, ModalBody, Input } from 'reactstrap'
+import { Token } from '@telefy/teleswap-core-sdk'
 
-function ConvertLockedModalComponent() {
+interface ExtendDurationButtonPropsType {
+  stakingToken: Token
+  currentLockedAmount: number
+  modalTitle?: string
+  currentDuration: number
+  lockStartTime: string
+  isOpen: boolean
+  onDismiss?: () => void
+}
+function ConvertLockedModalComponent({
+  isOpen,
+  onDismiss,
+  modalTitle,
+  stakingToken,
+  currentLockedAmount,
+  lockStartTime,
+  currentDuration,
+  ...rest
+}: ExtendDurationButtonPropsType) {
   const darkMode = useIsDarkMode()
-  const [modalConvertLocked, setConvertLockedModal] = React.useState(true)
-  // const closeModal = () => {
-  //   setLockedModal(!modalLocked)
-  // }
   return (
     <div>
       <div>
         <Modal
           className={`animated flexible-modal fadeIn ${darkMode ? 'locked-modal-dark' : 'locked-modal-light'}`}
-          isOpen={modalConvertLocked}
+          isOpen={isOpen}
+          onDismiss={onDismiss}
           backdrop={false}
         >
           <ModalHeader>
@@ -24,12 +40,7 @@ function ConvertLockedModalComponent() {
               {/* <img src={Icon} alt="teleicon" /> */}
               <h1>Convert to Lock</h1>
               {/* <p>Stake, Earn - And More!</p> */}
-              <div
-                className="modal-close-btn"
-                onClick={() => {
-                  setConvertLockedModal(false)
-                }}
-              >
+              <div className="modal-close-btn" onClick={onDismiss}>
                 &times;
               </div>
             </div>

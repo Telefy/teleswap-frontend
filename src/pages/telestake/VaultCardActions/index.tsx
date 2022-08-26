@@ -14,6 +14,7 @@ const CakeVaultCardActions: React.FC<{
   performanceFee: number
 }> = ({ pool, accountHasSharesStaked, isLoading, performanceFee }) => {
   const { stakingToken, userData } = pool
+
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
 
   const { isVaultApproved, setLastUpdated } = useCheckVaultApprovalStatus()

@@ -5588,3 +5588,9 @@ input[type=range].range-slider::-webkit-slider-runnable-track {
     z-index: 2!important;
   }
 /*# sourceMappingURL=26b848d58538f4f7.css.map*/
+
+/* Loki CSS start */
+.w100 {
+  width: 100%!important;
+}
+/* Loki CSS start */

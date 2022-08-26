@@ -29,6 +29,10 @@ import { useAverageBlockTime } from 'services/graph'
 import { ChainId } from '@telefy/teleswap-core-sdk'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import VaultCardActions from './VaultCardActions'
+import { VaultPositionTagWithLabel } from 'components/Vault/VaultPositionTag'
+import FlexibleApyComponent from 'components/Vault/FlexibleApyComponent'
+import { getVaultPosition } from 'utils/telePool'
+import { StakingApyBodyComponent } from 'components/Vault/StakingApyBodyComponent'
 
 const NUMBER_OF_POOLS_VISIBLE = 12
 
@@ -109,7 +113,7 @@ function StakeBodyComponent({
   const { performanceFeeAsDecimal } = fees as DeserializedVaultFees
   const accountHasSharesStaked = userShares && userShares.gt(0)
   const isLoading = !chosenPools.length || !chosenPools[0].userData || isVaultUserDataLoading
-
+  console.log(account, userData)
   return chosenPools.length ? (
     <div className="flex flex-col w-full items-center justify-between gap-6">
       <div className={darkMode ? 'telecard-dark' : 'telecard-light'}>
@@ -120,9 +124,12 @@ function StakeBodyComponent({
         </div>
         {!isStakedAlready && (
           <div className="telecard-content">
-            <div className="apy-block">
+            {account && userData && <VaultPositionTagWithLabel userData={userData} />}
+            {account && userData ? (
+              <StakingApyBodyComponent userData={userData} pool={chosenPools[0]} />
+            ) : (
               <StakingApy pool={chosenPools[0]} />
-            </div>
+            )}
             {account ? (
               <VaultCardActions
                 pool={chosenPools[0]}
