@@ -3,7 +3,6 @@
 import BigNumber from 'bignumber.js'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { DeserializedLockedVaultUser, DeserializedPool, VaultKey } from 'state/types'
-// import { usePriceCakeBusd } from 'state/farms/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import Button from 'farm-components/Button'
 import NotEnoughTokensModal from 'components/Vault/Modals/NotEnoughTokensModal'
@@ -15,6 +14,10 @@ import ConvertLockedModalComponent from '../ConvertLockedModalComponent'
 import { useCallback, useState } from 'react'
 import UnstakingFeeCountdownRow from '../UnstakingFeeCountdownRow'
 import RecentCakeProfitRow from '../RecentCakeProfitRow'
+import { useTelePrice } from 'services/graph'
+import { ChainId } from '@telefy/teleswap-core-sdk'
+import { useActiveWeb3React } from 'hooks/web3'
+import { formatNumberDecimals } from 'functions'
 
 interface HasStakeActionProps {
   pool: DeserializedPool
@@ -23,6 +26,7 @@ interface HasStakeActionProps {
 }
 
 const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBalance, performanceFee }) => {
+  const { chainId } = useActiveWeb3React()
   const { userData } = useVaultPoolByKey(pool.vaultKey as VaultKey)
   const {
     balance: { cakeAsBigNumber, cakeAsNumberBalance },
@@ -31,10 +35,12 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
   const { avgLockDurationsInSeconds } = useAvgLockDuration()
   const { lockedApy } = useVaultApy({ duration: avgLockDurationsInSeconds })
 
-  // const cakePriceBusd = usePriceCakeBusd()
-  // const stakedDollarValue = cakePriceBusd.gt(0)
-  //   ? getBalanceNumber(cakeAsBigNumber.multipliedBy(cakePriceBusd), stakingToken.decimals)
-  //   : 0
+  const { data: telePrice } = useTelePrice(chainId || ChainId.MAINNET)
+  const telePriceAsBigNumber = new BigNumber(telePrice)
+
+  const stakedDollarValue = telePriceAsBigNumber.gt(0)
+    ? getBalanceNumber(cakeAsBigNumber.multipliedBy(telePriceAsBigNumber), stakingToken.decimals)
+    : 0
   const [stakeModelIsOpen, setStakeModelIsOpen] = useState(false)
   const handleDismissModalStake = useCallback(() => {
     setStakeModelIsOpen(false)
@@ -66,7 +72,7 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
           <Button onClick={stakingTokenBalance.gt(0) ? onPresentStake : onPresentTokenRequired}>&#43;</Button>
         </div>
         {/* <div className={darkMode ? 'divider-dark' : 'divider-light'}></div> */}
-        <div className="input-caption-left2">-2637738 USD</div>
+        <div className="input-caption-left2">-{formatNumberDecimals(stakedDollarValue, 2)} USD</div>
       </div>
       <UnstakingFeeCountdownRow vaultKey={pool.vaultKey as VaultKey} />
       <div className="lock-stake-info">

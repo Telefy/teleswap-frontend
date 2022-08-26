@@ -18,7 +18,7 @@ export default function useAvgLockDuration() {
     const avgBoostRatio = lockedCakeBoostedShares?.div(
       lockedCakeOriginalShares ? (lockedCakeOriginalShares.isZero() ? BIG_ONE : lockedCakeOriginalShares) : BIG_ONE
     )
-
+    if (!totalLockedAmount) return BIG_ZERO
     return avgBoostRatio
       ?.minus(1)
       .times(new BigNumber(DURATION_FACTOR.toString()))

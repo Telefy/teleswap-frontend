@@ -13,8 +13,15 @@ import { DeserializedPool } from 'state/types'
 import { useActiveWeb3React } from 'hooks/web3'
 import { useAppDispatch } from 'state/hooks'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { getFullDisplayBalance } from 'utils/formatBalance'
+import { formatNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import { formatNumberDecimals } from 'functions'
+import { useTelePrice } from 'services/graph'
+import { ChainId } from '@telefy/teleswap-core-sdk'
+import { useVaultApy } from 'hooks/useVaultApy'
+import { getInterestBreakdown } from 'utils/compoundApyHelpers'
+import { ButtonLight, ButtonSecondary } from 'components/Button'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 interface FlexibleModalComponentProps {
   pool: DeserializedPool
@@ -25,15 +32,39 @@ interface FlexibleModalComponentProps {
   onDismiss: () => void
 }
 
+const ResponsiveButtonSecondary = styled(ButtonSecondary)`
+  width: fit-content;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    width: 48%;
+  `};
+`
+
 function FlexibleModalComponent({ stakingMax, performanceFee, pool, isOpen, onDismiss }: FlexibleModalComponentProps) {
   const darkMode = useIsDarkMode()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
   const { stakingToken, earningTokenPrice, vaultKey } = pool
   const { account } = useActiveWeb3React()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [percent, setPercent] = useState(0)
   const [stakeAmount, setStakeAmount] = useState('')
+  const { data: telePrice } = useTelePrice(chainId || ChainId.MAINNET)
+  const telePriceAsBigNumber = new BigNumber(telePrice)
+  const usdValueStaked = new BigNumber(stakeAmount).times(telePriceAsBigNumber)
+  const formattedUsdValueStaked =
+    telePriceAsBigNumber.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
+  const { flexibleApy } = useVaultApy()
 
+  const interestBreakdown = getInterestBreakdown({
+    principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
+    apr: +flexibleApy,
+    earningTokenPrice: earningTokenPrice || 0,
+    performanceFee,
+    compoundFrequency: 0,
+  })
+  const getTokenLink = stakingToken.address ? `/swap?use=V2&outputCurrency=${stakingToken.address}` : '/swap?use=V2'
+  const annualRoi = interestBreakdown[3] * (pool.earningTokenPrice || 1)
+  const formattedAnnualRoi = formatNumber(annualRoi, annualRoi > 10000 ? 0 : 2, annualRoi > 10000 ? 0 : 2)
   const handleStakeInputChange = (input: string) => {
     if (input) {
       const convertedInput = new BigNumber(input).multipliedBy(BIG_TEN.pow(stakingToken.decimals))
@@ -93,11 +124,13 @@ function FlexibleModalComponent({ stakingMax, performanceFee, pool, isOpen, onDi
                     </div>
                   </div>
                   <div className="box-content-top-item">
-                    <div className="text-under">-67465979 USD</div>
+                    <div className="text-under">
+                      {telePriceAsBigNumber.gt(0) && `~${formattedUsdValueStaked || 0} USD`}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="balance">Balance - 197595.066</div>
+              <div className="balance">Balance - {getFullDisplayBalance(stakingMax, stakingToken.decimals)}</div>
             </div>
             <div className="stake-slider">
               <RangeSlider
@@ -138,7 +171,8 @@ function FlexibleModalComponent({ stakingMax, performanceFee, pool, isOpen, onDi
             <div className="bottom-block">
               <div className="box-content-bottom">
                 <div className="box-content-bottom-item">
-                  <div>Annual ROI :</div> <div className="bold">$12684.089</div>
+                  <div>Annual ROI :</div>{' '}
+                  <div className="bold">${Number.isFinite(annualRoi) ? formattedAnnualRoi : 0}</div>
                 </div>
                 <div className="box-content-bottom-item">
                   <div>Performance Fee :</div> <div className="bold">{performanceFee || 0}%</div>
@@ -150,9 +184,9 @@ function FlexibleModalComponent({ stakingMax, performanceFee, pool, isOpen, onDi
         <ModalFooter>
           <div className="footer-buttons">
             <Button onClick={onDismiss}>Confirm</Button>
-            <Button onClick={onDismiss} className="btn-outline">
+            <ButtonLight as={Link} padding="14px 8px" to={getTokenLink}>
               Get TELE
-            </Button>
+            </ButtonLight>
           </div>
         </ModalFooter>
       </Modal>
