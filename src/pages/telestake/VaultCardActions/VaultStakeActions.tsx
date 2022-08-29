@@ -31,8 +31,20 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
   const handleDismissModalLocked = useCallback(() => {
     setModalLockedlOpen(false)
   }, [setModalLockedlOpen])
-  const onFlexibleButtonClick = () => setModalFlexiblelOpen(true)
-  const onLockedButtonClick = () => setModalLockedlOpen(true)
+  const onFlexibleButtonClick = () => {
+    console.log(document.body.style.overflowY)
+    if (document.getElementsByTagName('html')[0].style.overflow !== 'hidden') {
+      document.getElementsByTagName('html')[0].style.overflow = 'hidden'
+    }
+    setModalFlexiblelOpen(true)
+  }
+  const onLockedButtonClick = () => {
+    if (document.getElementsByTagName('html')[0].style.overflow !== 'hidden') {
+      document.getElementsByTagName('html')[0].style.overflow = 'hidden'
+    }
+    setModalLockedlOpen(true)
+  }
+
   // const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol={stakingToken.symbol} />)
   // const [onPresentStake] = useModal(
   //   <VaultStakeModal stakingMax={stakingTokenBalance} pool={pool} performanceFee={performanceFee} />

@@ -33,7 +33,7 @@ function StakingApyComponent({ pool }: { pool: DeserializedPool }) {
       <div className="box-content-top-item">
         <div>Locked Staking APY :</div>{' '}
         <div className="bold">
-          Up to&nbsp;
+          <span className="font-normal">Up to&nbsp;</span>
           <CountUp
             start={lockPreviousValue.current}
             end={parseFloat(lockedApy || '0')}

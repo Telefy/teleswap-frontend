@@ -20,7 +20,7 @@ const CakeVaultCardActions: React.FC<{
 
   return (
     <div>
-      <div className="title">
+      <div className="title mt-1">
         {accountHasSharesStaked ? stakingToken.symbol : 'Stake'}{' '}
         {accountHasSharesStaked ? 'Staked' : `${stakingToken.symbol}`}
       </div>
