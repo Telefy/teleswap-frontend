@@ -37,6 +37,7 @@ import TELE_POOL_ABI from 'abis/tele-pool.json'
 import ERC20_ABI from 'abis/erc20.json'
 import SousChef_ABI from 'abis/sous-chef.json'
 import { arrayUniq } from 'utils/prices'
+import { ZERO_ADDRESS } from 'constants/misc'
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -127,7 +128,9 @@ export const usePoolsPageFetch = () => {
   const poolTokenAddresses = poolsConfig.map(
     (pool) => pool.stakingToken[(chainId as keyof ChainTokenMap) || ChainId.MAINNET]?.address
   )
-  const vaultPoolArgs = poolsConfig.map((pool) => [[account || '', pool.contractAddress[chainId || ChainId.MAINNET]]])
+  const vaultPoolArgs = poolsConfig.map((pool) => [
+    [account || ZERO_ADDRESS, pool.contractAddress[chainId || ChainId.MAINNET]],
+  ])
   const poolTokensUniq = arrayUniq(poolTokenAddresses)
   const nonMasterPoolContractAddresses = nonMasterPools.map((pool) => pool.contractAddress[chainId || ChainId.MAINNET])
   const tokenInterface = new ethers.utils.Interface(ERC20_ABI)
@@ -145,21 +148,21 @@ export const usePoolsPageFetch = () => {
     poolTokensUniq,
     tokenInterface,
     'balanceOf',
-    [account || ''],
+    [account || ZERO_ADDRESS],
     NEVER_RELOAD
   )
   const userStakeBalanceRes = useMultipleContractSingleData(
     nonMasterPoolContractAddresses,
     sousChefPoolInterface,
     'userInfo',
-    [account || ''],
+    [account || ZERO_ADDRESS],
     NEVER_RELOAD
   )
   const userPendingRewardsRes = useMultipleContractSingleData(
     nonMasterPoolContractAddresses,
     sousChefPoolInterface,
     'pendingReward',
-    [account || ''],
+    [account || ZERO_ADDRESS],
     NEVER_RELOAD
   )
   const allowances: {
@@ -175,6 +178,7 @@ export const usePoolsPageFetch = () => {
     const { result: balanceRes } = tokenBalanceRes[index]
     return balanceRes ? { ...acc, [token]: balanceRes[0].toString() } : { ...acc }
   }, {})
+  console.log(tokenBalances, 'tokenBalances')
 
   const poolTokenBalances: {
     [key: string]: string
@@ -214,17 +218,22 @@ export const usePoolsPageFetch = () => {
   }))
 
   // ------- fetchCakeVaultUserData
-  const { result: vaultUserInfoRes } = useSingleCallResult(telePoolContract, 'userInfo', [account || ''], NEVER_RELOAD)
+  const { result: vaultUserInfoRes } = useSingleCallResult(
+    telePoolContract,
+    'userInfo',
+    [account || ZERO_ADDRESS],
+    NEVER_RELOAD
+  )
   const { result: vaultCalculatePerformanceFeeRes } = useSingleCallResult(
     telePoolContract,
     'calculatePerformanceFee',
-    [account || ''],
+    [account || ZERO_ADDRESS],
     NEVER_RELOAD
   )
   const { result: vaultCalculateOverdueFeeRes } = useSingleCallResult(
     telePoolContract,
     'calculateOverdueFee',
-    [account || ''],
+    [account || ZERO_ADDRESS],
     NEVER_RELOAD
   )
 
@@ -327,4 +336,67 @@ export const useVaultPoolByKey = (key: VaultKey) => {
   const vaultPoolByKey = useMemo(() => makeVaultPoolByKey(key), [key])
 
   return useSelector(vaultPoolByKey)
+}
+
+export const useUpdateCakeVaultUserData = () => {
+  const { account } = useActiveWeb3React()
+  const dispatch = useDispatch()
+  const telePoolContract = useTelePoolContract()
+  // useFetchPublicPoolsData()
+
+  // ------- fetchCakeVaultUserData
+  const { result: vaultUserInfoRes } = useSingleCallResult(
+    telePoolContract,
+    'userInfo',
+    [account || ZERO_ADDRESS],
+    NEVER_RELOAD
+  )
+  const { result: vaultCalculatePerformanceFeeRes } = useSingleCallResult(
+    telePoolContract,
+    'calculatePerformanceFee',
+    [account || ZERO_ADDRESS],
+    NEVER_RELOAD
+  )
+  const { result: vaultCalculateOverdueFeeRes } = useSingleCallResult(
+    telePoolContract,
+    'calculateOverdueFee',
+    [account || ZERO_ADDRESS],
+    NEVER_RELOAD
+  )
+
+  let fetchVaultUserInfo: SerializedLockedVaultUser
+  if (vaultUserInfoRes && vaultCalculatePerformanceFeeRes && vaultCalculateOverdueFeeRes) {
+    fetchVaultUserInfo = {
+      isLoading: false,
+      userShares: new BigNumber(vaultUserInfoRes.shares.toString()).toJSON(),
+      lastDepositedTime: vaultUserInfoRes.lastDepositedTime.toString(),
+      lastUserActionTime: vaultUserInfoRes.lastUserActionTime.toString(),
+      teleAtLastUserAction: new BigNumber(vaultUserInfoRes.teleAtLastUserAction.toString()).toJSON(),
+      userBoostedShare: new BigNumber(vaultUserInfoRes.userBoostedShare.toString()).toJSON(),
+      locked: vaultUserInfoRes.locked,
+      lockEndTime: vaultUserInfoRes.lockEndTime.toString(),
+      lockStartTime: vaultUserInfoRes.lockStartTime.toString(),
+      lockedAmount: new BigNumber(vaultUserInfoRes.lockedAmount.toString()).toJSON(),
+      currentPerformanceFee: new BigNumber(vaultCalculatePerformanceFeeRes[0].toString()).toJSON(),
+      currentOverdueFee: new BigNumber(vaultCalculateOverdueFeeRes[0].toString()).toJSON(),
+    }
+  } else {
+    fetchVaultUserInfo = {
+      isLoading: true,
+      userShares: '',
+      lastDepositedTime: '',
+      lastUserActionTime: '',
+      teleAtLastUserAction: '',
+      userBoostedShare: '',
+      lockEndTime: '',
+      lockStartTime: '',
+      locked: true,
+      lockedAmount: '',
+      currentPerformanceFee: '',
+      currentOverdueFee: '',
+    }
+  }
+  useEffect(() => {
+    dispatch(fetchCakeVaultUserData(fetchVaultUserInfo))
+  }, [dispatch, fetchVaultUserInfo])
 }

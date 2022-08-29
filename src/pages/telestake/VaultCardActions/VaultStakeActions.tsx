@@ -7,6 +7,7 @@ import Button from 'farm-components/Button'
 import { useCallback, useState } from 'react'
 import LockedModalComponent from '../LockedModalComponent'
 import FlexibleModalComponent from '../FlexibleModalComponent'
+import HasSharesActions from './HasShareActions'
 
 interface VaultStakeActionsProps {
   pool: DeserializedPool
@@ -58,22 +59,19 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
   // )
 
   const renderStakeAction = () => {
-    return (
-      // accountHasSharesStaked ? (
-      // <HasSharesActions pool={pool} stakingTokenBalance={stakingTokenBalance} performanceFee={performanceFee} />
-      // ) : (
+    return accountHasSharesStaked ? (
+      <HasSharesActions pool={pool} stakingTokenBalance={stakingTokenBalance} performanceFee={performanceFee} />
+    ) : (
       <div className="mt-1 flexiblelocked-btn-group">
         <div className="stake-tele-block">
           <div className="flexible">
             <Button onClick={onFlexibleButtonClick}>Flexible</Button>
-            {/* <Button>Flexible</Button> */}
           </div>
           <div className="locked">
             <Button onClick={onLockedButtonClick}>Locked</Button>
           </div>
         </div>
       </div>
-      // )
     )
   }
 
@@ -87,8 +85,20 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
         </div>
       )}
 
-      <LockedModalComponent isOpen={modalLockedOpen} onDismiss={handleDismissModalLocked} />
-      <FlexibleModalComponent isOpen={modalFlexibleOpen} onDismiss={handleDismissModalFlexible} />
+      <LockedModalComponent
+        isOpen={modalLockedOpen}
+        onDismiss={handleDismissModalLocked}
+        currentBalance={stakingTokenBalance}
+        stakingToken={stakingToken}
+        stakingTokenBalance={stakingTokenBalance}
+      />
+      <FlexibleModalComponent
+        isOpen={modalFlexibleOpen}
+        stakingMax={stakingTokenBalance}
+        performanceFee={performanceFee}
+        pool={pool}
+        onDismiss={handleDismissModalFlexible}
+      />
     </>
   )
 }

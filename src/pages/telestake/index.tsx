@@ -110,10 +110,6 @@ export default function TeleStake(): JSX.Element {
           convertLockedModal={convertLockedModal}
         />
       </TridentBody>
-
-      {modalStake && <StakeModalComponent />}
-      {modalUnStake && <UnstakeModalComponent />}
-      {modalConvertLocked && <ConvertLockedModalComponent />}
     </>
   )
 }

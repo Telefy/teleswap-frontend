@@ -16,32 +16,34 @@ function StakingApyComponent({ pool }: { pool: DeserializedPool }) {
   }, [lockedApy])
 
   return (
-    <div className="box-content-top">
-      <div className="box-content-top-item">
-        <div>Flexible Staking APY :</div>
-        <div className="bold">
-          <CountUp
-            start={flexPreviousValue.current}
-            end={parseFloat(flexibleApy || '0')}
-            suffix="%"
-            decimalPlaces={2}
-            duration={1}
-            thousandsSeparator=","
-          />
+    <div className="apy-block">
+      <div className="box-content-top">
+        <div className="box-content-top-item">
+          <div>Flexible Staking APY :</div>
+          <div className="bold">
+            <CountUp
+              start={flexPreviousValue.current}
+              end={parseFloat(flexibleApy || '0')}
+              suffix="%"
+              decimalPlaces={2}
+              duration={1}
+              thousandsSeparator=","
+            />
+          </div>
         </div>
-      </div>
-      <div className="box-content-top-item">
-        <div>Locked Staking APY :</div>{' '}
-        <div className="bold">
-          <span className="font-normal">Up to&nbsp;</span>
-          <CountUp
-            start={lockPreviousValue.current}
-            end={parseFloat(lockedApy || '0')}
-            suffix="%"
-            decimalPlaces={2}
-            duration={1}
-            thousandsSeparator=","
-          />
+        <div className="box-content-top-item">
+          <div>Locked Staking APY :</div>{' '}
+          <div className="bold">
+            <span className="font-normal">Up to&nbsp;</span>
+            <CountUp
+              start={lockPreviousValue.current}
+              end={parseFloat(lockedApy || '0')}
+              suffix="%"
+              decimalPlaces={2}
+              duration={1}
+              thousandsSeparator=","
+            />
+          </div>
         </div>
       </div>
     </div>

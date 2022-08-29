@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import Button from 'farm-components/Button'
 import { useIsDarkMode } from '../../state/user/hooks'
 import Icon from '../../assets/svg/teleicon.svg'
@@ -19,7 +19,6 @@ import { getCakeVaultEarnings } from 'utils/poolHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { formatUnits } from 'ethers/lib/utils'
 import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
-import { useVaultApy } from 'hooks/useVaultApy'
 import { useUserPoolStakedOnly } from 'state/user/hooks'
 import { useInitialBlock } from 'state/block/hooks'
 import { latinise } from 'utils/latinise'
@@ -29,6 +28,10 @@ import { useAverageBlockTime } from 'services/graph'
 import { ChainId } from '@telefy/teleswap-core-sdk'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import VaultCardActions from './VaultCardActions'
+import { VaultPositionTagWithLabel } from 'components/Vault/VaultPositionTag'
+import { StakingApyBodyComponent } from 'components/Vault/StakingApyBodyComponent'
+import PoolStatsInfo from './PoolStatsInfo'
+import { ZERO_ADDRESS } from 'constants/misc'
 
 const NUMBER_OF_POOLS_VISIBLE = 12
 
@@ -109,7 +112,7 @@ function StakeBodyComponent({
   const { performanceFeeAsDecimal } = fees as DeserializedVaultFees
   const accountHasSharesStaked = userShares && userShares.gt(0)
   const isLoading = !chosenPools.length || !chosenPools[0].userData || isVaultUserDataLoading
-
+  console.log(account, userData)
   return chosenPools.length ? (
     <div className="flex flex-col w-full items-center justify-between gap-6">
       <div className={darkMode ? 'telecard-dark' : 'telecard-light'}>
@@ -120,9 +123,12 @@ function StakeBodyComponent({
         </div>
         {!isStakedAlready && (
           <div className="telecard-content">
-            <div className="apy-block">
+            {account && userData && <VaultPositionTagWithLabel userData={userData} />}
+            {account && userData ? (
+              <StakingApyBodyComponent userData={userData} pool={chosenPools[0]} />
+            ) : (
               <StakingApy pool={chosenPools[0]} />
-            </div>
+            )}
             {account ? (
               <VaultCardActions
                 pool={chosenPools[0]}
@@ -228,35 +234,7 @@ function StakeBodyComponent({
 
         {!isStakedAlready && (
           <div className="telecard-footer">
-            <div className="box-content">
-              <div className="box-content-item">
-                <div>
-                  Total staked:
-                  {/* <MouseoverTooltipContent content={'Total amount of CAKE staked in this pool'}>
-                      <StyledInfo />
-                    </MouseoverTooltipContent> */}
-                </div>{' '}
-                <div className="foot-value">10 TELE</div>
-              </div>
-              <div className="box-content-item">
-                <div>Total locked:</div> <div className="foot-value">0 TELE</div>
-              </div>
-              <div className="box-content-item">
-                <div>Average lock duration:</div> <div className="foot-value">0 weeks</div>
-              </div>
-              <div className="box-content-item">
-                <div>Performance Fee</div> <div className="foot-value">0~2%</div>
-              </div>
-            </div>
-            <div className="box-link">
-              <a
-                target="_blank"
-                href="https://rinkeby-info.telefy.finance/token/0xf1e345ea7c33fd6c05f5512a780eb5839ee31674"
-                rel="noreferrer"
-              >
-                See Token Info
-              </a>
-            </div>
+            <PoolStatsInfo pool={chosenPools[0]} account={account || ZERO_ADDRESS} />
           </div>
         )}
       </div>

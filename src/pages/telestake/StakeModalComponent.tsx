@@ -6,29 +6,42 @@ import Icon from '../../assets/svg/teleicon.svg'
 import { Modal, ModalFooter, ModalHeader, ModalBody, Input } from 'reactstrap'
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css'
 import RangeSlider from 'react-bootstrap-range-slider'
+import { DeserializedPool } from 'state/types'
+import BigNumber from 'bignumber.js'
 
-function StakeModalComponent() {
+interface VaultStakeModalProps {
+  pool: DeserializedPool
+  stakingMax: BigNumber
+  performanceFee?: number
+  isRemovingStake?: boolean
+  onDismiss?: () => void
+  isOpen: boolean
+}
+
+function StakeModalComponent({
+  pool,
+  stakingMax,
+  performanceFee,
+  isRemovingStake = false,
+  onDismiss,
+  isOpen,
+}: VaultStakeModalProps) {
   const darkMode = useIsDarkMode()
-  const [modalStake, setModalStake] = React.useState(true)
-  const closeModal = () => {
-    setModalStake(!modalStake)
-  }
-  const stakeModal = () => setModalStake(!modalStake)
   const [value, setValue] = useState<any | 0>(0)
   return (
     <div>
       <Modal
         className={`animated flexible-modal fadeIn ${darkMode ? 'locked-modal-dark' : 'locked-modal-light'}`}
-        isOpen={modalStake}
-        toggle={stakeModal}
+        isOpen={isOpen}
+        onDismiss={onDismiss}
         backdrop={false}
       >
-        <ModalHeader toggle={stakeModal}>
+        <ModalHeader>
           <div className="flexiblecard-header">
             {/* <img src={Icon} alt="teleicon" /> */}
             <h1 className="font-md">Stake</h1>
             {/* <p>Stake, Earn - And More!</p> */}
-            <div className="modal-close-btn" onClick={stakeModal}>
+            <div className="modal-close-btn" onClick={onDismiss}>
               &times;
             </div>
           </div>
@@ -91,7 +104,7 @@ function StakeModalComponent() {
         </ModalBody>
         <ModalFooter>
           <div className="footer-buttons">
-            <Button onClick={stakeModal}>Confirm</Button>
+            <Button onClick={onDismiss}>Confirm</Button>
           </div>
         </ModalFooter>
       </Modal>
