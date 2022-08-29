@@ -10,14 +10,14 @@ import StakeModalComponent from '../StakeModalComponent'
 import UnstakeModalComponent from '../UnstakeModalComponent'
 import { useVaultApy } from 'hooks/useVaultApy'
 import useAvgLockDuration from 'hooks/useAvgLockDuration'
-import ConvertLockedModalComponent from '../ConvertLockedModalComponent'
 import { useCallback, useState } from 'react'
 import UnstakingFeeCountdownRow from '../UnstakingFeeCountdownRow'
-import RecentCakeProfitRow from '../RecentCakeProfitRow'
 import { useTelePrice } from 'services/graph'
 import { ChainId } from '@telefy/teleswap-core-sdk'
 import { useActiveWeb3React } from 'hooks/web3'
 import { formatNumberDecimals } from 'functions'
+import { ConvertToLockButton } from 'components/Vault/ConvertToLockButton'
+import FlexibleModalComponent from '../FlexibleModalComponent'
 
 interface HasStakeActionProps {
   pool: DeserializedPool
@@ -53,15 +53,10 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
   const handleDismissModalNotEnough = useCallback(() => {
     setNotEnoughModelIsOpen(false)
   }, [setNotEnoughModelIsOpen])
-  const [convertToLockModelIsOpen, setConvertToLockModelIsOpen] = useState(false)
-  const handleDismissModalConvertToLock = useCallback(() => {
-    setConvertToLockModelIsOpen(false)
-  }, [setConvertToLockModelIsOpen])
 
   const onPresentTokenRequired = () => setNotEnoughModelIsOpen(true)
   const onPresentStake = () => setStakeModelIsOpen(true)
   const onPresentUnstake = () => setUnStakeModelIsOpen(true)
-  const openConvetToLockModal = () => setConvertToLockModelIsOpen(true)
 
   return (
     <>
@@ -75,41 +70,20 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
         <div className="input-caption-left2">-{formatNumberDecimals(stakedDollarValue, 2)} USD</div>
       </div>
       <UnstakingFeeCountdownRow vaultKey={pool.vaultKey as VaultKey} />
-      <div className="lock-stake-info">
-        <p>
-          <span className="alert-icon">&#9888;</span> Lock stacking offers higher APY while providing other benefits.{' '}
-          <a className="link">
-            Learn More <span>&gt;&gt;</span>
-          </a>
-        </p>
-        <Button onClick={openConvetToLockModal}>Convert to Lock</Button>
-        <p>
-          Lock staking users are earning an average of {lockedApy ? parseFloat(lockedApy).toFixed(2) : 0}% APY. More
-          benefits are coming soon.
-        </p>
-      </div>
-      <UnstakeModalComponent
+      <ConvertToLockButton stakingToken={stakingToken} currentStakedAmount={cakeAsNumberBalance} />
+      <FlexibleModalComponent
         isOpen={unStakeModelIsOpen}
         onDismiss={handleDismissModalUnStake}
         stakingMax={cakeAsBigNumber}
         pool={pool}
         isRemovingStake
       />
-      <StakeModalComponent
+      <FlexibleModalComponent
         isOpen={stakeModelIsOpen}
         onDismiss={handleDismissModalStake}
         stakingMax={stakingTokenBalance}
         performanceFee={performanceFee}
         pool={pool}
-      />
-      <ConvertLockedModalComponent
-        isOpen={convertToLockModelIsOpen}
-        onDismiss={handleDismissModalConvertToLock}
-        modalTitle={'Convert to Lock'}
-        stakingToken={stakingToken}
-        lockStartTime={'0'}
-        currentLockedAmount={cakeAsNumberBalance}
-        currentDuration={0}
       />
       <NotEnoughTokensModal
         isOpen={notEnoughModelIsOpen}

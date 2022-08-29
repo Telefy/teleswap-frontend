@@ -337,3 +337,66 @@ export const useVaultPoolByKey = (key: VaultKey) => {
 
   return useSelector(vaultPoolByKey)
 }
+
+export const useUpdateCakeVaultUserData = () => {
+  const { account } = useActiveWeb3React()
+  const dispatch = useDispatch()
+  const telePoolContract = useTelePoolContract()
+  // useFetchPublicPoolsData()
+
+  // ------- fetchCakeVaultUserData
+  const { result: vaultUserInfoRes } = useSingleCallResult(
+    telePoolContract,
+    'userInfo',
+    [account || ZERO_ADDRESS],
+    NEVER_RELOAD
+  )
+  const { result: vaultCalculatePerformanceFeeRes } = useSingleCallResult(
+    telePoolContract,
+    'calculatePerformanceFee',
+    [account || ZERO_ADDRESS],
+    NEVER_RELOAD
+  )
+  const { result: vaultCalculateOverdueFeeRes } = useSingleCallResult(
+    telePoolContract,
+    'calculateOverdueFee',
+    [account || ZERO_ADDRESS],
+    NEVER_RELOAD
+  )
+
+  let fetchVaultUserInfo: SerializedLockedVaultUser
+  if (vaultUserInfoRes && vaultCalculatePerformanceFeeRes && vaultCalculateOverdueFeeRes) {
+    fetchVaultUserInfo = {
+      isLoading: false,
+      userShares: new BigNumber(vaultUserInfoRes.shares.toString()).toJSON(),
+      lastDepositedTime: vaultUserInfoRes.lastDepositedTime.toString(),
+      lastUserActionTime: vaultUserInfoRes.lastUserActionTime.toString(),
+      teleAtLastUserAction: new BigNumber(vaultUserInfoRes.teleAtLastUserAction.toString()).toJSON(),
+      userBoostedShare: new BigNumber(vaultUserInfoRes.userBoostedShare.toString()).toJSON(),
+      locked: vaultUserInfoRes.locked,
+      lockEndTime: vaultUserInfoRes.lockEndTime.toString(),
+      lockStartTime: vaultUserInfoRes.lockStartTime.toString(),
+      lockedAmount: new BigNumber(vaultUserInfoRes.lockedAmount.toString()).toJSON(),
+      currentPerformanceFee: new BigNumber(vaultCalculatePerformanceFeeRes[0].toString()).toJSON(),
+      currentOverdueFee: new BigNumber(vaultCalculateOverdueFeeRes[0].toString()).toJSON(),
+    }
+  } else {
+    fetchVaultUserInfo = {
+      isLoading: true,
+      userShares: '',
+      lastDepositedTime: '',
+      lastUserActionTime: '',
+      teleAtLastUserAction: '',
+      userBoostedShare: '',
+      lockEndTime: '',
+      lockStartTime: '',
+      locked: true,
+      lockedAmount: '',
+      currentPerformanceFee: '',
+      currentOverdueFee: '',
+    }
+  }
+  useEffect(() => {
+    dispatch(fetchCakeVaultUserData(fetchVaultUserInfo))
+  }, [dispatch, fetchVaultUserInfo])
+}

@@ -5,6 +5,7 @@ import { USDC } from '../constants/tokens'
 import { useV2TradeExactOut } from './useV2Trade'
 import { useBestV3TradeExactOut } from './useBestV3Trade'
 import { useActiveWeb3React } from './web3'
+import { useTelePrice } from 'services/graph'
 
 /**
  * Returns the price in USDC of the input currency
@@ -56,6 +57,15 @@ export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefine
       return null
     }
   }, [currencyAmount, price])
+}
+
+export const useUSDCTeleAmount = (amount: number): number | undefined => {
+  const { chainId } = useActiveWeb3React()
+  const { data: telePrice } = useTelePrice(chainId || ChainId.MAINNET)
+  if (telePrice) {
+    return telePrice * amount
+  }
+  return undefined
 }
 
 // StableCoin amounts used when calculating spot price for a given currency.

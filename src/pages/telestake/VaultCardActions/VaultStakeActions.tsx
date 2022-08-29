@@ -73,7 +73,13 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
         </div>
       )}
 
-      <LockedModalComponent isOpen={modalLockedOpen} onDismiss={handleDismissModalLocked} />
+      <LockedModalComponent
+        isOpen={modalLockedOpen}
+        onDismiss={handleDismissModalLocked}
+        currentBalance={stakingTokenBalance}
+        stakingToken={stakingToken}
+        stakingTokenBalance={stakingTokenBalance}
+      />
       <FlexibleModalComponent
         isOpen={modalFlexibleOpen}
         stakingMax={stakingTokenBalance}
