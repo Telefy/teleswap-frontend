@@ -5,7 +5,7 @@ import useAvgLockDuration from 'hooks/useAvgLockDuration'
 import { Token } from '@telefy/teleswap-core-sdk'
 import Button from 'farm-components/Button'
 import { useVaultApy } from 'hooks/useVaultApy'
-import ConvertLockedModalComponent from 'pages/telestake/ConvertLockedModalComponent'
+import ExtendLockedModalComponent from 'pages/telestake/ExtendLockedModalComponent'
 
 export const ConvertToLockButton: FC<{ stakingToken: Token; currentStakedAmount: number }> = ({
   stakingToken,
@@ -35,7 +35,7 @@ export const ConvertToLockButton: FC<{ stakingToken: Token; currentStakedAmount:
           benefits are coming soon.
         </p>
       </div>
-      <ConvertLockedModalComponent
+      <ExtendLockedModalComponent
         isOpen={convertToLockModelIsOpen}
         onDismiss={handleDismissModalConvertToLock}
         modalTitle={'Convert to Lock'}

@@ -67,7 +67,7 @@ export function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: numbe
   const boostFactor = useMemo(() => _getBoostFactor(BOOST_WEIGHT, duration, DURATION_FACTOR), [duration])
 
   const lockedApy = useMemo(() => {
-    return flexibleApy && getLockedApy(flexibleApy, boostFactor).toString()
+    return flexibleApy ? getLockedApy(flexibleApy, boostFactor).toString() : '0'
   }, [boostFactor, flexibleApy])
 
   const getBoostFactor = useCallback(

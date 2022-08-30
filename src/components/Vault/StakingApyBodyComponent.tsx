@@ -1,26 +1,17 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { Trans } from '@lingui/macro'
-import { FC, ReactNode, useMemo } from 'react'
-import { DeserializedLockedVaultUser, DeserializedPool } from 'state/types'
-import { VaultPosition, getVaultPosition } from 'utils/telePool'
+import { FC, useMemo } from 'react'
+import { DeserializedCakeVault, DeserializedLockedVaultUser, DeserializedPool } from 'state/types'
+import { getVaultPosition } from 'utils/telePool'
 import StakingApy from 'pages/telestake/StakingApyComponent'
 import FlexibleApyComponent from './FlexibleApyComponent'
-import { LockedApyComponent } from './LockedApyComponent'
+import LockedApyComponent from './LockedApyComponent'
+import { BIG_ZERO } from 'utils/bigNumber'
 
-const positionLabel: Record<VaultPosition, ReactNode> = {
-  [VaultPosition.None]: '',
-  [VaultPosition.Flexible]: <Trans>Flexible</Trans>,
-  [VaultPosition.Locked]: <Trans>Locked</Trans>,
-  [VaultPosition.LockedEnd]: <Trans>Locked End</Trans>,
-  [VaultPosition.AfterBurning]: <Trans>After Burning</Trans>,
-}
-
-export const StakingApyBodyComponent: FC<{ userData: DeserializedLockedVaultUser; pool: DeserializedPool }> = ({
-  userData,
-  pool,
-  ...props
-}) => {
+export const StakingApyBodyComponent: FC<{
+  userData: DeserializedLockedVaultUser
+  pool: DeserializedPool
+}> = ({ userData, pool, ...props }) => {
   const position = useMemo(() => getVaultPosition(userData), [userData])
 
   if (position) {
@@ -29,7 +20,11 @@ export const StakingApyBodyComponent: FC<{ userData: DeserializedLockedVaultUser
         {position == 1 ? (
           <FlexibleApyComponent pool={pool} />
         ) : position > 1 ? (
-          <LockedApyComponent pool={pool} />
+          <LockedApyComponent
+            userData={userData}
+            stakingToken={pool?.stakingToken}
+            stakingTokenBalance={pool?.userData?.stakingTokenBalance || BIG_ZERO}
+          />
         ) : (
           <></>
         )}

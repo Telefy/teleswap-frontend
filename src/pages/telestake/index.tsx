@@ -1,38 +1,15 @@
-import { t, Trans } from '@lingui/macro'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'farm-components/Button'
 import Typography from 'farm-components/Typography'
-import { Chef, PairType } from 'features/onsen/enum'
-import useFarmRewards from 'hooks/useFarmRewards'
-import useFuse from 'hooks/useFuse'
 import { TridentBody, TridentHeader } from 'layouts/Trident'
-import { useActiveWeb3React } from 'hooks/web3'
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useIsDarkMode } from '../../state/user/hooks'
-import Icon from '../../assets/svg/teleicon.svg'
 import styled from 'styled-components'
 import { Info } from 'react-feather'
-import { Input } from 'reactstrap'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import StakeBodyComponent from './StakeBodyComponent'
-import LockedModalComponent from './LockedModalComponent'
-import ConvertLockedModalComponent from './ConvertLockedModalComponent'
-import FlexibleModalComponent from './FlexibleModalComponent'
-import StakeModalComponent from './StakeModalComponent'
-import UnstakeModalComponent from './UnstakeModalComponent'
-import { useVaultApprove, useCheckVaultApprovalStatus } from '../../hooks/useApprove'
 import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
-
-const StyledInfo = styled(Info)`
-  opacity: 0.4;
-  color: ${({ theme }) => theme.text1};
-  height: 16px;
-  width: 16px;
-  :hover {
-    opacity: 0.8;
-  }
-`
 
 export default function TeleStake(): JSX.Element {
   const { i18n } = useLingui()
@@ -61,12 +38,8 @@ export default function TeleStake(): JSX.Element {
   }
   // const lockedModal = () => setLockedModal(!modalLocked)
   const toggleWalletModal = useWalletModalToggle()
-  const [isFlexibleLockedBoxShown, setFlexibleLockedBoxShown] = useState(false)
   const stakeModal = () => setModalStake(!modalStake)
   const unStakeModal = () => setModalUnStake(!modalUnStake)
-  const enableButtonHandler = () => {
-    setFlexibleLockedBoxShown(!isFlexibleLockedBoxShown)
-  }
 
   // Integration code starts
   usePoolsPageFetch()
@@ -103,8 +76,6 @@ export default function TeleStake(): JSX.Element {
         <StakeBodyComponent
           isStakedAlready={isStakedAlready}
           toggleWalletModal={toggleWalletModal}
-          flexibleModal={flexibleModal}
-          setLockedModal={setLockedModal}
           unStakeModal={unStakeModal}
           stakeModal={stakeModal}
           convertLockedModal={convertLockedModal}

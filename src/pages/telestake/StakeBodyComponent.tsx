@@ -6,7 +6,7 @@ import Icon from '../../assets/svg/teleicon.svg'
 import { Input } from 'reactstrap'
 import { useActiveWeb3React } from 'hooks/web3'
 import { usePoolsWithVault } from 'state/pools/hooks'
-import StakingApy from './StakingApyComponent'
+import StakingCommonApy from './StakingApyComponent'
 import {
   DeserializedLockedVaultUser,
   DeserializedPool,
@@ -35,15 +35,7 @@ import { ZERO_ADDRESS } from 'constants/misc'
 
 const NUMBER_OF_POOLS_VISIBLE = 12
 
-function StakeBodyComponent({
-  isStakedAlready,
-  toggleWalletModal,
-  flexibleModal,
-  setLockedModal,
-  unStakeModal,
-  stakeModal,
-  convertLockedModal,
-}: any) {
+function StakeBodyComponent({ isStakedAlready, toggleWalletModal, unStakeModal, stakeModal, convertLockedModal }: any) {
   const darkMode = useIsDarkMode()
   const { account, chainId } = useActiveWeb3React()
   const { pools, userDataLoaded } = usePoolsWithVault(chainId || ChainId.MAINNET)
@@ -127,15 +119,19 @@ function StakeBodyComponent({
             {account && userData ? (
               <StakingApyBodyComponent userData={userData} pool={chosenPools[0]} />
             ) : (
-              <StakingApy pool={chosenPools[0]} />
+              <StakingCommonApy pool={chosenPools[0]} />
             )}
             {account ? (
-              <VaultCardActions
-                pool={chosenPools[0]}
-                accountHasSharesStaked={accountHasSharesStaked}
-                isLoading={isLoading}
-                performanceFee={performanceFeeAsDecimal}
-              />
+              vaultPool?.userData?.locked ? (
+                <></>
+              ) : (
+                <VaultCardActions
+                  pool={chosenPools[0]}
+                  accountHasSharesStaked={accountHasSharesStaked}
+                  isLoading={isLoading}
+                  performanceFee={performanceFeeAsDecimal}
+                />
+              )
             ) : (
               <div className="connect-wal-btn">
                 <div className="title">Start Earning</div>
@@ -144,46 +140,6 @@ function StakeBodyComponent({
             )}
           </div>
         )}
-        <div>
-          {isStakedAlready && (
-            <div className="telecard-content">
-              <div className="title">My Position</div>
-              <div className="custom-input2">
-                <Input type="text" value="13456.12" />
-                <div className="stk-btn-holder">
-                  <Button onClick={unStakeModal}>&#8722;</Button>
-                  <Button onClick={stakeModal}>&#43;</Button>
-                </div>
-                {/* <div className={darkMode ? 'divider-dark' : 'divider-light'}></div> */}
-                <div className="input-caption-left2">-2637738 USD</div>
-              </div>
-              <div className="apy-block2">
-                <div className="box-content-top">
-                  <div className="box-content-top-item">
-                    <div>APY :</div> <div className="bold">4.25%</div>
-                  </div>
-                  <div className="box-content-top-item">
-                    <div>Recent TELE Profit :</div> <div className="bold">91.06%</div>
-                  </div>
-                </div>
-              </div>
-              <div className="unstakefee">
-                <div>0.2% nnstaking fee before</div>
-                <div className="time">1d:12m:05s</div>
-              </div>
-              <div className="lock-stake-info">
-                <p>
-                  <span className="alert-icon">&#9888;</span> Lock stacking offers higher APY while providing other
-                  benefits.{' '}
-                  <a className="link">
-                    Learn More <span>&gt;&gt;</span>
-                  </a>
-                </p>
-                <Button onClick={convertLockedModal}>Convert to Lock</Button>
-              </div>
-            </div>
-          )}
-        </div>
 
         <div>
           {isStakedAlready && (
@@ -232,11 +188,9 @@ function StakeBodyComponent({
           )}
         </div>
 
-        {!isStakedAlready && (
-          <div className="telecard-footer">
-            <PoolStatsInfo pool={chosenPools[0]} account={account || ZERO_ADDRESS} />
-          </div>
-        )}
+        <div className="telecard-footer">
+          <PoolStatsInfo pool={chosenPools[0]} account={account || ZERO_ADDRESS} />
+        </div>
       </div>
     </div>
   ) : (

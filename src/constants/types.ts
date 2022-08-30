@@ -1,6 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { ChainTokenMap, Token } from '@telefy/teleswap-core-sdk'
 import { Dispatch, SetStateAction } from 'react'
+import { DeserializedLockedVaultUser } from 'state/types'
+import { VaultPosition, VaultPositionParams } from 'utils/telePool'
 
 type VoidFn = () => void
 
@@ -195,4 +197,33 @@ export interface OverviewPropsType {
   lockStartTime?: string
   lockEndTime?: string
   showLockWarning?: boolean
+}
+export interface LockedStakingApyPropsType {
+  stakingToken: Token
+  stakingTokenBalance: BigNumber
+  userData: DeserializedLockedVaultUser
+}
+export interface AddTeleToLockedModalComponentPropsType {
+  isOpen: boolean
+  onDismiss?: VoidFn
+  stakingToken: Token
+  currentBalance: BigNumber
+  currentLockedAmount: BigNumber
+  lockStartTime?: string
+  lockEndTime?: string
+  stakingTokenBalance: BigNumber
+}
+export interface AfterLockedActionsPropsType {
+  lockEndTime: string
+  lockStartTime: string
+  currentLockedAmount: number
+  stakingToken: Token
+  position: VaultPosition
+  isInline?: boolean
+}
+export interface LockedActionsPropsType extends VaultPositionParams {
+  lockStartTime: string
+  stakingToken: Token
+  stakingTokenBalance: BigNumber
+  lockedAmount: BigNumber
 }
