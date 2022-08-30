@@ -8,6 +8,7 @@ import { useCallback, useState } from 'react'
 import LockedModalComponent from '../LockedModalComponent'
 import FlexibleModalComponent from '../FlexibleModalComponent'
 import HasSharesActions from './HasShareActions'
+import { hideHtmlScroll, showHtmlScroll } from 'utils/scrollHelper'
 
 interface VaultStakeActionsProps {
   pool: DeserializedPool
@@ -27,36 +28,21 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
   const [modalFlexibleOpen, setModalFlexiblelOpen] = useState(false)
   const handleDismissModalFlexible = useCallback(() => {
     setModalFlexiblelOpen(false)
+    showHtmlScroll()
   }, [setModalFlexiblelOpen])
   const [modalLockedOpen, setModalLockedlOpen] = useState(false)
   const handleDismissModalLocked = useCallback(() => {
     setModalLockedlOpen(false)
+    showHtmlScroll()
   }, [setModalLockedlOpen])
   const onFlexibleButtonClick = () => {
-    console.log(document.body.style.overflowY)
-    if (document.getElementsByTagName('html')[0].style.overflow !== 'hidden') {
-      document.getElementsByTagName('html')[0].style.overflow = 'hidden'
-    }
+    hideHtmlScroll()
     setModalFlexiblelOpen(true)
   }
   const onLockedButtonClick = () => {
-    if (document.getElementsByTagName('html')[0].style.overflow !== 'hidden') {
-      document.getElementsByTagName('html')[0].style.overflow = 'hidden'
-    }
+    hideHtmlScroll()
     setModalLockedlOpen(true)
   }
-
-  // const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol={stakingToken.symbol} />)
-  // const [onPresentStake] = useModal(
-  //   <VaultStakeModal stakingMax={stakingTokenBalance} pool={pool} performanceFee={performanceFee} />
-  // )
-  // const [openPresentLockedStakeModal] = useModal(
-  //   <LockedStakeModal
-  //     currentBalance={stakingTokenBalance}
-  //     stakingToken={stakingToken}
-  //     stakingTokenBalance={stakingTokenBalance}
-  //   />
-  // )
 
   const renderStakeAction = () => {
     return accountHasSharesStaked ? (
