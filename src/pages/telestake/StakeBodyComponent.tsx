@@ -141,53 +141,6 @@ function StakeBodyComponent({ isStakedAlready, toggleWalletModal, unStakeModal, 
           </div>
         )}
 
-        <div>
-          {isStakedAlready && (
-            <div className="telecard-content">
-              <div className="confirm-lock-title">
-                <div className="title">My Position</div>
-                <div>Locked</div>
-              </div>
-              <div className="tele-lock-unlock-block">
-                <div className="tele-lock-unlock-block-item">
-                  <div className="inner-title">TELE Locked</div>
-                  <div className="locked-value">155098.00</div>
-                  <div className="bottom-value">-2637738 USD</div>
-                </div>
-                <div className="tele-lock-unlock-block-item">
-                  <div className="inner-title">Unlocks In</div>
-                  <div className="locked-value">5 Weeks</div>
-                  <div className="bottom-value">08 July 2022</div>
-                </div>
-              </div>
-              <div className="stake-tele-block mt-1">
-                <div className="flexible">
-                  <Button onClick={stakeModal}>Add TELE</Button>
-                </div>
-                <div className="locked">
-                  <Button onClick={convertLockedModal}>Extend</Button>
-                </div>
-              </div>
-              <div className="apy-block2">
-                <div className="box-content-top">
-                  <div className="box-content-top-item">
-                    <div>APY :</div> <div className="bold">4.25%</div>
-                  </div>
-                  <div className="box-content-top-item">
-                    <div>Lock Duration : </div> <div className="bold">10 Weeks</div>
-                  </div>
-                  <div className="box-content-top-item">
-                    <div>Yield Boost : </div> <div className="bold">4.8x</div>
-                  </div>
-                  <div className="box-content-top-item">
-                    <div>Recent TELE Profit : </div> <div className="bold">200.20</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
         <div className="telecard-footer">
           <PoolStatsInfo pool={chosenPools[0]} account={account || ZERO_ADDRESS} />
         </div>
