@@ -18,21 +18,20 @@ export default function useAvgLockDuration() {
     const avgBoostRatio = lockedCakeBoostedShares?.div(
       lockedCakeOriginalShares ? (lockedCakeOriginalShares.isZero() ? BIG_ONE : lockedCakeOriginalShares) : BIG_ONE
     )
-    if (!totalLockedAmount) return BIG_ZERO
+    if (!totalLockedAmount) return '0'
     return avgBoostRatio
       ?.minus(1)
       .times(new BigNumber(DURATION_FACTOR.toString()))
       .div(new BigNumber(BOOST_WEIGHT.toString()).div(BIG_TEN.pow(12)))
       .toFixed(0)
   }, [totalCakeInVault, totalLockedAmount, pricePerFullShare, totalShares])
-
   const avgLockDurationsInWeeks = useMemo(
     () => formatSecondsToWeeks(avgLockDurationsInSeconds),
     [avgLockDurationsInSeconds]
   )
 
   return {
-    avgLockDurationsInWeeks,
+    avgLockDurationsInWeeks: avgLockDurationsInWeeks.length < 1 ? '<1 week' : avgLockDurationsInWeeks,
     avgLockDurationsInSeconds: _toNumber(avgLockDurationsInSeconds),
   }
 }

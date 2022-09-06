@@ -22,12 +22,12 @@ import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 import { ButtonLight, ButtonSecondary } from 'components/Button'
 import { ConvertToLockButton } from 'components/Vault/ConvertToLockButton'
 import { Link } from 'react-router-dom'
-import { useUpdateCakeVaultUserData, useVaultPoolByKey } from 'state/pools/hooks'
+import { usePoolsPageFetch, useUpdateCakeVaultUserData, useVaultPoolByKey } from 'state/pools/hooks'
 import { fetchCakeVaultUserData } from 'state/pools'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useTelePoolContract } from 'hooks/useContract'
 import { vaultPoolConfig } from 'constants/pools'
-import { ZERO_ADDRESS } from 'constants/misc'
+import { BIG_NUMBER_FMT, ZERO_ADDRESS } from 'constants/misc'
 import { UpdateUserDataComponent } from 'components/Vault/UpdateUserDataComponent'
 
 // min deposit and withdraw amount
@@ -40,6 +40,7 @@ interface FlexibleModalComponentProps {
   isRemovingStake?: boolean
   isOpen: boolean
   onDismiss: () => void
+  handleReRenderToggle: VoidFunction
 }
 
 function FlexibleModalComponent({
@@ -49,6 +50,7 @@ function FlexibleModalComponent({
   isOpen,
   onDismiss,
   isRemovingStake = false,
+  handleReRenderToggle,
 }: FlexibleModalComponentProps) {
   const darkMode = useIsDarkMode()
   const dispatch = useAppDispatch()
@@ -76,7 +78,6 @@ function FlexibleModalComponent({
   const callOptions = {
     gasLimit: vaultPoolConfig[pool.vaultKey as VaultKey].gasLimit,
   }
-
   const interestBreakdown = getInterestBreakdown({
     principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
     apr: +flexibleApy,
@@ -117,10 +118,17 @@ function FlexibleModalComponent({
         // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
         return isWithdrawingAll
           ? callWithGasPrice(vaultPoolContract, 'withdrawAll', undefined, callOptions)
-          : callWithGasPrice(vaultPoolContract, 'withdrawByAmount', [convertedStakeAmount.toString()], callOptions)
+          : callWithGasPrice(
+              vaultPoolContract,
+              'withdrawByAmount',
+              [convertedStakeAmount.toFormat(BIG_NUMBER_FMT)],
+              callOptions
+            )
       }, 'Unstaked! Your earnings have also been harvested to your wallet!')
 
       if (receipt?.status) {
+        handleReRenderToggle()
+        // setLoadUserData(true)
         onDismiss?.()
         // useUpdateCakeVaultUserData()
       }
@@ -131,11 +139,13 @@ function FlexibleModalComponent({
       const receipt = await fetchWithCatchTxError(() => {
         // .toString() being called to fix a BigNumber error in prod
         // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
-        const methodArgs = [convertedStakeAmount.toString(), lockDuration.toString()]
+        const methodArgs = [convertedStakeAmount.toFormat(BIG_NUMBER_FMT), lockDuration.toString()]
         return callWithGasPrice(vaultPoolContract, 'deposit', methodArgs, callOptions)
       }, 'Staked! Your funds have been staked in the pool')
 
       if (receipt?.status) {
+        handleReRenderToggle()
+        // setLoadUserData(true)
         onDismiss?.()
       }
     }
@@ -155,7 +165,6 @@ function FlexibleModalComponent({
         <Modal
           className={`animated flexible-modal fadeIn ${darkMode ? 'locked-modal-dark' : 'locked-modal-light'}`}
           isOpen={isOpen}
-          onDismiss={onDismiss}
           backdrop={false}
         >
           <ModalHeader>
@@ -265,7 +274,6 @@ function FlexibleModalComponent({
           </ModalFooter>
         </Modal>
       </div>
-      {loadUserData && <UpdateUserDataComponent />}
     </>
   )
 }

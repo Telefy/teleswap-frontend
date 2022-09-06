@@ -32,12 +32,14 @@ import { VaultPositionTagWithLabel } from 'components/Vault/VaultPositionTag'
 import { StakingApyBodyComponent } from 'components/Vault/StakingApyBodyComponent'
 import PoolStatsInfo from './PoolStatsInfo'
 import { ZERO_ADDRESS } from 'constants/misc'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 const NUMBER_OF_POOLS_VISIBLE = 12
 
-function StakeBodyComponent({ isStakedAlready, toggleWalletModal, unStakeModal, stakeModal, convertLockedModal }: any) {
+function StakeBodyComponent({ handleReRenderToggle }: { handleReRenderToggle: VoidFunction }) {
   const darkMode = useIsDarkMode()
   const { account, chainId } = useActiveWeb3React()
+  const toggleWalletModal = useWalletModalToggle()
   const { pools, userDataLoaded } = usePoolsWithVault(chainId || ChainId.MAINNET)
   const [sortOption, setSortOption] = useState('hot')
   const [numberOfPoolsVisible, setNumberOfPoolsVisible] = useState(NUMBER_OF_POOLS_VISIBLE)
@@ -104,7 +106,6 @@ function StakeBodyComponent({ isStakedAlready, toggleWalletModal, unStakeModal, 
   const { performanceFeeAsDecimal } = fees as DeserializedVaultFees
   const accountHasSharesStaked = userShares && userShares.gt(0)
   const isLoading = !chosenPools.length || !chosenPools[0].userData || isVaultUserDataLoading
-  console.log(account, userData)
   return chosenPools.length ? (
     <div className="flex flex-col w-full items-center justify-between gap-6">
       <div className={darkMode ? 'telecard-dark' : 'telecard-light'}>
@@ -113,33 +114,32 @@ function StakeBodyComponent({ isStakedAlready, toggleWalletModal, unStakeModal, 
           <h1 className="font-md">Tele Stake</h1>
           <p>Stake, Earn - And More!</p>
         </div>
-        {!isStakedAlready && (
-          <div className="telecard-content">
-            {account && userData && <VaultPositionTagWithLabel userData={userData} />}
-            {account && userData ? (
-              <StakingApyBodyComponent userData={userData} pool={chosenPools[0]} />
+        <div className="telecard-content">
+          {account && userData && <VaultPositionTagWithLabel userData={userData} />}
+          {account && userData ? (
+            <StakingApyBodyComponent userData={userData} pool={chosenPools[0]} />
+          ) : (
+            <StakingCommonApy />
+          )}
+          {account ? (
+            vaultPool?.userData?.locked ? (
+              <></>
             ) : (
-              <StakingCommonApy pool={chosenPools[0]} />
-            )}
-            {account ? (
-              vaultPool?.userData?.locked ? (
-                <></>
-              ) : (
-                <VaultCardActions
-                  pool={chosenPools[0]}
-                  accountHasSharesStaked={accountHasSharesStaked}
-                  isLoading={isLoading}
-                  performanceFee={performanceFeeAsDecimal}
-                />
-              )
-            ) : (
-              <div className="connect-wal-btn">
-                <div className="title">Start Earning</div>
-                <Button onClick={toggleWalletModal}>Connect Wallet</Button>
-              </div>
-            )}
-          </div>
-        )}
+              <VaultCardActions
+                pool={chosenPools[0]}
+                accountHasSharesStaked={accountHasSharesStaked}
+                isLoading={isLoading}
+                performanceFee={performanceFeeAsDecimal}
+                handleReRenderToggle={handleReRenderToggle}
+              />
+            )
+          ) : (
+            <div className="connect-wal-btn">
+              <div className="title">Start Earning</div>
+              <Button onClick={toggleWalletModal}>Connect Wallet</Button>
+            </div>
+          )}
+        </div>
 
         <div className="telecard-footer">
           <PoolStatsInfo pool={chosenPools[0]} account={account || ZERO_ADDRESS} />

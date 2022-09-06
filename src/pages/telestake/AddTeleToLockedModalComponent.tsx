@@ -120,7 +120,6 @@ function AddTeleToLockedModalComponent({
         <Modal
           className={`animated flexible-modal fadeIn ${darkMode ? 'locked-modal-dark' : 'locked-modal-light'}`}
           isOpen={isOpen}
-          onDismiss={onDismiss}
           backdrop={false}
         >
           <ModalHeader>

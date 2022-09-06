@@ -25,7 +25,10 @@ export default function useAddTokenToMetamask(currencyToAdd: Currency | undefine
               address: token.address,
               symbol: token.symbol,
               decimals: token.decimals,
-              image: getTokenLogoURL(token.address),
+              image:
+                token.address.toLowerCase() == '0xf1e345ea7c33fd6c05f5512a780eb5839ee31674'
+                  ? 'https://telefy.finance/assets/Images/telecoin.svg'
+                  : getTokenLogoURL(token.address),
             },
           },
         })

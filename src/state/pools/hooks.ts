@@ -22,12 +22,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { useTeleContract, useMulticallContract, useTelePoolContract } from 'hooks/useContract'
 import { AddressMap, ChainId, ChainTokenMap } from '@telefy/teleswap-core-sdk'
 import { useActiveWeb3React } from 'hooks/web3'
-import {
-  NEVER_RELOAD,
-  useMultipleContractMultipleData,
-  useMultipleContractSingleData,
-  useSingleCallResult,
-} from '../multicall/hooks'
+import { useMultipleContractMultipleData, useMultipleContractSingleData, useSingleCallResult } from '../multicall/hooks'
 import { getTelePoolAddress } from 'utils/addressHelpers'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from 'utils/bigNumber'
@@ -94,34 +89,10 @@ export const usePoolsPageFetch = () => {
 
   // ---- fetchCakeVaultPublicData
   const vaultPoolContractAddress = getTelePoolAddress(chainId || ChainId.MAINNET)
-  const { result: sharePriceCall } = useSingleCallResult(
-    telePoolContract,
-    'getPricePerFullShare',
-    undefined,
-    NEVER_RELOAD
-  )
-  const { result: sharesCall } = useSingleCallResult(telePoolContract, 'totalShares', undefined, NEVER_RELOAD)
-  const { result: totalLockedAmountCall } = useSingleCallResult(
-    telePoolContract,
-    'totalLockedAmount',
-    undefined,
-    NEVER_RELOAD
-  )
-  const { result: totalCakeInVaultCall } = useSingleCallResult(
-    teleContract,
-    'balanceOf',
-    [vaultPoolContractAddress],
-    NEVER_RELOAD
-  )
-  const totalSharesAsBigNumber = sharesCall && sharesCall.length ? new BigNumber(sharesCall[0].toString()) : BIG_ZERO
-  const totalLockedAmountAsBigNumber =
-    totalLockedAmountCall && totalLockedAmountCall.length
-      ? new BigNumber(totalLockedAmountCall[0].toString())
-      : BIG_ZERO
-  const sharePriceAsBigNumber =
-    sharePriceCall && sharePriceCall.length ? new BigNumber(sharePriceCall[0].toString()) : BIG_ZERO
-  const totalCakeInVaultAsBigNumber =
-    totalCakeInVaultCall && totalCakeInVaultCall.length ? new BigNumber(totalCakeInVaultCall[0].toString()) : BIG_ZERO
+  const { result: sharePriceCall } = useSingleCallResult(telePoolContract, 'getPricePerFullShare', undefined)
+  const { result: sharesCall } = useSingleCallResult(telePoolContract, 'totalShares', undefined)
+  const { result: totalLockedAmountCall } = useSingleCallResult(telePoolContract, 'totalLockedAmount', undefined)
+  const { result: totalCakeInVaultCall } = useSingleCallResult(teleContract, 'balanceOf', [vaultPoolContractAddress])
 
   // ------- fetchPoolsUserDataAsync
   const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)
@@ -141,29 +112,22 @@ export const usePoolsPageFetch = () => {
     poolTokenAddresses,
     tokenInterface,
     'allowance',
-    vaultPoolArgs,
-    NEVER_RELOAD
+    vaultPoolArgs
   )
-  const tokenBalanceRes = useMultipleContractSingleData(
-    poolTokensUniq,
-    tokenInterface,
-    'balanceOf',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
-  )
+  const tokenBalanceRes = useMultipleContractSingleData(poolTokensUniq, tokenInterface, 'balanceOf', [
+    account || ZERO_ADDRESS,
+  ])
   const userStakeBalanceRes = useMultipleContractSingleData(
     nonMasterPoolContractAddresses,
     sousChefPoolInterface,
     'userInfo',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
+    [account || ZERO_ADDRESS]
   )
   const userPendingRewardsRes = useMultipleContractSingleData(
     nonMasterPoolContractAddresses,
     sousChefPoolInterface,
     'pendingReward',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
+    [account || ZERO_ADDRESS]
   )
   const allowances: {
     [key: string]: string
@@ -178,7 +142,6 @@ export const usePoolsPageFetch = () => {
     const { result: balanceRes } = tokenBalanceRes[index]
     return balanceRes ? { ...acc, [token]: balanceRes[0].toString() } : { ...acc }
   }, {})
-  console.log(tokenBalances, 'tokenBalances')
 
   const poolTokenBalances: {
     [key: string]: string
@@ -218,24 +181,13 @@ export const usePoolsPageFetch = () => {
   }))
 
   // ------- fetchCakeVaultUserData
-  const { result: vaultUserInfoRes } = useSingleCallResult(
-    telePoolContract,
-    'userInfo',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
-  )
-  const { result: vaultCalculatePerformanceFeeRes } = useSingleCallResult(
-    telePoolContract,
-    'calculatePerformanceFee',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
-  )
-  const { result: vaultCalculateOverdueFeeRes } = useSingleCallResult(
-    telePoolContract,
-    'calculateOverdueFee',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
-  )
+  const { result: vaultUserInfoRes } = useSingleCallResult(telePoolContract, 'userInfo', [account || ZERO_ADDRESS])
+  const { result: vaultCalculatePerformanceFeeRes } = useSingleCallResult(telePoolContract, 'calculatePerformanceFee', [
+    account || ZERO_ADDRESS,
+  ])
+  const { result: vaultCalculateOverdueFeeRes } = useSingleCallResult(telePoolContract, 'calculateOverdueFee', [
+    account || ZERO_ADDRESS,
+  ])
 
   let fetchVaultUserInfo: SerializedLockedVaultUser
   if (vaultUserInfoRes && vaultCalculatePerformanceFeeRes && vaultCalculateOverdueFeeRes) {
@@ -282,6 +234,15 @@ export const usePoolsPageFetch = () => {
   // console.log(userData, 'userData ---- 2')
   // console.log(fetchVaultUserInfo, 'fetchVaultUserInfo --- 3')
   useEffect(() => {
+    const totalSharesAsBigNumber = sharesCall && sharesCall.length ? new BigNumber(sharesCall[0].toString()) : BIG_ZERO
+    const totalLockedAmountAsBigNumber =
+      totalLockedAmountCall && totalLockedAmountCall.length
+        ? new BigNumber(totalLockedAmountCall[0].toString())
+        : BIG_ZERO
+    const sharePriceAsBigNumber =
+      sharePriceCall && sharePriceCall.length ? new BigNumber(sharePriceCall[0].toString()) : BIG_ZERO
+    const totalCakeInVaultAsBigNumber =
+      totalCakeInVaultCall && totalCakeInVaultCall.length ? new BigNumber(totalCakeInVaultCall[0].toString()) : BIG_ZERO
     batch(() => {
       // fetchPublicVaultData(chainId, teleContract)
       dispatch(
@@ -296,15 +257,7 @@ export const usePoolsPageFetch = () => {
       dispatch(fetchPoolsUserDataAsync(userData))
       dispatch(fetchCakeVaultUserData(fetchVaultUserInfo))
     })
-  }, [
-    dispatch,
-    fetchVaultUserInfo,
-    sharePriceAsBigNumber,
-    totalCakeInVaultAsBigNumber,
-    totalLockedAmountAsBigNumber,
-    totalSharesAsBigNumber,
-    userData,
-  ])
+  }, [fetchVaultUserInfo, sharePriceCall, sharesCall, totalCakeInVaultCall, totalLockedAmountCall, userData])
 
   useEffect(() => {
     batch(() => {
@@ -345,24 +298,13 @@ export const useUpdateCakeVaultUserData = () => {
   // useFetchPublicPoolsData()
 
   // ------- fetchCakeVaultUserData
-  const { result: vaultUserInfoRes } = useSingleCallResult(
-    telePoolContract,
-    'userInfo',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
-  )
-  const { result: vaultCalculatePerformanceFeeRes } = useSingleCallResult(
-    telePoolContract,
-    'calculatePerformanceFee',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
-  )
-  const { result: vaultCalculateOverdueFeeRes } = useSingleCallResult(
-    telePoolContract,
-    'calculateOverdueFee',
-    [account || ZERO_ADDRESS],
-    NEVER_RELOAD
-  )
+  const { result: vaultUserInfoRes } = useSingleCallResult(telePoolContract, 'userInfo', [account || ZERO_ADDRESS])
+  const { result: vaultCalculatePerformanceFeeRes } = useSingleCallResult(telePoolContract, 'calculatePerformanceFee', [
+    account || ZERO_ADDRESS,
+  ])
+  const { result: vaultCalculateOverdueFeeRes } = useSingleCallResult(telePoolContract, 'calculateOverdueFee', [
+    account || ZERO_ADDRESS,
+  ])
 
   let fetchVaultUserInfo: SerializedLockedVaultUser
   if (vaultUserInfoRes && vaultCalculatePerformanceFeeRes && vaultCalculateOverdueFeeRes) {

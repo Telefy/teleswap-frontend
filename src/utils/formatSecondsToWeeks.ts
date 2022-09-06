@@ -5,7 +5,12 @@ import addSeconds from 'date-fns/addSeconds'
 export const secondsToWeeks = (seconds: number) => {
   const now = new Date()
   const addedDate = addSeconds(now, seconds)
-
+  // if (seconds === seconds) {
+  //   console.log(now, 'now')
+  //   console.log(addedDate, 'addedDate')
+  //   console.log(new Date(addedDate), 'new Date(addedDate)')
+  //   console.log(differenceInWeeks(new Date(addedDate), now), 'new Date(addedDate)')
+  // }
   return differenceInWeeks(new Date(addedDate), now)
 }
 

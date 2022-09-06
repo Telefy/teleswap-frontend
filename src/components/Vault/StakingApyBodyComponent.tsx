@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { FC, useMemo } from 'react'
-import { DeserializedCakeVault, DeserializedLockedVaultUser, DeserializedPool } from 'state/types'
+import { DeserializedLockedVaultUser, DeserializedPool } from 'state/types'
 import { getVaultPosition } from 'utils/telePool'
 import StakingApy from 'pages/telestake/StakingApyComponent'
 import FlexibleApyComponent from './FlexibleApyComponent'
@@ -11,7 +11,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 export const StakingApyBodyComponent: FC<{
   userData: DeserializedLockedVaultUser
   pool: DeserializedPool
-}> = ({ userData, pool, ...props }) => {
+}> = ({ userData, pool }) => {
   const position = useMemo(() => getVaultPosition(userData), [userData])
 
   if (position) {
@@ -32,5 +32,5 @@ export const StakingApyBodyComponent: FC<{
     )
   }
 
-  return <StakingApy pool={pool} />
+  return <StakingApy />
 }

@@ -1,48 +1,22 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React, { memo, useEffect, useRef, useState } from 'react'
-import { DeserializedPool } from 'state/types'
+import React from 'react'
 import { useVaultApy } from 'hooks/useVaultApy'
-import { CountUp } from 'use-count-up'
 
-function StakingApyComponent({ pool }: { pool: DeserializedPool }) {
+function StakingApyComponent() {
   const { flexibleApy, lockedApy } = useVaultApy()
-  const flexPreviousValue = useRef(0)
-  const lockPreviousValue = useRef(0)
-  useEffect(() => {
-    flexPreviousValue.current = parseFloat(flexibleApy || '0')
-  }, [flexibleApy])
-  useEffect(() => {
-    lockPreviousValue.current = parseFloat(lockedApy || '0')
-  }, [lockedApy])
 
   return (
     <div className="apy-block">
       <div className="box-content-top">
         <div className="box-content-top-item">
           <div>Flexible Staking APY :</div>
-          <div className="bold">
-            <CountUp
-              start={flexPreviousValue.current}
-              end={parseFloat(flexibleApy || '0')}
-              suffix="%"
-              decimalPlaces={2}
-              duration={1}
-              thousandsSeparator=","
-            />
-          </div>
+          <div className="bold">{parseFloat(flexibleApy || '0').toFixed(2)}%</div>
         </div>
         <div className="box-content-top-item">
           <div>Locked Staking APY :</div>{' '}
           <div className="bold">
             Up to&nbsp;
-            <CountUp
-              start={lockPreviousValue.current}
-              end={parseFloat(lockedApy || '0')}
-              suffix="%"
-              decimalPlaces={2}
-              duration={1}
-              thousandsSeparator=","
-            />
+            {parseFloat(lockedApy || '0').toFixed(2)}%
           </div>
         </div>
       </div>

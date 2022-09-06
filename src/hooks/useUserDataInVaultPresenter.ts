@@ -34,6 +34,9 @@ const useUserDataInVaultPresenter: UserDataInVaultPresenterFn = ({ lockEndTime, 
   } catch (_) {
     // ignore invalid format
   }
+  const tt = formatSecondsToWeeks(secondDuration)
+  const gg = formatSecondsToWeeks(604800)
+  const hh = formatSecondsToWeeks(30240)
 
   return {
     weekDuration: formatSecondsToWeeks(secondDuration),

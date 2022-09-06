@@ -7,6 +7,7 @@ import { DeserializedLockedVaultUser, DeserializedPool } from 'state/types'
 import { isLocked, isStaked } from 'utils/telePool'
 import useAvgLockDuration from 'hooks/useAvgLockDuration'
 import { Token } from '@telefy/teleswap-core-sdk'
+import { formatNumberDecimals } from 'functions'
 
 export const PerformanceFee: FC<{ userData?: DeserializedLockedVaultUser; performanceFeeAsDecimal?: number }> = ({
   userData,
@@ -31,7 +32,9 @@ export const TotalLocked: FC<{ totalLocked: BigNumber; lockedToken: Token }> = (
   return (
     <div className="box-content-item">
       <div>Total locked:</div>{' '}
-      <div className="foot-value">{getBalanceNumber(totalLocked, lockedToken.decimals)} TELE</div>
+      <div className="foot-value">
+        {formatNumberDecimals(getBalanceNumber(totalLocked, lockedToken.decimals), 5)} TELE
+      </div>
     </div>
   )
 }
@@ -50,7 +53,9 @@ export const TotalStaked: FC<{ totalStaked: BigNumber; stakingToken: Token }> = 
   return (
     <div className="box-content-item">
       <div>Total staked:</div>{' '}
-      <div className="foot-value">{getBalanceNumber(totalStaked, stakingToken.decimals)} TELE</div>
+      <div className="foot-value">
+        {formatNumberDecimals(getBalanceNumber(totalStaked, stakingToken.decimals), 5)} TELE
+      </div>
     </div>
   )
 }

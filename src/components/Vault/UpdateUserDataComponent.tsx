@@ -5,5 +5,6 @@ import { useUpdateCakeVaultUserData } from 'state/pools/hooks'
 
 export const UpdateUserDataComponent: FC = () => {
   useUpdateCakeVaultUserData()
+  console.log('updateData Component triggered !!!')
   return <></>
 }

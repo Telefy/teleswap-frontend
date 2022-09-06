@@ -23,9 +23,15 @@ interface HasStakeActionProps {
   pool: DeserializedPool
   stakingTokenBalance: BigNumber
   performanceFee: number
+  handleReRenderToggle: VoidFunction
 }
 
-const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBalance, performanceFee }) => {
+const HasSharesActions: React.FC<HasStakeActionProps> = ({
+  pool,
+  stakingTokenBalance,
+  performanceFee,
+  handleReRenderToggle,
+}) => {
   const { chainId } = useActiveWeb3React()
   const { userData } = useVaultPoolByKey(pool.vaultKey as VaultKey)
   const {
@@ -77,6 +83,7 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
         stakingMax={cakeAsBigNumber}
         pool={pool}
         isRemovingStake
+        handleReRenderToggle={handleReRenderToggle}
       />
       <FlexibleModalComponent
         isOpen={stakeModelIsOpen}
@@ -84,6 +91,7 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
         stakingMax={stakingTokenBalance}
         performanceFee={performanceFee}
         pool={pool}
+        handleReRenderToggle={handleReRenderToggle}
       />
       <NotEnoughTokensModal
         isOpen={notEnoughModelIsOpen}

@@ -14,6 +14,7 @@ interface VaultStakeActionsProps {
   stakingTokenBalance: BigNumber
   accountHasSharesStaked: boolean
   performanceFee: number
+  handleReRenderToggle: VoidFunction
 }
 
 const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
@@ -21,6 +22,7 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
   stakingTokenBalance,
   accountHasSharesStaked,
   performanceFee,
+  handleReRenderToggle,
 }) => {
   const { stakingToken, userDataLoaded } = pool
 
@@ -34,21 +36,15 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
   }, [setModalLockedlOpen])
   const onFlexibleButtonClick = () => setModalFlexiblelOpen(true)
   const onLockedButtonClick = () => setModalLockedlOpen(true)
-  // const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol={stakingToken.symbol} />)
-  // const [onPresentStake] = useModal(
-  //   <VaultStakeModal stakingMax={stakingTokenBalance} pool={pool} performanceFee={performanceFee} />
-  // )
-  // const [openPresentLockedStakeModal] = useModal(
-  //   <LockedStakeModal
-  //     currentBalance={stakingTokenBalance}
-  //     stakingToken={stakingToken}
-  //     stakingTokenBalance={stakingTokenBalance}
-  //   />
-  // )
 
   const renderStakeAction = () => {
     return accountHasSharesStaked ? (
-      <HasSharesActions pool={pool} stakingTokenBalance={stakingTokenBalance} performanceFee={performanceFee} />
+      <HasSharesActions
+        pool={pool}
+        stakingTokenBalance={stakingTokenBalance}
+        performanceFee={performanceFee}
+        handleReRenderToggle={handleReRenderToggle}
+      />
     ) : (
       <div className="mt-1 flexiblelocked-btn-group">
         <div className="stake-tele-block">
@@ -86,6 +82,7 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
         performanceFee={performanceFee}
         pool={pool}
         onDismiss={handleDismissModalFlexible}
+        handleReRenderToggle={handleReRenderToggle}
       />
     </>
   )
