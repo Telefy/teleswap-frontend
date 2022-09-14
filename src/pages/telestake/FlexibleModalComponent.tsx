@@ -56,6 +56,7 @@ function FlexibleModalComponent({
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
   const { stakingToken, earningTokenPrice, vaultKey } = pool
+
   const { account } = useActiveWeb3React()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [percent, setPercent] = useState(0)
@@ -78,10 +79,18 @@ function FlexibleModalComponent({
   const callOptions = {
     gasLimit: vaultPoolConfig[pool.vaultKey as VaultKey].gasLimit,
   }
+  // console.log({
+  //   principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
+  //   apr: +flexibleApy,
+  //   earningTokenPrice: earningTokenPrice || 0,
+  //   performanceFee,
+  //   compoundFrequency: 0,
+  // })
+
   const interestBreakdown = getInterestBreakdown({
     principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
     apr: +flexibleApy,
-    earningTokenPrice: earningTokenPrice || 0,
+    earningTokenPrice: telePrice || 0,
     performanceFee,
     compoundFrequency: 0,
   })

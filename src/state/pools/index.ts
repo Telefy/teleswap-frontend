@@ -9,38 +9,20 @@ import {
   SerializedCakeVault,
   SerializedLockedVaultUser,
 } from 'state/types'
-import { BIG_ZERO } from 'utils/bigNumber'
 import cakeAbi from 'abis/tele.json'
 import { getTelePoolAddress } from 'utils/addressHelpers'
 import { multicallv2 } from 'utils/multicall'
-// import { getBalanceNumber } from 'utils/formatBalance'
-// import priceHelperLpsConfig from 'constants/priceHelperLps'
-// import fetchFarms from '../farms/fetchFarms'
-// import getFarmsPrices from '../farms/getFarmsPrices'
-import {
-  fetchPoolsBlockLimits,
-  // fetchPoolsProfileRequirement,
-  // fetchPoolsStakingLimits,
-  fetchPoolsTotalStaking,
-} from './fetchPools'
+
 import {
   fetchPoolsAllowance,
   fetchUserBalances,
   fetchUserPendingRewards,
   fetchUserStakeBalances,
 } from './fetchPoolsUser'
-import { fetchVaultFees } from './fetchVaultPublic'
-import fetchVaultUser from './fetchVaultUser'
 import { getTokenPricesFromFarm } from './helpers'
 import { resetUserState } from 'state/global/actions'
 import { ChainId, ChainTokenMap, TELE_ADDRESS } from '@telefy/teleswap-core-sdk'
-import { useActiveWeb3React } from 'hooks/web3'
-import { Contract } from 'ethers'
 import { MulticallStake } from 'abis/types'
-import { Interface } from 'ethers/lib/utils'
-import { CallState, OptionalMethodInputs } from 'state/multicall/hooks'
-import { ListenerOptions } from 'state/multicall/actions'
-import { useMemo } from 'react'
 
 export const initialPoolVaultState = Object.freeze({
   totalShares: null,
@@ -138,83 +120,7 @@ export const fetchCakePoolUserDataAsync =
       })
     )
   }
-/*
-export const fetchPoolsPublicDataAsync = (currentBlockNumber: number) => async (dispatch, getState) => {
-  try {
-    const { chainId } = useActiveWeb3React()
-    const [totalStakings, profileRequirements, currentBlock] = await Promise.all([
-      fetchPoolsTotalStaking(),
-      fetchPoolsProfileRequirement(),
-      currentBlockNumber ? Promise.resolve(currentBlockNumber) : simpleRpcProvider.getBlockNumber(),
-    ])
 
-    const liveData = poolsConfig.map((pool) => {
-      const totalStaking = totalStakings.find((entry) => entry.sousId === pool.sousId)
-      const isPoolFinished = pool.isFinished
-
-      const stakingTokenAddress =
-        pool.stakingToken[chainId ? (chainId as keyof ChainTokenMap) : ChainId.MAINNET]?.address.toLowerCase() || null
-      // const stakingTokenPrice = stakingTokenAddress ? prices[stakingTokenAddress] : 0
-
-      const earningTokenAddress = pool.earningToken[chainId ? chainId : ChainId.MAINNET]?.address.toLowerCase() || null
-      // const earningTokenPrice = earningTokenAddress ? prices[earningTokenAddress] : 0
-      // const apr = !isPoolFinished
-      //   ? getPoolApr(
-      //       stakingTokenPrice,
-      //       earningTokenPrice,
-      //       getBalanceNumber(new BigNumber(totalStaking.totalStaked), pool.stakingToken.decimals),
-      //       parseFloat(pool.tokenPerBlock)
-      //     )
-      //   : 0
-
-      const profileRequirement = profileRequirements[pool.sousId] ? profileRequirements[pool.sousId] : undefined
-
-      return {
-        ...totalStaking,
-        profileRequirement,
-        // stakingTokenPrice,
-        // earningTokenPrice,
-        // apr,
-        isFinished: isPoolFinished,
-      }
-    })
-
-    dispatch(setPoolsPublicData(liveData))
-  } catch (error) {
-    console.error('[Pools Action] error when getting public data', error)
-  }
-}
-
-
-export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => {
-  const poolsWithStakingLimit = getState()
-    .pools.data.filter(({ stakingLimit }) => stakingLimit !== null && stakingLimit !== undefined)
-    .map((pool) => pool.sousId)
-
-  try {
-    const stakingLimits = await fetchPoolsStakingLimits(poolsWithStakingLimit)
-
-    const stakingLimitData = poolsConfig.map((pool) => {
-      if (poolsWithStakingLimit.includes(pool.sousId)) {
-        return { sousId: pool.sousId }
-      }
-      const { stakingLimit, numberBlocksForUserLimit } = stakingLimits[pool.sousId] || {
-        stakingLimit: BIG_ZERO,
-        numberBlocksForUserLimit: 0,
-      }
-      return {
-        sousId: pool.sousId,
-        stakingLimit: stakingLimit.toJSON(),
-        numberBlocksForUserLimit,
-      }
-    })
-
-    dispatch(setPoolsPublicData(stakingLimitData))
-  } catch (error) {
-    console.error('[Pools Action] error when getting staking limits', error)
-  }
-}
-*/
 interface LooseNumberObject {
   [key: string]: any
 }
@@ -265,13 +171,13 @@ export const updateUserPendingReward = createAsyncThunk<
 //   // return publicVaultInfo
 // })
 
-export const fetchCakeVaultFees = createAsyncThunk<
-  SerializedVaultFees,
-  { chainId: number; multicallContract: MulticallStake }
->('teleVault/fetchFees', async ({ chainId, multicallContract }) => {
-  const vaultFees = await fetchVaultFees(chainId, multicallContract)
-  return vaultFees
-})
+// export const fetchCakeVaultFees = createAsyncThunk<
+//   SerializedVaultFees,
+//   { chainId: number; multicallContract: MulticallStake }
+// >('teleVault/fetchFees', async ({ chainId, multicallContract }) => {
+//   const vaultFees = await fetchVaultFees(chainId, multicallContract)
+//   return vaultFees
+// })
 
 export const PoolsSlice = createSlice({
   name: 'Pools',
@@ -324,6 +230,10 @@ export const PoolsSlice = createSlice({
       userData.isLoading = false
       state.teleVault = { ...state.teleVault, userData }
     },
+    fetchCakeVaultFees: (state, action: PayloadAction<SerializedVaultFees>) => {
+      const fees = action.payload
+      state.teleVault = { ...state.teleVault, fees }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetUserState, (state) => {
@@ -335,12 +245,6 @@ export const PoolsSlice = createSlice({
       state.teleVault = { ...state.teleVault, userData: initialPoolVaultState.userData }
     })
     // Vault public data that updates frequently
-
-    // Vault fees
-    builder.addCase(fetchCakeVaultFees.fulfilled, (state, action: PayloadAction<SerializedVaultFees>) => {
-      const fees = action.payload
-      state.teleVault = { ...state.teleVault, fees }
-    })
     builder.addMatcher(
       isAnyOf(
         updateUserAllowance.fulfilled,
@@ -368,6 +272,7 @@ export const {
   fetchCakeVaultPublicData,
   fetchPoolsUserDataAsync,
   fetchCakeVaultUserData,
+  fetchCakeVaultFees,
 } = PoolsSlice.actions
 
 export default PoolsSlice.reducer

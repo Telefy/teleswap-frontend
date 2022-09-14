@@ -26,7 +26,7 @@ const Overview: React.FC<OverviewPropsType> = ({
 
   const lockedApy = useMemo(() => getLockedApy(duration), [getLockedApy, duration])
   const boostFactor = useMemo(() => getBoostFactor(duration), [getBoostFactor, duration])
-  const newLockedApy = useMemo(() => (newDuration && getLockedApy(newDuration)) || 0, [getLockedApy, newDuration])
+  const newLockedApy = useMemo(() => (newDuration && getLockedApy(newDuration)) || '0', [getLockedApy, newDuration])
   const newBoost = useMemo(() => (newDuration && getBoostFactor(newDuration)) || 0, [getBoostFactor, newDuration])
 
   const formattedRoi = useMemo(() => {
@@ -86,8 +86,7 @@ const Overview: React.FC<OverviewPropsType> = ({
             <div className="bold">{isValidDuration && unlockDate ? format(unlockDate, 'MMM do, yyyy HH:mm') : '-'}</div>
           </div>
           <div className="box-content-bottom-item">
-            <div>Estimated ROI :</div>{' '}
-            <DiffBalance value={formattedRoi} newValue={newFormattedRoi} decimals={2} suffix="" prefix="$" />
+            <div>Estimated ROI :</div> <DiffText value={formattedRoi} newValue={newFormattedRoi} prefix={'$'} />
           </div>
         </div>
       </div>

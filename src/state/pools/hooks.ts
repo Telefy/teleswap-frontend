@@ -1,15 +1,13 @@
 import { useEffect, useMemo } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state/hooks'
-import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import {
-  // fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
   fetchCakeVaultPublicData,
   fetchCakeVaultFees,
   fetchCakeVaultUserData,
-  // fetchPoolsStakingLimitsAsync,
+  setPoolsPublicData,
 } from '.'
 import { DeserializedPool, SerializedLockedVaultUser, VaultKey } from 'state/types'
 import {
@@ -18,9 +16,8 @@ import {
   makeVaultPoolByKey,
   poolsWithVaultSelector,
 } from './selectors'
-import { AnyAction } from '@reduxjs/toolkit'
 import { useTeleContract, useMulticallContract, useTelePoolContract } from 'hooks/useContract'
-import { AddressMap, ChainId, ChainTokenMap } from '@telefy/teleswap-core-sdk'
+import { ChainId, ChainTokenMap, TELE_ADDRESS } from '@telefy/teleswap-core-sdk'
 import { useActiveWeb3React } from 'hooks/web3'
 import { useMultipleContractMultipleData, useMultipleContractSingleData, useSingleCallResult } from '../multicall/hooks'
 import { getTelePoolAddress } from 'utils/addressHelpers'
@@ -33,23 +30,47 @@ import ERC20_ABI from 'abis/erc20.json'
 import SousChef_ABI from 'abis/sous-chef.json'
 import { arrayUniq } from 'utils/prices'
 import { ZERO_ADDRESS } from 'constants/misc'
+import { useTelePrice } from 'services/graph'
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
+  const { data: telePrice } = useTelePrice(chainId || ChainId.MAINNET)
 
-  useSlowRefreshEffect(
-    (currentBlock) => {
-      const fetchPoolsData = async () => {
-        batch(() => {
-          // dispatch(fetchPoolsPublicDataAsync(currentBlock))
-          // dispatch(fetchPoolsStakingLimitsAsync())
-        })
+  useEffect(() => {
+    const liveData = poolsConfig.map((pool) => {
+      const totalStaking = { totalStaked: '0' }
+      const isPoolFinished = pool.isFinished
+
+      const stakingTokenAddress =
+        pool.stakingToken[(chainId as keyof ChainTokenMap) || ChainId.MAINNET]?.address.toLowerCase() || null
+      const stakingTokenPrice =
+        stakingTokenAddress === TELE_ADDRESS[chainId || ChainId.MAINNET].toLowerCase() ? telePrice : 0
+
+      const earningTokenAddress =
+        pool.earningToken[(chainId as keyof ChainTokenMap) || ChainId.MAINNET]?.address.toLowerCase() || null
+      const earningTokenPrice =
+        earningTokenAddress === TELE_ADDRESS[chainId || ChainId.MAINNET].toLowerCase() ? telePrice : 0
+      const apr = 0
+
+      const profileRequirement = {
+        required: false,
+        thresholdPoints: BIG_ZERO,
       }
 
-      fetchPoolsData()
-    },
-    [dispatch]
-  )
+      return {
+        ...totalStaking,
+        profileRequirement,
+        stakingTokenPrice,
+        earningTokenPrice,
+        apr,
+        isFinished: isPoolFinished,
+      }
+    })
+    batch(() => {
+      dispatch(setPoolsPublicData(liveData))
+    })
+  }, [chainId, dispatch, telePrice])
 }
 
 export const useFetchUserPools = (account: string, chainId: number) => {
@@ -84,8 +105,7 @@ export const usePoolsPageFetch = () => {
   const dispatch = useDispatch()
   const teleContract = useTeleContract()
   const telePoolContract = useTelePoolContract()
-  const multicallContract = useMulticallContract(true)
-  // useFetchPublicPoolsData()
+  useFetchPublicPoolsData()
 
   // ---- fetchCakeVaultPublicData
   const vaultPoolContractAddress = getTelePoolAddress(chainId || ChainId.MAINNET)
@@ -93,6 +113,9 @@ export const usePoolsPageFetch = () => {
   const { result: sharesCall } = useSingleCallResult(telePoolContract, 'totalShares', undefined)
   const { result: totalLockedAmountCall } = useSingleCallResult(telePoolContract, 'totalLockedAmount', undefined)
   const { result: totalCakeInVaultCall } = useSingleCallResult(teleContract, 'balanceOf', [vaultPoolContractAddress])
+  const { result: performanceFeeCall } = useSingleCallResult(telePoolContract, 'performanceFee', undefined)
+  const { result: withdrawFeeCall } = useSingleCallResult(telePoolContract, 'withdrawFee', undefined)
+  const { result: withdrawFeePeriodCall } = useSingleCallResult(telePoolContract, 'withdrawFeePeriod', undefined)
 
   // ------- fetchPoolsUserDataAsync
   const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)
@@ -257,18 +280,27 @@ export const usePoolsPageFetch = () => {
       dispatch(fetchPoolsUserDataAsync(userData))
       dispatch(fetchCakeVaultUserData(fetchVaultUserInfo))
     })
-  }, [fetchVaultUserInfo, sharePriceCall, sharesCall, totalCakeInVaultCall, totalLockedAmountCall, userData])
+  }, [dispatch, fetchVaultUserInfo, sharePriceCall, sharesCall, totalCakeInVaultCall, totalLockedAmountCall, userData])
 
   useEffect(() => {
+    const performanceFeeAsBigNumber =
+      performanceFeeCall && performanceFeeCall.length ? new BigNumber(performanceFeeCall[0].toString()) : BIG_ZERO
+    const withdrawFeeAsBigNumber =
+      withdrawFeeCall && withdrawFeeCall.length ? new BigNumber(withdrawFeeCall[0].toString()) : BIG_ZERO
+    const withdrawFeePeriodAsBigNumber =
+      withdrawFeePeriodCall && withdrawFeePeriodCall.length
+        ? new BigNumber(withdrawFeePeriodCall[0].toString())
+        : BIG_ZERO
     batch(() => {
       dispatch(
         fetchCakeVaultFees({
-          chainId: chainId || ChainId.MAINNET,
-          multicallContract,
+          performanceFee: performanceFeeAsBigNumber.toNumber(),
+          withdrawalFee: withdrawFeeAsBigNumber.toNumber(),
+          withdrawalFeePeriod: withdrawFeePeriodAsBigNumber.toNumber(),
         })
       )
     })
-  }, [dispatch])
+  }, [dispatch, performanceFeeCall, withdrawFeeCall, withdrawFeePeriodCall])
 }
 
 export const useCakeVault = () => {

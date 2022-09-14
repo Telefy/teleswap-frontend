@@ -27,7 +27,6 @@ export const LockedStakeButton: FC<LockedModalBodyButtonPropsType> = ({
           isOverMax: duration > MAX_LOCK_DURATION,
         }
   }, [validator, currentBalance, lockedAmount, duration])
-  console.log(isValidDuration, isValidAmount)
   return (
     <div className="footer-buttons">
       <Button disabled={pendingTx || !(isValidAmount && isValidDuration)} onClick={handleConfirmClick}>
