@@ -45,7 +45,7 @@ const PoolStatsInfo: React.FC<ExpandedFooterProps> = ({ pool, account, showTotal
           />
         )}
         {vaultKey && <TotalLocked totalLocked={totalLockedAmount || BIG_ZERO} lockedToken={stakingToken} />}
-        {vaultKey && <DurationAvg />}
+        {/* {vaultKey && <DurationAvg />} */}
         {vaultKey && <PerformanceFee userData={userData} performanceFeeAsDecimal={performanceFeeAsDecimal} />}
       </div>
       <div className="box-link">

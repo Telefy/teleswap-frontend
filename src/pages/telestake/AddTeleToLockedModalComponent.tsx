@@ -32,7 +32,7 @@ const RenewDuration = ({
       {!checkedState && (
         <div>
           {
-            'Adding more CAKE will renew your lock, setting it to remaining duration. Due to shorter lock period, benefits decrease. To keep similar benefits, extend your lock.'
+            'Adding more TELE will renew your lock, setting it to remaining duration. Due to shorter lock period, benefits decrease. To keep similar benefits, extend your lock.'
           }
         </div>
       )}
@@ -74,7 +74,7 @@ function AddTeleToLockedModalComponent({
   const remainingDuration = differenceInSeconds(new Date(convertTimeToSeconds(lockEndTime as string)), new Date())
   const passedDuration = differenceInSeconds(new Date(), new Date(convertTimeToSeconds(lockStartTime as string)))
 
-  // if you locked for 1 week, then add cake without renew the extension, it's possible that remainingDuration + passedDuration less than 1 week.
+  // if you locked for 1 week, then add tele without renew the extension, it's possible that remainingDuration + passedDuration less than 1 week.
   const atLeastOneWeekNewDuration = Math.max(ONE_WEEK_DEFAULT + MIN_DURATION_BUFFER, remainingDuration + passedDuration)
 
   const prepConfirmArg = useCallback(() => {

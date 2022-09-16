@@ -32,6 +32,15 @@ import { arrayUniq } from 'utils/prices'
 import { ZERO_ADDRESS } from 'constants/misc'
 import { useTelePrice } from 'services/graph'
 
+export const useTelePoolBalance = (chainId: number): BigNumber => {
+  const teleContract = useTeleContract()
+  const vaultPoolContractAddress = getTelePoolAddress(chainId || ChainId.MAINNET)
+  const { result: totalCakeInVaultCall } = useSingleCallResult(teleContract, 'balanceOf', [vaultPoolContractAddress])
+  return totalCakeInVaultCall && totalCakeInVaultCall.length
+    ? new BigNumber(totalCakeInVaultCall[0].toString())
+    : BIG_ZERO
+}
+
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
@@ -103,16 +112,14 @@ export const usePoolsWithVault = (chainId: number) => useSelector(poolsWithVault
 export const usePoolsPageFetch = () => {
   const { account, chainId } = useActiveWeb3React()
   const dispatch = useDispatch()
-  const teleContract = useTeleContract()
   const telePoolContract = useTelePoolContract()
   useFetchPublicPoolsData()
 
   // ---- fetchCakeVaultPublicData
-  const vaultPoolContractAddress = getTelePoolAddress(chainId || ChainId.MAINNET)
   const { result: sharePriceCall } = useSingleCallResult(telePoolContract, 'getPricePerFullShare', undefined)
   const { result: sharesCall } = useSingleCallResult(telePoolContract, 'totalShares', undefined)
   const { result: totalLockedAmountCall } = useSingleCallResult(telePoolContract, 'totalLockedAmount', undefined)
-  const { result: totalCakeInVaultCall } = useSingleCallResult(teleContract, 'balanceOf', [vaultPoolContractAddress])
+  const { result: totalCakeInVaultCall } = useSingleCallResult(telePoolContract, 'balanceOf', undefined)
   const { result: performanceFeeCall } = useSingleCallResult(telePoolContract, 'performanceFee', undefined)
   const { result: withdrawFeeCall } = useSingleCallResult(telePoolContract, 'withdrawFee', undefined)
   const { result: withdrawFeePeriodCall } = useSingleCallResult(telePoolContract, 'withdrawFeePeriod', undefined)

@@ -77,7 +77,7 @@ const Overview: React.FC<OverviewPropsType> = ({
               value={_toNumber(boostFactor)}
               newValue={_toNumber(newBoost)}
               decimals={2}
-              suffix=""
+              suffix="x"
               prefix=""
             />
           </div>

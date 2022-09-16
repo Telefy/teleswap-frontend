@@ -81,7 +81,8 @@ const LockedApyComponent: React.FC<LockedStakingApyPropsType> = ({ stakingToken,
             </div>
           )}
           <div className="box-content-top-item">
-            <div>Recent TELE Profit : </div> <div className="bold">{earningTokenBalance.toFixed(5)}</div>
+            <div>Recent TELE Profit : </div>{' '}
+            <div className="bold">{earningTokenBalance < 0 ? 0 : earningTokenBalance.toFixed(5)}</div>
           </div>
           {position === VaultPosition.LockedEnd && (
             <div className="box-content-top-item">

@@ -10,7 +10,12 @@ interface DiffTextPropsType {
 
 const DiffText: React.FC<DiffTextPropsType> = ({ value, newValue, prefix }) => {
   prefix = prefix === undefined ? '' : prefix
-  if (isUndefinedOrNull(newValue) || isUndefinedOrNull(value) || value === newValue) {
+  if (
+    isUndefinedOrNull(newValue) ||
+    isUndefinedOrNull(value) ||
+    value === newValue ||
+    parseFloat(newValue || '0') === 0
+  ) {
     return (
       <div className="bold">
         {prefix}

@@ -22,7 +22,7 @@ import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 import { ButtonLight, ButtonSecondary } from 'components/Button'
 import { ConvertToLockButton } from 'components/Vault/ConvertToLockButton'
 import { Link } from 'react-router-dom'
-import { usePoolsPageFetch, useUpdateCakeVaultUserData, useVaultPoolByKey } from 'state/pools/hooks'
+import { usePoolsPageFetch, useTelePoolBalance, useUpdateCakeVaultUserData, useVaultPoolByKey } from 'state/pools/hooks'
 import { fetchCakeVaultUserData } from 'state/pools'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useTelePoolContract } from 'hooks/useContract'
@@ -63,6 +63,8 @@ function FlexibleModalComponent({
   const [loadUserData, setLoadUserData] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
   const { data: telePrice } = useTelePrice(chainId || ChainId.MAINNET)
+  const poolBal = useTelePoolBalance(chainId || ChainId.MAINNET)
+  // const poolBal = new BigNumber('2000000000000000000')
   const telePriceAsBigNumber = new BigNumber(telePrice)
   const usdValueStaked = new BigNumber(stakeAmount).times(telePriceAsBigNumber)
   const formattedUsdValueStaked =
@@ -86,6 +88,7 @@ function FlexibleModalComponent({
   //   performanceFee,
   //   compoundFrequency: 0,
   // })
+  console.log(poolBal.toJSON(), 'poolBal')
 
   const interestBreakdown = getInterestBreakdown({
     principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
@@ -119,7 +122,7 @@ function FlexibleModalComponent({
     setPercent(sliderPercent)
   }
   const handleWithdrawal = async () => {
-    // trigger withdrawAll function if the withdrawal will leave 0.00001 CAKE or less
+    // trigger withdrawAll function if the withdrawal will leave 0.00001 TELE or less
     const isWithdrawingAll = stakingMax.minus(convertedStakeAmount).lte(MIN_AMOUNT)
     if (vaultPoolContract) {
       const receipt = await fetchWithCatchTxError(() => {
@@ -271,7 +274,24 @@ function FlexibleModalComponent({
               {cakeAsNumberBalance ? (
                 <ConvertToLockButton stakingToken={stakingToken} currentStakedAmount={cakeAsNumberBalance} />
               ) : null}
-              <Button onClick={handleConfirmClick} disabled={pendingTx}>
+              {isRemovingStake && poolBal.lt(convertedStakeAmount) && (
+                <>
+                  <div>
+                    Sorry! Tele Pool currently has lower amount of balance than you are trying to withdraw. Please try
+                    with lower amount or try after sometime
+                  </div>
+                </>
+              )}
+              <Button
+                onClick={handleConfirmClick}
+                disabled={
+                  pendingTx ||
+                  !stakeAmount ||
+                  parseFloat(stakeAmount) === 0 ||
+                  stakingMax.lt(convertedStakeAmount) ||
+                  poolBal.lt(convertedStakeAmount)
+                }
+              >
                 {pendingTx ? 'Confirming...' : 'Confirm'}
               </Button>
               {!isRemovingStake && (
