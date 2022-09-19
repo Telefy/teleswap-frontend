@@ -5,18 +5,36 @@ import isUndefinedOrNull from 'utils/isUndefinedOrNull'
 interface DiffTextPropsType {
   value: string
   newValue?: string
+  prefix?: string
 }
 
-const DiffText: React.FC<DiffTextPropsType> = ({ value, newValue }) => {
-  if (isUndefinedOrNull(newValue) || isUndefinedOrNull(value) || value === newValue) {
-    return <div className="bold">{value || '-'}</div>
+const DiffText: React.FC<DiffTextPropsType> = ({ value, newValue, prefix }) => {
+  prefix = prefix === undefined ? '' : prefix
+  if (
+    isUndefinedOrNull(newValue) ||
+    isUndefinedOrNull(value) ||
+    value === newValue ||
+    parseFloat(newValue || '0') === 0
+  ) {
+    return (
+      <div className="bold">
+        {prefix}
+        {value || '-'}
+      </div>
+    )
   }
 
   return (
     <>
-      <div className="bold">{value}</div>
+      <div className="bold">
+        {prefix}
+        {value}
+      </div>
       {`->`}
-      <div className="bold">{newValue}</div>
+      <div className="bold">
+        {prefix}
+        {newValue}
+      </div>
     </>
   )
 }

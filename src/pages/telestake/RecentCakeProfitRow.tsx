@@ -1,24 +1,25 @@
 /* eslint-disable react/react-in-jsx-scope */
-// import { usePriceCakeBusd } from 'state/farms/hooks'
+import { ChainId } from '@telefy/teleswap-core-sdk'
+import { formatNumberDecimals, toAmount } from 'functions'
 import { useActiveWeb3React } from 'hooks/web3'
+import { useTelePrice } from 'services/graph'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedLockedVaultUser, DeserializedPool, VaultKey } from 'state/types'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getCakeVaultEarnings } from './helpers'
 
 const RecentCakeProfitCountdownRow = ({ pool }: { pool: DeserializedPool }) => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { pricePerFullShare, userData } = useVaultPoolByKey(pool.vaultKey as VaultKey)
   const { teleAtLastUserAction, userShares, currentOverdueFee, currentPerformanceFee } =
     userData as DeserializedLockedVaultUser
-  // const cakePriceBusd = usePriceCakeBusd()
+  const { data: telePrice } = useTelePrice(chainId || ChainId.MAINNET)
   const { hasAutoEarnings, autoCakeToDisplay } = getCakeVaultEarnings(
     account || '',
     teleAtLastUserAction,
     userShares,
     pricePerFullShare || BIG_ZERO,
-    // cakePriceBusd.toNumber(),
-    0.2,
+    telePrice,
     currentPerformanceFee.plus(currentOverdueFee)
   )
 
@@ -28,7 +29,8 @@ const RecentCakeProfitCountdownRow = ({ pool }: { pool: DeserializedPool }) => {
 
   return (
     <div className="box-content-top-item">
-      <div>Recent TELE Profit :</div> <div className="bold">{hasAutoEarnings && autoCakeToDisplay}</div>
+      <div>Recent TELE Profit :</div>{' '}
+      <div className="bold">{hasAutoEarnings && formatNumberDecimals(autoCakeToDisplay, 5)}</div>
     </div>
   )
 }

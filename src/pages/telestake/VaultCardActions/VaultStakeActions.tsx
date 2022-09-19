@@ -15,6 +15,7 @@ interface VaultStakeActionsProps {
   stakingTokenBalance: BigNumber
   accountHasSharesStaked: boolean
   performanceFee: number
+  handleReRenderToggle: VoidFunction
 }
 
 const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
@@ -22,6 +23,7 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
   stakingTokenBalance,
   accountHasSharesStaked,
   performanceFee,
+  handleReRenderToggle,
 }) => {
   const { stakingToken, userDataLoaded } = pool
 
@@ -35,6 +37,7 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
     setModalLockedlOpen(false)
     showHtmlScroll()
   }, [setModalLockedlOpen])
+
   const onFlexibleButtonClick = () => {
     hideHtmlScroll()
     setModalFlexiblelOpen(true)
@@ -46,7 +49,12 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
 
   const renderStakeAction = () => {
     return accountHasSharesStaked ? (
-      <HasSharesActions pool={pool} stakingTokenBalance={stakingTokenBalance} performanceFee={performanceFee} />
+      <HasSharesActions
+        pool={pool}
+        stakingTokenBalance={stakingTokenBalance}
+        performanceFee={performanceFee}
+        handleReRenderToggle={handleReRenderToggle}
+      />
     ) : (
       <div className="mt-1 flexiblelocked-btn-group">
         <div className="stake-tele-block">
@@ -84,6 +92,7 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
         performanceFee={performanceFee}
         pool={pool}
         onDismiss={handleDismissModalFlexible}
+        handleReRenderToggle={handleReRenderToggle}
       />
     </>
   )

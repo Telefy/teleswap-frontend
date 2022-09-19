@@ -5,7 +5,7 @@ import useAvgLockDuration from 'hooks/useAvgLockDuration'
 import { Token } from '@telefy/teleswap-core-sdk'
 import Button from 'farm-components/Button'
 import { useVaultApy } from 'hooks/useVaultApy'
-import ConvertLockedModalComponent from 'pages/telestake/ConvertLockedModalComponent'
+import ExtendLockedModalComponent from 'pages/telestake/ExtendLockedModalComponent'
 
 export const ConvertToLockButton: FC<{ stakingToken: Token; currentStakedAmount: number }> = ({
   stakingToken,
@@ -25,9 +25,9 @@ export const ConvertToLockButton: FC<{ stakingToken: Token; currentStakedAmount:
       <div className="lock-stake-info">
         <p>
           <span className="alert-icon">&#9888;</span> Lock stacking offers higher APY while providing other benefits.{' '}
-          <a className="link">
+          {/* <a className="link">
             Learn More <span>&gt;&gt;</span>
-          </a>
+          </a> */}
         </p>
         <Button onClick={openConvetToLockModal}>Convert to Lock</Button>
         <p>
@@ -35,7 +35,7 @@ export const ConvertToLockButton: FC<{ stakingToken: Token; currentStakedAmount:
           benefits are coming soon.
         </p>
       </div>
-      <ConvertLockedModalComponent
+      <ExtendLockedModalComponent
         isOpen={convertToLockModelIsOpen}
         onDismiss={handleDismissModalConvertToLock}
         modalTitle={'Convert to Lock'}

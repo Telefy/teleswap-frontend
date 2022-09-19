@@ -67,6 +67,15 @@ export const getCakeVaultEarnings = (
 
   const autoUsdProfit = autoCakeProfit.times(earningTokenPrice)
   const autoUsdToDisplay = autoUsdProfit.gte(0) ? getBalanceNumber(autoUsdProfit, 18) : 0
+  // console.log(userShares.toJSON(), 'userShares')
+  // console.log(pricePerFullShare.toJSON(), 'pricePerFullShare') //
+  // console.log(earningTokenPrice, 'earningTokenPrice')
+  // console.log(cakeAsBigNumber.toJSON(), 'cakeAsBigNumber') //
+  // console.log(cakeAtLastUserAction.toJSON(), 'cakeAtLastUserAction')
+  // console.log(fee?.toJSON(), 'fee') //
+  // console.log(autoCakeProfit.toJSON(), 'autoCakeProfit') //
+  // console.log(autoCakeToDisplay, 'autoCakeToDisplay')
+  // console.log(autoUsdToDisplay, 'autoUsdToDisplay')
   return { hasAutoEarnings, autoCakeToDisplay, autoUsdToDisplay }
 }
 

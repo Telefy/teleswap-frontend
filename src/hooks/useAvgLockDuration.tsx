@@ -8,23 +8,14 @@ import { BIG_ONE, BIG_TEN, BIG_ZERO } from 'utils/bigNumber'
 import formatSecondsToWeeks from 'utils/formatSecondsToWeeks'
 
 export default function useAvgLockDuration() {
-  const { totalLockedAmount, totalShares, totalCakeInVault, pricePerFullShare } = useCakeVault()
+  // console.log(
+  //   totalLockedAmount?.toJSON(),
+  //   totalShares?.toJSON(),
+  //   totalCakeInVault?.toJSON(),
+  //   pricePerFullShare?.toJSON()
+  // )
 
-  const avgLockDurationsInSeconds = useMemo(() => {
-    const flexibleCakeAmount = totalCakeInVault?.minus(totalLockedAmount || BIG_ZERO)
-    const flexibleCakeShares = flexibleCakeAmount?.div(pricePerFullShare || BIG_ONE).times(BIG_TEN.pow(18))
-    const lockedCakeBoostedShares = totalShares?.minus(flexibleCakeShares || BIG_ZERO)
-    const lockedCakeOriginalShares = totalLockedAmount?.div(pricePerFullShare || BIG_ONE).times(BIG_TEN.pow(18))
-    const avgBoostRatio = lockedCakeBoostedShares?.div(
-      lockedCakeOriginalShares ? (lockedCakeOriginalShares.isZero() ? BIG_ONE : lockedCakeOriginalShares) : BIG_ONE
-    )
-    if (!totalLockedAmount) return BIG_ZERO
-    return avgBoostRatio
-      ?.minus(1)
-      .times(new BigNumber(DURATION_FACTOR.toString()))
-      .div(new BigNumber(BOOST_WEIGHT.toString()).div(BIG_TEN.pow(12)))
-      .toFixed(0)
-  }, [totalCakeInVault, totalLockedAmount, pricePerFullShare, totalShares])
+  const avgLockDurationsInSeconds = 0
 
   const avgLockDurationsInWeeks = useMemo(
     () => formatSecondsToWeeks(avgLockDurationsInSeconds),
@@ -32,7 +23,7 @@ export default function useAvgLockDuration() {
   )
 
   return {
-    avgLockDurationsInWeeks,
+    avgLockDurationsInWeeks: avgLockDurationsInWeeks.length < 1 ? '<1 week' : avgLockDurationsInWeeks,
     avgLockDurationsInSeconds: _toNumber(avgLockDurationsInSeconds),
   }
 }

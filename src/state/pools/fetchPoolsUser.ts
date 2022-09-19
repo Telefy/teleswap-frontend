@@ -16,7 +16,7 @@ interface LooseStringObject {
 interface LooseNumberObject {
   [key: string]: any
 }
-// Pool 0, Cake / Cake is a different kind of contract (master chef)
+// Pool 0, Tele / Tele is a different kind of contract (master chef)
 // BNB pools use the native BNB token (wrapping ? unwrapping is done at the contract level)
 const nonBnbPools = poolsConfig
 const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)

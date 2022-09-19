@@ -8,6 +8,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import { BOOST_WEIGHT, DURATION_FACTOR, MAX_LOCK_DURATION } from 'constants/pools'
 import { useAverageBlockTime } from 'services/graph'
 import { useActiveWeb3React } from './web3'
+import { BIG_NUMBER_FMT } from 'constants/misc'
 
 // default
 const DEFAULT_PERFORMANCE_FEE_DECIMALS = 2
@@ -27,7 +28,7 @@ const getFlexibleApy = (
 
 const _getBoostFactor = (boostWeight: BigNumber, duration: number, durationFactor: BigNumber) => {
   return FixedNumber.from(boostWeight)
-    .mulUnsafe(FixedNumber.from(Math.max(duration, 0)))
+    .mulUnsafe(FixedNumber.from(Math.max(duration, 0).toLocaleString().replace(/,/g, '')))
     .divUnsafe(FixedNumber.from(durationFactor))
     .divUnsafe(FixedNumber.from(PRECISION_FACTOR))
 }
@@ -45,8 +46,11 @@ export function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: numbe
   const { data: averageBlockTime } = useAverageBlockTime({ chainId })
   // console.log(totalShares, pricePerFullShare, performanceFeeAsDecimal, averageBlockTime)
 
-  const totalSharesAsEtherBN = useMemo(() => FixedNumber.from(totalShares.toString()), [totalShares])
-  const pricePerFullShareAsEtherBN = useMemo(() => FixedNumber.from(pricePerFullShare.toString()), [pricePerFullShare])
+  const totalSharesAsEtherBN = useMemo(() => FixedNumber.from(totalShares.toFormat(BIG_NUMBER_FMT)), [totalShares])
+  const pricePerFullShareAsEtherBN = useMemo(
+    () => FixedNumber.from(pricePerFullShare.toFormat(BIG_NUMBER_FMT)),
+    [pricePerFullShare]
+  )
 
   const totalCakePoolEmissionPerYear = useMemo(() => {
     const BLOCKS_PER_YEAR = (60 / (averageBlockTime || 1)) * 60 * 24 * 365
@@ -67,7 +71,7 @@ export function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: numbe
   const boostFactor = useMemo(() => _getBoostFactor(BOOST_WEIGHT, duration, DURATION_FACTOR), [duration])
 
   const lockedApy = useMemo(() => {
-    return flexibleApy && getLockedApy(flexibleApy, boostFactor).toString()
+    return flexibleApy ? getLockedApy(flexibleApy, boostFactor).toString() : '0'
   }, [boostFactor, flexibleApy])
 
   const getBoostFactor = useCallback(

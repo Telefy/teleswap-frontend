@@ -1,73 +1,20 @@
-import { t, Trans } from '@lingui/macro'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'farm-components/Button'
 import Typography from 'farm-components/Typography'
-import { Chef, PairType } from 'features/onsen/enum'
-import useFarmRewards from 'hooks/useFarmRewards'
-import useFuse from 'hooks/useFuse'
 import { TridentBody, TridentHeader } from 'layouts/Trident'
-import { useActiveWeb3React } from 'hooks/web3'
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useState } from 'react'
 import { useIsDarkMode } from '../../state/user/hooks'
-import Icon from '../../assets/svg/teleicon.svg'
-import styled from 'styled-components'
-import { Info } from 'react-feather'
-import { Input } from 'reactstrap'
-import { useWalletModalToggle } from '../../state/application/hooks'
 import StakeBodyComponent from './StakeBodyComponent'
-import LockedModalComponent from './LockedModalComponent'
-import ConvertLockedModalComponent from './ConvertLockedModalComponent'
-import FlexibleModalComponent from './FlexibleModalComponent'
-import StakeModalComponent from './StakeModalComponent'
-import UnstakeModalComponent from './UnstakeModalComponent'
-import { useVaultApprove, useCheckVaultApprovalStatus } from '../../hooks/useApprove'
-import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
-
-const StyledInfo = styled(Info)`
-  opacity: 0.4;
-  color: ${({ theme }) => theme.text1};
-  height: 16px;
-  width: 16px;
-  :hover {
-    opacity: 0.8;
-  }
-`
+import { usePoolsPageFetch } from 'state/pools/hooks'
 
 export default function TeleStake(): JSX.Element {
   const { i18n } = useLingui()
 
-  const param = useLocation().search
-  const router = new URLSearchParams(param)
-
-  const type = !router.get('filter') ? 'all' : (router.get('filter') as string)
   const darkMode = useIsDarkMode()
-
-  const [modalFlexible, setFlexibleModal] = React.useState(false)
-  const [modalLocked, setLockedModal] = React.useState(false)
-  const [modalConvertLocked, setConvertLockedModal] = React.useState(false)
-  const [isStakedAlready, setIsStakedAlready] = useState(false)
-  const [isConvertToLock, setIsConvertToLock] = useState(false)
-  const [modalStake, setModalStake] = React.useState(false)
-  const [modalUnStake, setModalUnStake] = React.useState(false)
-  const flexibleModal = () => {
-    setFlexibleModal(!modalFlexible)
-    setIsStakedAlready(true)
+  const [reRenderToggle, setReRenderToggle] = useState(true)
+  const handleReRenderToggle = () => {
+    setReRenderToggle(!reRenderToggle)
   }
-  const convertLockedModal = () => {
-    setConvertLockedModal(!modalConvertLocked)
-    setFlexibleModal(false)
-    setIsStakedAlready(false)
-  }
-  // const lockedModal = () => setLockedModal(!modalLocked)
-  const toggleWalletModal = useWalletModalToggle()
-  const [isFlexibleLockedBoxShown, setFlexibleLockedBoxShown] = useState(false)
-  const stakeModal = () => setModalStake(!modalStake)
-  const unStakeModal = () => setModalUnStake(!modalUnStake)
-  const enableButtonHandler = () => {
-    setFlexibleLockedBoxShown(!isFlexibleLockedBoxShown)
-  }
-
   // Integration code starts
   usePoolsPageFetch()
 
@@ -100,15 +47,7 @@ export default function TeleStake(): JSX.Element {
       </TridentHeader>
       {/* <div className={darkMode ? 'divider-dark' : 'divider-light'}></div> */}
       <TridentBody>
-        <StakeBodyComponent
-          isStakedAlready={isStakedAlready}
-          toggleWalletModal={toggleWalletModal}
-          flexibleModal={flexibleModal}
-          setLockedModal={setLockedModal}
-          unStakeModal={unStakeModal}
-          stakeModal={stakeModal}
-          convertLockedModal={convertLockedModal}
-        />
+        <StakeBodyComponent handleReRenderToggle={handleReRenderToggle} />
       </TridentBody>
     </>
   )

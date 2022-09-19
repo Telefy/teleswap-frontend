@@ -32,3 +32,13 @@ export const ZERO_PERCENT = new Percent('0')
 export const ONE_HUNDRED_PERCENT = new Percent('1')
 export const FAST_INTERVAL = 10000
 export const SLOW_INTERVAL = 60000
+export const BIG_NUMBER_FMT = {
+  prefix: '',
+  decimalSeparator: '.',
+  groupSeparator: '',
+  groupSize: 3,
+  secondaryGroupSize: 0,
+  fractionGroupSeparator: '',
+  fractionGroupSize: 0,
+  suffix: '',
+}
