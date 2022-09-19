@@ -15,7 +15,7 @@ function StakingApyComponent() {
         <div className="box-content-top-item">
           <div>Locked Staking APY :</div>{' '}
           <div className="bold">
-            Up to&nbsp;
+            <span className="font-normal">Up to&nbsp;</span>
             {parseFloat(lockedApy || '0').toFixed(2)}%
           </div>
         </div>

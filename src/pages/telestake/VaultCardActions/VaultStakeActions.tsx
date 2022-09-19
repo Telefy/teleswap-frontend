@@ -8,6 +8,7 @@ import { useCallback, useState } from 'react'
 import LockedModalComponent from '../LockedModalComponent'
 import FlexibleModalComponent from '../FlexibleModalComponent'
 import HasSharesActions from './HasShareActions'
+import { hideHtmlScroll, showHtmlScroll } from 'utils/scrollHelper'
 
 interface VaultStakeActionsProps {
   pool: DeserializedPool
@@ -29,13 +30,22 @@ const VaultStakeActions: React.FC<VaultStakeActionsProps> = ({
   const [modalFlexibleOpen, setModalFlexiblelOpen] = useState(false)
   const handleDismissModalFlexible = useCallback(() => {
     setModalFlexiblelOpen(false)
+    showHtmlScroll()
   }, [setModalFlexiblelOpen])
   const [modalLockedOpen, setModalLockedlOpen] = useState(false)
   const handleDismissModalLocked = useCallback(() => {
     setModalLockedlOpen(false)
+    showHtmlScroll()
   }, [setModalLockedlOpen])
-  const onFlexibleButtonClick = () => setModalFlexiblelOpen(true)
-  const onLockedButtonClick = () => setModalLockedlOpen(true)
+
+  const onFlexibleButtonClick = () => {
+    hideHtmlScroll()
+    setModalFlexiblelOpen(true)
+  }
+  const onLockedButtonClick = () => {
+    hideHtmlScroll()
+    setModalLockedlOpen(true)
+  }
 
   const renderStakeAction = () => {
     return accountHasSharesStaked ? (

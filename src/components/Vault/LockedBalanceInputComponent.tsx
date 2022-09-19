@@ -82,11 +82,13 @@ const LockedBalanceInputComponent: React.FC<PropsType> = ({
               <img src={Icon} alt="teleicon" width={20} /> {stakingSymbol}
             </div>
             <div className="locked-content-right-item">
-              <NumericalInput
-                className="token-amount-input w100"
-                value={lockedAmount}
-                onUserInput={handleStakeInputChange}
-              />
+              <div className="tele-input">
+                <NumericalInput
+                  className="token-amount-input w100"
+                  value={lockedAmount}
+                  onUserInput={handleStakeInputChange}
+                />
+              </div>
               <div>
                 <div className="text-under">{`~${usedValueStaked || 0} USD`}</div>
                 {userNotEnoughTele && <div className="text-under bold">{notEnoughErrorMessage}</div>}

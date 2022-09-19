@@ -76,6 +76,7 @@ p {
 :after, :before {
   --tw-content: ""}
 html {
+  overflow-y: hidden;
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
   tab-size: 4;
@@ -4765,12 +4766,11 @@ button.close {
   border: 0;
   -webkit-appearance: none;
 }
-.modal-open {
-  overflow: hidden;
-}
+
 .modal {
   display: none;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   position: fixed;
   top: 0;
   right: 0;
@@ -5179,7 +5179,7 @@ padding: 15px;
   width: 350px!important;
 }
 .main-header a{
-  font-size: 12px;
+  font-size: 10px;
   padding: 5px 8px;
 }
 .main-header div{
@@ -5243,7 +5243,7 @@ padding: 15px;
   font-size: 20px!important;
 }
 .box-content-top-item div {
-  font-size: 14px!important;
+  font-size: 11px!important;
 }
 }
 .locked Button{
@@ -5586,6 +5586,10 @@ input[type=range].range-slider::-webkit-slider-runnable-track {
 }
   .z-2{
     z-index: 2!important;
+  }
+  .font-normal{
+    font-weight: normal;
+    font-size: 14px;
   }
 /*# sourceMappingURL=26b848d58538f4f7.css.map*/
 
