@@ -63,8 +63,8 @@ function FlexibleModalComponent({
   const [loadUserData, setLoadUserData] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
   const { data: telePrice } = useTelePrice(chainId || ChainId.MAINNET)
-  const poolBal = useTelePoolBalance(chainId || ChainId.MAINNET)
-  // const poolBal = new BigNumber('2000000000000000000')
+  // const poolBal = useTelePoolBalance(chainId || ChainId.MAINNET)
+  const poolBal = new BigNumber('2000000000000000000')
   const telePriceAsBigNumber = new BigNumber(telePrice)
   const usdValueStaked = new BigNumber(stakeAmount).times(telePriceAsBigNumber)
   const formattedUsdValueStaked =
@@ -276,9 +276,11 @@ function FlexibleModalComponent({
               ) : null}
               {isRemovingStake && poolBal.lt(convertedStakeAmount) && (
                 <>
-                  <div>
-                    Sorry! Tele Pool currently has lower amount of balance than you are trying to withdraw. Please try
-                    with lower amount or try after sometime
+                  <div className="warning-block">
+                    <div className="warning-content">
+                      Sorry! Tele Pool currently has lower amount of balance than you are trying to withdraw. Please try
+                      with lower amount or try after sometime
+                    </div>
                   </div>
                 </>
               )}
@@ -295,7 +297,7 @@ function FlexibleModalComponent({
                 {pendingTx ? 'Confirming...' : 'Confirm'}
               </Button>
               {!isRemovingStake && (
-                <ButtonLight as={Link} padding="14px 8px" to={getTokenLink}>
+                <ButtonLight className="get-tele-btn" as={Link} padding="14px 8px" to={getTokenLink}>
                   Get TELE
                 </ButtonLight>
               )}

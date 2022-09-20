@@ -38,6 +38,7 @@ const AfterLockedActions: React.FC<AfterLockedActionsPropsType> = ({
       <div className="lock-stake-info">
         <ConvertToFlexibleButton />
         <Button
+          className="renew-button"
           disabled={
             Number.isFinite(currentDurationLeftInSeconds) &&
             MAX_LOCK_DURATION - currentDurationLeftInSeconds < ONE_WEEK_DEFAULT

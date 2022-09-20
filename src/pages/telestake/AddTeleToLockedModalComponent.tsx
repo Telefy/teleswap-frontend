@@ -29,16 +29,22 @@ const RenewDuration = ({
 }) => {
   return (
     <>
-      {!checkedState && (
-        <div>
-          {
-            'Adding more TELE will renew your lock, setting it to remaining duration. Due to shorter lock period, benefits decrease. To keep similar benefits, extend your lock.'
-          }
+      <div className="renew-msg-block">
+        {!checkedState && (
+          <div className="renew-msg">
+            {
+              'Adding more TELE will renew your lock, setting it to remaining duration. Due to shorter lock period, benefits decrease. To keep similar benefits, extend your lock.'
+            }
+          </div>
+        )}
+        <div className="renew-checkbox-block">
+          <Checkbox
+            className="renew-lock-checkbox"
+            checked={checkedState}
+            onChange={() => setCheckedState((prev) => !prev)}
+          />
+          <p>{'Renew and extend your lock to keep similar benefits.'}</p>
         </div>
-      )}
-      <div>
-        <Checkbox checked={checkedState} onChange={() => setCheckedState((prev) => !prev)} />
-        <p>{'Renew and extend your lock to keep similar benefits.'}</p>
       </div>
     </>
   )

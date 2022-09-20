@@ -40,8 +40,8 @@ const LockDurationField: React.FC<LockDurationFieldPropsType> = ({ duration, set
           />
         </div>
         <div>Week</div>
-        {isOverMax && <div className="bold">{'Total lock duration exceeds 52 weeks'}</div>}
       </div>
+      {isOverMax && <div className="duration-exceed-msg">{'Total lock duration exceeds 52 weeks'}</div>}
     </>
   )
 }

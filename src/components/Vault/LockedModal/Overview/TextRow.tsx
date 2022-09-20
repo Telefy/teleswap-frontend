@@ -29,9 +29,7 @@ const DiffText: React.FC<DiffTextPropsType> = ({ value, newValue, prefix }) => {
       <div className="bold">
         {prefix}
         {value}
-      </div>
-      {`->`}
-      <div className="bold">
+        {<span className="arrow-icon">&#8658;</span>}
         {prefix}
         {newValue}
       </div>
