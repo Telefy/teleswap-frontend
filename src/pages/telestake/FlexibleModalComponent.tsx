@@ -63,8 +63,8 @@ function FlexibleModalComponent({
   const [loadUserData, setLoadUserData] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
   const { data: telePrice } = useTelePrice(chainId || ChainId.MAINNET)
-  // const poolBal = useTelePoolBalance(chainId || ChainId.MAINNET)
-  const poolBal = new BigNumber('2000000000000000000')
+  const poolBal = useTelePoolBalance(chainId || ChainId.MAINNET)
+  // const poolBal = new BigNumber('2000000000000000000')
   const telePriceAsBigNumber = new BigNumber(telePrice)
   const usdValueStaked = new BigNumber(stakeAmount).times(telePriceAsBigNumber)
   const formattedUsdValueStaked =
