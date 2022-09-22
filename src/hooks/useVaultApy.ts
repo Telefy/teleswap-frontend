@@ -53,7 +53,10 @@ export function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: numbe
   )
 
   const totalCakePoolEmissionPerYear = useMemo(() => {
-    const BLOCKS_PER_YEAR = (60 / (averageBlockTime || 1)) * 60 * 24 * 365
+    const BLOCKS_PER_YEAR =
+      (60 / (averageBlockTime ? (typeof averageBlockTime == 'object' ? 1 : averageBlockTime) : 1)) * 60 * 24 * 365
+    console.log(averageBlockTime, BLOCKS_PER_YEAR, VAULT_POOL_TELE_PER_BLOCK)
+
     return FixedNumber.from(VAULT_POOL_TELE_PER_BLOCK.toString()).mulUnsafe(
       FixedNumber.from(BLOCKS_PER_YEAR.toString() || '0')
     )

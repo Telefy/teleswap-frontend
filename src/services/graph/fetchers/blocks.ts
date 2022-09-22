@@ -58,9 +58,10 @@ export const getMassBlocks = async (chainId = ChainId.MAINNET, timestamps) => {
 export const getAverageBlockTime = async (chainId = ChainId.MAINNET) => {
   // console.log('getAverageBlockTime')
   const now = startOfHour(Date.now())
+  const hoursToSubtract = chainId == ChainId.RINKEBY ? 22 : 6
   const blocks = await getBlocks(chainId, {
     where: {
-      timestamp_gt: getUnixTime(subHours(now, 6)),
+      timestamp_gt: getUnixTime(subHours(now, hoursToSubtract)),
       timestamp_lt: getUnixTime(now),
     },
   })
