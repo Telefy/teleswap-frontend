@@ -4738,7 +4738,9 @@ font-size: 16px;
   color: #f338c3!important;
 }
 /*# sourceMappingURL=26b848d58538f4f7.css.map*/
-
+a{
+  cursor: pointer;
+}
 
 
 .close {
@@ -4988,9 +4990,10 @@ button.close {
   background: #f7dafb;
   width: 100%;
   border: 1px solid #db9ee3;
-  height: 100px;
+  height: 88px;
   border-radius: 10px;
   margin-top: 10px;
+  padding: 10px;
   position: relative;
 }
 .telecard-light .custom-input Input{
@@ -5166,7 +5169,7 @@ padding: 15px;
 }
 .footer-buttons Button{
   width: 100%;
-  margin: 5px;
+  margin: 5px 0;
 }
 .btn-outline{
   border: 1px solid #d17fdc;
@@ -5373,11 +5376,16 @@ border: 1px solid #db9ee3;
 
 .telecard-dark .custom-input2{
   width: 100%;
+  height: 88px;
   border-radius: 10px;
   margin-top: 10px;
   position: relative;
   background: #400a48;
   padding: 10px;
+}
+.custom-input2 .locked-value{
+  font-weight: 600;
+  padding: 10px 8px 0;
 }
 .apy-block2{
   width: 100%;
@@ -5598,3 +5606,128 @@ input[type=range].range-slider::-webkit-slider-runnable-track {
   width: 100%!important;
 }
 /* Loki CSS start */
+.get-tele-btn{
+  border-radius: 12px!important;
+  border: 2px solid #F69EE5!important;
+  background-color: transparent!important;
+}
+.get-tele-btn:hover{
+  background-color: #e078cb;
+}
+.locked-modal-light .get-tele-btn{
+  background-color: transparent;
+  color: #444;
+}
+.warning-block{
+  border-radius: 10px;
+  padding: 13px;
+  margin-top: 5px;
+  background: #430c4b;
+  border: 1px solid #782a64;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.warning-block .warning-title{
+font-size: 14px;
+font-weight: 600;
+}
+.warning-block .warning-content{
+  font-size: 14px;
+  text-align: center;
+}
+.locked-modal-light .warning-block {
+  background: #f3caf9;
+  border: 1px solid #db9ee3;
+}
+.locked-modal-light .lock-stake-info{
+  background: #f3caf9;
+  border: 1px solid #db9ee3;
+
+}
+.locked-modal-light .lock-stake-info p{
+  color: #444;
+}
+.convert-lock-btn{
+  background-color: #a12899!important;
+  color: #fff !important;
+}
+.renew-lock-checkbox:checked{
+  background-color: #9c27b0!important;
+}
+.renew-lock-checkbox{
+  height: 20px!important;
+  width: 20px!important;
+  box-shadow: 0 0 0 1pt #8a1695;
+  border-radius: 4px!important;
+  background-color: transparent!important;
+}
+.renew-lock-checkbox:hover{
+  background-color: #fff!important;
+}
+.locked-modal-light .renew-msg{
+  font-size: 14px;
+  margin-bottom: 14px;
+  color: #000;
+  text-align: justify;
+  transition: opacity 0.5s linear;
+}
+.locked-modal-dark .renew-msg{
+  font-size: 14px;
+  margin-bottom: 14px;
+  color: #fff;
+  text-align: justify;
+  transition: opacity 0.5s linear;
+}
+.locked-modal-light .renew-msg-block{
+  margin-top:8px;
+  background: #f3caf9;
+  border: 1px solid #db9ee3;
+  padding: 10px;
+  border-radius: 10px;
+}
+.locked-modal-dark .renew-msg-block{
+  margin-top:8px;
+  background: #430c4b;
+  border: 1px solid #782a64;
+  padding: 10px;
+  border-radius: 10px;
+}
+.locked-modal-dark .renew-msg-block p{
+  color: #fff;
+}
+.renew-msg-block p{
+  font-weight: 600;
+  font-size: 14px;
+}
+.renew-checkbox-block{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.duration-exceed-msg{
+  font-size: 14px;
+  margin-top: 2px;
+  color: #b339c8;
+  font-weight: 600;
+}
+.telecard-dark .renew-button{
+  background: #9431a3;
+}
+.telecard-light .renew-button{
+  background: #9431a3;
+}
+.arrow-icon{
+  color: #e91eab;
+  padding: 0 8px;
+}
+.blink {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

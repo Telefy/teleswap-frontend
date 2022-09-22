@@ -37,7 +37,7 @@ const DiffBalance: React.FC<DiffBalancePropsType> = ({ value, newValue, decimals
         {prefix}
         {parseFloat(String(value)).toFixed(decimals)}
         {suffix}
-        {`->`}
+        {<span className="arrow-icon">&#8658;</span>}
         {prefix}
         {parseFloat(String(newValue)).toFixed(decimals)}
         {suffix}

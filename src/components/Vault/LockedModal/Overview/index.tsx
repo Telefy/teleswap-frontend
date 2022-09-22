@@ -93,9 +93,13 @@ const Overview: React.FC<OverviewPropsType> = ({
 
       {showLockWarning && (
         <>
-          <div className="mt-1">Warning</div>
-          <div>
-            {'You will be able to withdraw the staked TELE and profit only when the staking position is unlocked'}
+          <div className="warning-block">
+            <div className="warning-title">
+              <span className="alert-icon">&#9888;</span> Warning
+            </div>
+            <div className="warning-content">
+              {'You will be able to withdraw the staked TELE and profit only when the staking position is unlocked'}
+            </div>
           </div>
         </>
       )}

@@ -29,7 +29,9 @@ export const ConvertToLockButton: FC<{ stakingToken: Token; currentStakedAmount:
             Learn More <span>&gt;&gt;</span>
           </a> */}
         </p>
-        <Button onClick={openConvetToLockModal}>Convert to Lock</Button>
+        <Button className="convert-lock-btn" onClick={openConvetToLockModal}>
+          Convert to Lock
+        </Button>
         <p>
           Lock staking users are earning an average of {lockedApy ? parseFloat(lockedApy).toFixed(2) : 0}% APY. More
           benefits are coming soon.
