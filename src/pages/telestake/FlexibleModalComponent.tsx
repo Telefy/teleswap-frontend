@@ -88,7 +88,6 @@ function FlexibleModalComponent({
   //   performanceFee,
   //   compoundFrequency: 0,
   // })
-  console.log(poolBal.toJSON(), 'poolBal')
 
   const interestBreakdown = getInterestBreakdown({
     principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,

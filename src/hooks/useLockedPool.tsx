@@ -14,6 +14,7 @@ import { VaultKey } from 'state/types'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { PrepConfirmArg } from 'constants/types'
 import { Token } from '@telefy/teleswap-core-sdk'
+import { BIG_NUMBER_FMT } from 'constants/misc'
 
 interface HookArgs {
   lockedAmount: BigNumber
@@ -50,7 +51,7 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
         const receipt = await fetchWithCatchTxError(() => {
           // .toString() being called to fix a BigNumber error in prod
           // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
-          const methodArgs = [convertedStakeAmount.toString(), lockDuration]
+          const methodArgs = [convertedStakeAmount.toFormat(BIG_NUMBER_FMT), lockDuration]
           return callWithGasPrice(vaultPoolContract, 'deposit', methodArgs, callOptions)
         }, 'Staked! Your funds have been staked in the pool')
 
